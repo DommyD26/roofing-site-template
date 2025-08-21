@@ -1,0 +1,8 @@
+{
+  "brand_name": "{{BRAND_NAME}}",
+  "city": "{{CITY}}",
+  "state": "{{STATE}}",
+  "phone": "{{PHONE}}",
+  "phone_display": "{{PHONE_DISPLAY}}",
+  "posts": []
+}
