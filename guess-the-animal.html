@@ -1,0 +1,759 @@
+<title>Guess the Animal</title>
+<style>
+  :root {
+    --ground: #0e1330;
+    --ground-2: #141a3d;
+    --raised: #1b2350;
+    --raised-2: #232c63;
+    --line: #33407e;
+    --text: #f6f4ff;
+    --muted: #a3abd8;
+    --gold: #ffd23f;
+    --coral: #ff5470;
+    --sky: #4cc9f0;
+    --mint: #2dd4bf;
+    --shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6);
+    font-synthesis-weight: none;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    background:
+      radial-gradient(1200px 700px at 50% -10%, #1e2a63 0%, transparent 60%),
+      radial-gradient(900px 600px at 100% 110%, rgba(255, 84, 112, 0.12), transparent 60%),
+      radial-gradient(900px 600px at 0% 110%, rgba(76, 201, 240, 0.12), transparent 60%),
+      var(--ground);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  #app {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(16px, 3vh, 40px) clamp(20px, 4vw, 72px);
+  }
+
+  .hidden { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex: 0 0 auto;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    font-size: clamp(18px, 2.2vw, 30px);
+  }
+  .brand .dot { color: var(--gold); }
+  .counter {
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    font-size: clamp(16px, 1.8vw, 24px);
+    color: var(--muted);
+  }
+  .counter b { color: var(--text); }
+
+  .track {
+    margin-top: 14px;
+    height: 8px;
+    border-radius: 99px;
+    background: var(--raised);
+    overflow: hidden;
+    flex: 0 0 auto;
+  }
+  .track > div {
+    height: 100%;
+    width: 0%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--sky), var(--gold));
+    transition: width 0.5s cubic-bezier(.4, 0, .2, 1);
+  }
+
+  /* ---------- Stage ---------- */
+  .stage {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(18px, 3.2vh, 42px);
+    min-height: 0;
+    text-align: center;
+  }
+
+  /* Stakes badge */
+  .stakes {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: clamp(10px, 1.6vh, 20px) clamp(28px, 4vw, 56px);
+    border-radius: 26px;
+    background: var(--raised);
+    border: 2px solid var(--line);
+    box-shadow: var(--shadow);
+    transition: transform 0.25s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .stakes .num {
+    font-weight: 900;
+    font-size: clamp(46px, 8vw, 118px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: var(--stakes-color, var(--gold));
+    transition: color 0.3s ease;
+  }
+  .stakes .lbl {
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-size: clamp(10px, 1.1vw, 15px);
+    font-weight: 800;
+    color: var(--muted);
+    padding-left: 0.28em;
+  }
+  .stakes.pulse { animation: pulse 0.4s ease; }
+  @keyframes pulse {
+    50% { transform: scale(1.06); }
+  }
+
+  /* Hints */
+  .hints {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.6vh, 18px);
+    width: min(1000px, 92vw);
+  }
+  .hint {
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 2vw, 26px);
+    padding: clamp(14px, 2.4vh, 28px) clamp(20px, 3vw, 40px);
+    border-radius: 20px;
+    background: var(--ground-2);
+    border: 2px solid var(--line);
+    text-align: left;
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+    animation: hintin 0.45s cubic-bezier(.2, .7, .2, 1) forwards;
+  }
+  @keyframes hintin {
+    to { opacity: 1; transform: none; }
+  }
+  .hint .tag {
+    flex: 0 0 auto;
+    width: clamp(46px, 5vw, 66px);
+    height: clamp(46px, 5vw, 66px);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-weight: 900;
+    font-size: clamp(18px, 2vw, 28px);
+    background: rgba(255, 210, 63, 0.12);
+    color: var(--gold);
+    border: 2px solid rgba(255, 210, 63, 0.4);
+  }
+  .hint.h2 .tag { background: rgba(255, 84, 112, 0.12); color: var(--coral); border-color: rgba(255, 84, 112, 0.4); }
+  .hint.h3 .tag { background: rgba(76, 201, 240, 0.12); color: var(--sky); border-color: rgba(76, 201, 240, 0.4); }
+  .hint .txt {
+    font-size: clamp(20px, 2.9vw, 40px);
+    font-weight: 650;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  .hint.current {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(255, 210, 63, 0.14), var(--shadow);
+  }
+  .hint.h2.current { border-color: var(--coral); box-shadow: 0 0 0 4px rgba(255, 84, 112, 0.14), var(--shadow); }
+  .hint.h3.current { border-color: var(--sky); box-shadow: 0 0 0 4px rgba(76, 201, 240, 0.14), var(--shadow); }
+
+  /* Answer reveal */
+  .answer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(8px, 1.6vh, 20px);
+    animation: hintin 0.5s cubic-bezier(.2, .7, .2, 1) forwards;
+  }
+  .answer .emoji {
+    font-size: clamp(90px, 22vh, 240px);
+    line-height: 1;
+    filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.4));
+    animation: bounce 0.7s cubic-bezier(.2, .8, .2, 1);
+  }
+  @keyframes bounce {
+    0% { transform: scale(0.2) rotate(-12deg); opacity: 0; }
+    60% { transform: scale(1.12) rotate(4deg); }
+    100% { transform: none; opacity: 1; }
+  }
+  .answer .name {
+    font-weight: 900;
+    font-size: clamp(44px, 9vw, 128px);
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    color: var(--mint);
+    text-wrap: balance;
+  }
+  .answer .worth {
+    font-size: clamp(16px, 2vw, 26px);
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .answer .worth b { color: var(--gold); font-variant-numeric: tabular-nums; }
+
+  /* ---------- Controls ---------- */
+  .controls {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(12px, 1.6vw, 22px);
+    padding-top: clamp(12px, 2vh, 24px);
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-radius: 18px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    transition: transform 0.12s ease, filter 0.2s ease, background 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:active { transform: translateY(2px) scale(0.99); }
+  button:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
+
+  .btn-primary {
+    padding: clamp(16px, 2.4vh, 26px) clamp(28px, 4vw, 56px);
+    font-size: clamp(18px, 2.4vw, 30px);
+    background: linear-gradient(180deg, var(--gold), #f5b800);
+    color: #1a1400;
+    box-shadow: 0 12px 26px -8px rgba(255, 210, 63, 0.5);
+  }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-primary.reveal {
+    background: linear-gradient(180deg, var(--mint), #14b8a6);
+    color: #04231f;
+    box-shadow: 0 12px 26px -8px rgba(45, 212, 191, 0.5);
+  }
+  .btn-primary.next {
+    background: linear-gradient(180deg, var(--sky), #2f9fd6);
+    color: #042435;
+    box-shadow: 0 12px 26px -8px rgba(76, 201, 240, 0.5);
+  }
+  .btn-ghost {
+    padding: clamp(16px, 2.4vh, 26px) clamp(20px, 2.6vw, 34px);
+    font-size: clamp(15px, 1.7vw, 22px);
+    background: var(--raised);
+    color: var(--text);
+    border: 2px solid var(--line);
+  }
+  .btn-ghost:hover { background: var(--raised-2); }
+
+  .hint-note {
+    position: absolute;
+    bottom: clamp(8px, 1.5vh, 16px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(11px, 1.1vw, 14px);
+    color: var(--muted);
+    opacity: 0.7;
+    white-space: nowrap;
+  }
+  .hint-note kbd {
+    font-family: inherit;
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1px 7px;
+    font-size: 0.9em;
+    font-weight: 700;
+  }
+
+  /* ---------- Start / End screens ---------- */
+  .screen {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: clamp(16px, 3vh, 34px);
+    min-height: 0;
+  }
+  .kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    font-weight: 800;
+    font-size: clamp(11px, 1.3vw, 16px);
+    color: var(--gold);
+    padding-left: 0.4em;
+  }
+  .title {
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 0.88;
+    font-size: clamp(56px, 12vw, 180px);
+    text-wrap: balance;
+  }
+  .title .row2 { color: var(--gold); }
+  .subtitle {
+    font-size: clamp(18px, 2.4vw, 30px);
+    font-weight: 600;
+    color: var(--muted);
+    max-width: 22ch;
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+  .rules {
+    display: flex;
+    gap: clamp(12px, 2vw, 24px);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .rule {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: clamp(16px, 2.2vh, 24px) clamp(22px, 3vw, 40px);
+    border-radius: 20px;
+    background: var(--raised);
+    border: 2px solid var(--line);
+    min-width: 150px;
+  }
+  .rule .pts {
+    font-weight: 900;
+    font-size: clamp(30px, 4vw, 54px);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .rule:nth-child(1) .pts { color: var(--gold); }
+  .rule:nth-child(2) .pts { color: var(--coral); }
+  .rule:nth-child(3) .pts { color: var(--sky); }
+  .rule .desc {
+    font-size: clamp(13px, 1.4vw, 18px);
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .end-emojis {
+    font-size: clamp(40px, 8vw, 90px);
+    letter-spacing: 0.05em;
+  }
+
+  #confetti {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+</style>
+
+<canvas id="confetti"></canvas>
+
+<div id="app">
+  <!-- ===== START SCREEN ===== -->
+  <section id="start" class="screen">
+    <div class="kicker">Yell it out loud &nbsp;·&nbsp; 25 rounds</div>
+    <h1 class="title">Guess the<br><span class="row2">Animal</span></h1>
+    <p class="subtitle">Three hints per animal. The sooner you shout the right answer, the more points you win.</p>
+    <div class="rules">
+      <div class="rule"><span class="pts">300</span><span class="desc">Got it after hint&nbsp;1</span></div>
+      <div class="rule"><span class="pts">200</span><span class="desc">Got it after hint&nbsp;2</span></div>
+      <div class="rule"><span class="pts">100</span><span class="desc">Got it after hint&nbsp;3</span></div>
+    </div>
+    <button class="btn-primary" id="startBtn">Start Game →</button>
+  </section>
+
+  <!-- ===== GAME SCREEN ===== -->
+  <div id="game" class="hidden" style="display:flex;flex-direction:column;flex:1 1 auto;min-height:0;">
+    <div class="topbar">
+      <div class="brand">Guess the Animal <span class="dot">●</span></div>
+      <div class="counter">Round <b id="qNum">1</b> / 25</div>
+    </div>
+    <div class="track"><div id="trackFill"></div></div>
+
+    <div class="stage">
+      <div class="stakes" id="stakes">
+        <span class="num" id="stakesNum">300</span>
+        <span class="lbl">Points if you guess now</span>
+      </div>
+      <div class="hints" id="hints"></div>
+      <div class="answer hidden" id="answerBox">
+        <div class="emoji" id="ansEmoji">🐆</div>
+        <div class="name" id="ansName">Cheetah</div>
+        <div class="worth" id="ansWorth"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn-ghost" id="prevBtn">← Back</button>
+      <button class="btn-primary" id="mainBtn">Next Hint →</button>
+      <button class="btn-ghost" id="skipBtn">Skip</button>
+    </div>
+  </div>
+
+  <!-- ===== END SCREEN ===== -->
+  <section id="end" class="screen hidden">
+    <div class="end-emojis">🎉 🏆 🎉</div>
+    <div class="kicker">That's a wrap</div>
+    <h1 class="title" style="font-size:clamp(44px,9vw,130px)">Game<br><span class="row2">Over</span></h1>
+    <p class="subtitle">All 25 animals guessed. Highest score wins — tally up and crown your champion!</p>
+    <button class="btn-primary next" id="restartBtn">↻ Play Again</button>
+  </section>
+
+  <div class="hint-note" id="hintNote">
+    Press <kbd>Space</kbd> to reveal &nbsp;·&nbsp; <kbd>←</kbd> <kbd>→</kbd> to navigate
+  </div>
+</div>
+
+<script>
+  const ANIMALS = [
+    { name: "Cheetah", emoji: "🐆", hints: [
+      "I hold a speed record that no other land animal has ever come close to beating.",
+      "The black \"tear\" lines running down my face cut the sun's glare so I can lock onto prey.",
+      "I'm the fastest land animal — a slender spotted cat that can sprint around 70 mph."] },
+    { name: "Octopus", emoji: "🐙", hints: [
+      "I have three hearts and my blood is blue.",
+      "I can squeeze my entire body through a gap no bigger than a coin.",
+      "I'm a boneless sea creature with eight arms that can change color in an instant."] },
+    { name: "Platypus", emoji: "🦫", hints: [
+      "I'm a mammal, yet I lay eggs.",
+      "The males of my kind have venomous spurs on their back legs.",
+      "I'm an Australian oddball with a duck's bill, webbed feet, and a beaver-like tail."] },
+    { name: "Emperor Penguin", emoji: "🐧", hints: [
+      "The fathers balance a single egg on their feet through the coldest winter on Earth.",
+      "I can dive deeper than any other bird — well over 1,500 feet down.",
+      "I'm the biggest penguin of all, and I live in Antarctica."] },
+    { name: "Chameleon", emoji: "🦎", hints: [
+      "My two eyes can swivel and look in completely different directions at the same time.",
+      "My sticky tongue can shoot out to nearly twice the length of my body.",
+      "I'm a lizard world-famous for changing the color of my skin."] },
+    { name: "Blue Whale", emoji: "🐋", hints: [
+      "My heart alone is roughly the size of a small car.",
+      "My babies can gain about 200 pounds every single day.",
+      "I'm the largest animal that has ever existed on this planet."] },
+    { name: "Axolotl", emoji: "🐲", hints: [
+      "I can regrow lost legs, my tail, and even parts of my heart and brain.",
+      "I stay in my baby form my whole life — I basically never grow up.",
+      "I'm a pink Mexican salamander with feathery gills, a star of aquariums and video games."] },
+    { name: "Sloth", emoji: "🦥", hints: [
+      "Algae grows in my fur, giving me a faint greenish tint.",
+      "I climb down from my tree only about once a week — usually just to poop.",
+      "I'm the slowest mammal, spending my days hanging upside down in the rainforest."] },
+    { name: "Mantis Shrimp", emoji: "🦐", hints: [
+      "I throw the fastest punch in the animal kingdom — quick enough to briefly boil the water around it.",
+      "My eyes have 16 types of color receptors; I see colors you can't even imagine.",
+      "I'm a wildly colorful sea crustacean — and despite the name, not really a shrimp."] },
+    { name: "Arctic Fox", emoji: "🦊", hints: [
+      "My coat turns brown in summer and pure white in winter.",
+      "I can survive temperatures as low as 70 degrees below zero.",
+      "I'm a small, fluffy fox that lives in the frozen far north."] },
+    { name: "Elephant", emoji: "🐘", hints: [
+      "I can \"hear\" through my feet, feeling distant vibrations in the ground.",
+      "I'm the only animal on Earth that physically cannot jump.",
+      "I'm the largest land animal, with big flapping ears and a long trunk."] },
+    { name: "Bald Eagle", emoji: "🦅", hints: [
+      "I can spot a rabbit from almost two miles away.",
+      "I build the biggest nest of any bird — some weigh more than a ton.",
+      "I'm the national bird of the United States, known for my white head."] },
+    { name: "Tardigrade", emoji: "🐻", hints: [
+      "I've been taken into the vacuum of outer space — and survived it.",
+      "I can go decades without food or water, then spring back to life.",
+      "I'm a microscopic critter affectionately nicknamed the \"water bear.\""] },
+    { name: "Kangaroo", emoji: "🦘", hints: [
+      "I physically can't walk backward.",
+      "I carry and raise my baby inside a pouch on my belly.",
+      "I'm an Australian animal that hops around on powerful hind legs."] },
+    { name: "Dolphin", emoji: "🐬", hints: [
+      "I sleep with only half of my brain at a time so I never stop breathing.",
+      "I \"see\" through the water using clicks and echoes.",
+      "I'm a super-smart, playful marine mammal that loves to leap."] },
+    { name: "Owl", emoji: "🦉", hints: [
+      "I can rotate my head about three-quarters of the way around.",
+      "My feathers let me fly almost completely silently.",
+      "I'm a nocturnal bird famous for saying \"hoo.\""] },
+    { name: "Poison Dart Frog", emoji: "🐸", hints: [
+      "A single one of me can carry enough toxin to take down ten grown adults.",
+      "My dazzling bright colors are a loud warning: do not eat me.",
+      "I'm a tiny, brilliantly colored frog from the rainforest."] },
+    { name: "Giraffe", emoji: "🦒", hints: [
+      "My tongue is dark blue-purple and around 20 inches long.",
+      "I have exactly the same number of neck bones as you do — just seven.",
+      "I'm the tallest animal in the world, thanks to my very long neck."] },
+    { name: "Honeybee", emoji: "🐝", hints: [
+      "I do a little dance to tell my family exactly where to find food.",
+      "To make just one pound of my golden product, my hive visits about two million flowers.",
+      "I'm a striped insect that makes honey and can give a sting."] },
+    { name: "Great White Shark", emoji: "🦈", hints: [
+      "I can detect a single drop of blood diluted in a huge tank of water.",
+      "I have to keep swimming constantly or I'll sink.",
+      "I'm a giant predatory fish — the one that terrorized swimmers in \"Jaws.\""] },
+    { name: "Koala", emoji: "🐨", hints: [
+      "My fingerprints look so human that they've reportedly confused crime scenes.",
+      "I sleep for up to 22 hours a day.",
+      "I'm a fuzzy grey Australian animal that eats eucalyptus leaves."] },
+    { name: "Peacock", emoji: "🦚", hints: [
+      "Only the males of my kind wear the famous showpiece — the females are fairly plain.",
+      "I fan out the shimmering \"eyes\" on my feathers to attract a mate.",
+      "I'm a bird known for spreading a huge, dazzling tail."] },
+    { name: "Narwhal", emoji: "🦄", hints: [
+      "My \"tusk\" is actually a giant tooth that spirals right out through my lip.",
+      "People often call me the \"unicorn of the sea.\"",
+      "I'm an Arctic whale with a long, spiraled horn."] },
+    { name: "Bat", emoji: "🦇", hints: [
+      "I'm the only mammal in the world capable of true, flapping flight.",
+      "I navigate in total darkness by listening to my own echoes.",
+      "I'm a night creature that hangs upside down; a few of my kind sip blood."] },
+    { name: "Red Panda", emoji: "🦝", hints: [
+      "Despite my name, I'm not closely related to that black-and-white bear you're picturing.",
+      "I wrap my long, bushy ringed tail around myself like a blanket in the cold.",
+      "I'm a small, rusty-red, cat-sized animal from the Himalayas that munches bamboo."] },
+  ];
+
+  const STAKES = [300, 200, 100];
+  const STAKES_COLOR = ["var(--gold)", "var(--coral)", "var(--sky)"];
+
+  // State
+  let qi = 0;        // question index
+  let revealed = 0;  // number of hints shown (1..3)
+  let answerShown = false;
+
+  const $ = (id) => document.getElementById(id);
+  const startScreen = $("start"), gameScreen = $("game"), endScreen = $("end");
+  const hintsEl = $("hints"), answerBox = $("answerBox");
+  const stakesEl = $("stakes"), stakesNum = $("stakesNum");
+  const mainBtn = $("mainBtn"), prevBtn = $("prevBtn"), skipBtn = $("skipBtn");
+  const hintNote = $("hintNote");
+
+  function startGame() {
+    qi = 0;
+    startScreen.classList.add("hidden");
+    endScreen.classList.add("hidden");
+    gameScreen.classList.remove("hidden");
+    hintNote.classList.remove("hidden");
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    revealed = 1;
+    answerShown = false;
+    answerBox.classList.add("hidden");
+    stakesEl.classList.remove("hidden");
+    $("qNum").textContent = qi + 1;
+    $("trackFill").style.width = ((qi) / ANIMALS.length * 100) + "%";
+    renderHints();
+    updateStakes();
+    prevBtn.style.visibility = qi === 0 ? "hidden" : "visible";
+    skipBtn.classList.remove("hidden");
+  }
+
+  function renderHints() {
+    const a = ANIMALS[qi];
+    hintsEl.innerHTML = "";
+    for (let i = 0; i < revealed; i++) {
+      const div = document.createElement("div");
+      div.className = "hint h" + (i + 1) + (i === revealed - 1 && !answerShown ? " current" : "");
+      div.style.animationDelay = (i === revealed - 1 ? "0s" : "0s");
+      div.innerHTML = '<div class="tag">' + (i + 1) + '</div><div class="txt">' + a.hints[i] + '</div>';
+      hintsEl.appendChild(div);
+    }
+  }
+
+  function updateStakes() {
+    const idx = Math.min(revealed, 3) - 1;
+    stakesNum.textContent = STAKES[idx];
+    stakesEl.style.setProperty("--stakes-color", STAKES_COLOR[idx]);
+    stakesEl.classList.remove("pulse");
+    void stakesEl.offsetWidth;
+    stakesEl.classList.add("pulse");
+    // Update main button label
+    if (revealed < 3) {
+      mainBtn.textContent = "Next Hint →";
+      mainBtn.className = "btn-primary";
+    } else {
+      mainBtn.textContent = "Reveal Answer ✓";
+      mainBtn.className = "btn-primary reveal";
+    }
+  }
+
+  function showAnswer() {
+    answerShown = true;
+    const a = ANIMALS[qi];
+    hintsEl.innerHTML = "";
+    stakesEl.classList.add("hidden");
+    $("ansEmoji").textContent = a.emoji;
+    $("ansName").textContent = a.name;
+    $("ansWorth").innerHTML = "Guessed after hint " + revealed + "? &nbsp;<b>" + STAKES[revealed - 1] + " points</b>";
+    answerBox.classList.remove("hidden");
+    // re-trigger emoji animation
+    const em = $("ansEmoji");
+    em.style.animation = "none"; void em.offsetWidth; em.style.animation = "";
+    fireConfetti();
+    mainBtn.textContent = (qi === ANIMALS.length - 1) ? "See Results 🏆" : "Next Animal →";
+    mainBtn.className = "btn-primary next";
+    skipBtn.classList.add("hidden");
+    $("trackFill").style.width = ((qi + 1) / ANIMALS.length * 100) + "%";
+  }
+
+  function mainAction() {
+    if (!answerShown && revealed < 3) {
+      revealed++;
+      renderHints();
+      updateStakes();
+    } else if (!answerShown && revealed === 3) {
+      showAnswer();
+    } else {
+      // answer shown -> next
+      if (qi === ANIMALS.length - 1) {
+        endGame();
+      } else {
+        qi++;
+        loadQuestion();
+      }
+    }
+  }
+
+  function skipQuestion() {
+    if (qi === ANIMALS.length - 1) { endGame(); return; }
+    qi++;
+    loadQuestion();
+  }
+
+  function goBack() {
+    if (answerShown || revealed > 1) {
+      // step back within a question
+      if (answerShown) {
+        answerShown = false;
+        answerBox.classList.add("hidden");
+        stakesEl.classList.remove("hidden");
+        skipBtn.classList.remove("hidden");
+        renderHints();
+        updateStakes();
+        $("trackFill").style.width = (qi / ANIMALS.length * 100) + "%";
+      } else if (revealed > 1) {
+        revealed--;
+        renderHints();
+        updateStakes();
+      }
+    } else if (qi > 0) {
+      qi--;
+      loadQuestion();
+      // show fully? no — start fresh at hint 1
+    }
+  }
+
+  function endGame() {
+    gameScreen.classList.add("hidden");
+    hintNote.classList.add("hidden");
+    endScreen.classList.remove("hidden");
+    fireConfetti(true);
+  }
+
+  // ---------- Confetti ----------
+  const canvas = $("confetti");
+  const ctx = canvas.getContext("2d");
+  let pieces = [];
+  let rafId = null;
+  const COLORS = ["#ffd23f", "#ff5470", "#4cc9f0", "#2dd4bf", "#f6f4ff"];
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function fireConfetti(big) {
+    if (reduceMotion) return;
+    const count = big ? 180 : 90;
+    for (let i = 0; i < count; i++) {
+      pieces.push({
+        x: canvas.width / 2 + rand(-120, 120),
+        y: canvas.height / 2 + rand(-40, 40),
+        vx: rand(-9, 9),
+        vy: rand(-16, -4),
+        g: rand(0.25, 0.45),
+        size: rand(6, 13),
+        rot: rand(0, Math.PI * 2),
+        vrot: rand(-0.3, 0.3),
+        color: COLORS[(Math.random() * COLORS.length) | 0],
+        life: rand(70, 130),
+      });
+    }
+    if (!rafId) rafId = requestAnimationFrame(tick);
+  }
+
+  function tick() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = pieces.length - 1; i >= 0; i--) {
+      const p = pieces[i];
+      p.vy += p.g;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vrot;
+      p.life--;
+      if (p.life <= 0 || p.y > canvas.height + 40) { pieces.splice(i, 1); continue; }
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      ctx.restore();
+    }
+    if (pieces.length > 0) {
+      rafId = requestAnimationFrame(tick);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      rafId = null;
+    }
+  }
+
+  // ---------- Wire up ----------
+  $("startBtn").addEventListener("click", startGame);
+  $("restartBtn").addEventListener("click", startGame);
+  mainBtn.addEventListener("click", mainAction);
+  prevBtn.addEventListener("click", goBack);
+  skipBtn.addEventListener("click", skipQuestion);
+
+  document.addEventListener("keydown", (e) => {
+    if (!gameScreen.classList.contains("hidden")) {
+      if (e.code === "Space" || e.code === "ArrowRight" || e.code === "Enter") {
+        e.preventDefault(); mainAction();
+      } else if (e.code === "ArrowLeft") {
+        e.preventDefault(); goBack();
+      } else if (e.key.toLowerCase() === "s") {
+        e.preventDefault(); skipQuestion();
+      }
+    } else if (!startScreen.classList.contains("hidden")) {
+      if (e.code === "Space" || e.code === "Enter") { e.preventDefault(); startGame(); }
+    } else if (!endScreen.classList.contains("hidden")) {
+      if (e.code === "Space" || e.code === "Enter") { e.preventDefault(); startGame(); }
+    }
+  });
+</script>
