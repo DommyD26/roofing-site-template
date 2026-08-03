@@ -40,3 +40,24 @@ Known traps found (recorded so later passes don't repeat them):
 - Counter-overhang shadows from the sconce lights read as crisp "grout" lines.
 - The open WC door leaf, box fan, floor towels, grey rug, and two bath mats
   each hide specific runs (documented per-dimension in the panel outputs).
+
+## Revision 2 — corrections from IMG_9308 / IMG_9309
+
+IMG_9308 (from mid-room looking back at the entry) and IMG_9309 (standing at
+his sink looking into his closet) resolved the southwest corner:
+
+- **His vanity is on the WEST wall, front facing EAST** (sink, raised granite
+  return at its south end, mirror on the west wall). The earlier
+  "faces-the-entry niche" reading is retired; the measured run lengths
+  (closet sill, 0.88 casing+pilaster, 2.8 vanity) stand — only the facing
+  direction changes.
+- **His closet door sits near the SW corner** (west wall, ~Y 0.7–3.1), with
+  a towel-hook wall wrapping the corner to the WC door. Standing at his sink
+  facing the mirror, the closet door is immediately to the LEFT — literal
+  match to the owner's description.
+- **The full SW sequence** (one sweep in IMG_9308): entry → switch stub →
+  WC door (south wall) → corner → his closet door → his vanity (west wall).
+- Entry confirmed double-leaf with both leaves opening toward the bedroom
+  (empty opening seen from inside).
+- Consequence: room width closes at **12.25 tiles (±0.75)**, not 15.4; the
+  entry sits 5.0 tiles from the west wall; tub deck ~4 ft deep platform.

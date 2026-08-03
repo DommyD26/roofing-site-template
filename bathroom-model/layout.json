@@ -1,5 +1,5 @@
 {
- "title": "Master bathroom \u2014 tile-derived plan (1 unit = 12\" tile)",
+ "title": "Master bathroom - tile-derived plan (1 unit = 12\" tile)",
  "convention": {
   "origin": "center of entry door threshold from bedroom",
   "x": "+X to the RIGHT walking in",
@@ -7,26 +7,26 @@
   "z": "+Z up",
   "unit": "1.0 = one 12in x 12in floor tile"
  },
- "derived_from": "photos/IMG_9297..IMG_9301 grout-line counting (5 of 49 photos); threshold coincides with a grout row; grid column ~at entry left jamb",
+ "derived_from": "photos/IMG_9297..9301 + IMG_9308/9309 grout-line counting (7 of 49 photos); threshold coincides with a grout row",
  "elements": [
   {
    "name": "room",
    "type": "room",
    "footprint": [
     [
-     -10.3,
+     -6.35,
      0
     ],
     [
-     5.1,
+     5.9,
      0
     ],
     [
-     5.1,
+     5.9,
      11.0
     ],
     [
-     -10.3,
+     -6.35,
      11.0
     ]
    ],
@@ -38,19 +38,19 @@
    "type": "wall",
    "footprint": [
     [
-     -10.65,
+     -6.7,
      -0.35
     ],
     [
-     -5.05,
+     -5.65,
      -0.35
     ],
     [
-     -5.05,
+     -5.65,
      0
     ],
     [
-     -10.65,
+     -6.7,
      0
     ]
    ],
@@ -62,7 +62,7 @@
    "type": "wall",
    "footprint": [
     [
-     -2.05,
+     -2.65,
      -0.35
     ],
     [
@@ -74,13 +74,13 @@
      0
     ],
     [
-     -2.05,
+     -2.65,
      0
     ]
    ],
    "height": 10.0,
    "label": "wall-south-b",
-   "notes": "light-switch bank on this stub, room side"
+   "notes": "3-gang light-switch bank on this stub, room side"
   },
   {
    "name": "wall-south-c",
@@ -91,11 +91,11 @@
      -0.35
     ],
     [
-     5.45,
+     6.25,
      -0.35
     ],
     [
-     5.45,
+     6.25,
      0
     ],
     [
@@ -111,44 +111,44 @@
    "type": "wall",
    "footprint": [
     [
-     5.1,
+     5.9,
      0
     ],
     [
-     5.45,
+     6.25,
      0
     ],
     [
-     5.45,
+     6.25,
      11.0
     ],
     [
-     5.1,
+     5.9,
      11.0
     ]
    ],
    "height": 10.0,
    "label": "wall-east",
-   "notes": "window above tub deck (position estimated)"
+   "notes": "window with blinds above tub deck (position estimated)"
   },
   {
    "name": "wall-north",
    "type": "wall",
    "footprint": [
     [
-     -10.65,
+     -6.7,
      11.0
     ],
     [
-     5.45,
+     6.25,
      11.0
     ],
     [
-     5.45,
+     6.25,
      11.35
     ],
     [
-     -10.65,
+     -6.7,
      11.35
     ]
    ],
@@ -160,48 +160,50 @@
    "type": "wall",
    "footprint": [
     [
-     -10.65,
+     -6.7,
      0
     ],
     [
-     -10.3,
+     -6.35,
      0
     ],
     [
-     -10.3,
-     6.7
+     -6.35,
+     0.7
     ],
     [
-     -10.65,
-     6.7
+     -6.7,
+     0.7
     ]
    ],
    "height": 10.0,
-   "label": "wall-west-s"
+   "label": "wall-west-s",
+   "notes": "towel-hook rail on the room side (wraps the SW corner)"
   },
   {
    "name": "wall-west-n",
    "type": "wall",
    "footprint": [
     [
-     -10.65,
-     9.1
+     -6.7,
+     3.1
     ],
     [
-     -10.3,
-     9.1
+     -6.35,
+     3.1
     ],
     [
-     -10.3,
+     -6.35,
      11.0
     ],
     [
-     -10.65,
+     -6.7,
      11.0
     ]
    ],
    "height": 10.0,
-   "label": "wall-west-n"
+   "label": "wall-west-n",
+   "notes": "his mirror + sconce + outlets above his vanity"
   },
   {
    "name": "entry-door",
@@ -233,352 +235,332 @@
    "type": "closet",
    "footprint": [
     [
-     -5.35,
+     -5.95,
      -4.5
     ],
     [
-     -1.75,
+     -2.35,
      -4.5
     ],
     [
-     -1.75,
+     -2.35,
      0
     ],
     [
-     -5.35,
+     -5.95,
      0
     ]
    ],
    "height": 10.0,
    "label": "WC",
    "estimated": true,
-   "notes": "tiled floor; sloped under-stair ceiling dropping toward the back (south); wall cabinet above toilet"
+   "notes": "tiled floor; sloped under-stair ceiling dropping toward the back; wall cabinet above toilet"
   },
   {
    "name": "wc-door",
    "type": "door",
    "footprint": [
     [
-     -5.05,
+     -5.65,
      -0.08
     ],
     [
-     -2.05,
+     -2.65,
      -0.08
     ],
     [
-     -2.05,
+     -2.65,
      0.08
     ],
     [
-     -5.05,
+     -5.65,
      0.08
     ]
    ],
    "height": 8.0,
    "label": "WC door 3'0\"",
-   "notes": "hinge on west jamb, swings OUT into the bathroom (leaf seen in IMG_9298/9300/9301)"
+   "notes": "swings OUT into the bathroom toward the vanity (open leaf seen in IMG_9298/9300/9301/9308)"
   },
   {
    "name": "toilet",
    "type": "fixture",
    "footprint": [
     [
-     -4.4,
+     -5.0,
      -4.4
     ],
     [
-     -2.7,
+     -3.3,
      -4.4
     ],
     [
-     -2.7,
+     -3.3,
      -2.1
     ],
     [
-     -4.4,
+     -5.0,
      -2.1
     ]
    ],
    "height": 2.6,
    "label": "toilet",
    "estimated": true,
-   "notes": "bidet seat; faces the door"
+   "notes": "bidet seat; squatty stool; faces the door"
   },
   {
    "name": "his-closet",
    "type": "closet",
    "footprint": [
     [
-     -14.3,
-     5.9
+     -10.85,
+     0.1
     ],
     [
-     -10.3,
-     5.9
+     -6.35,
+     0.1
     ],
     [
-     -10.3,
-     9.9
+     -6.35,
+     4.3
     ],
     [
-     -14.3,
-     9.9
+     -10.85,
+     4.3
     ]
    ],
    "height": 10.0,
    "label": "his closet",
    "estimated": true,
-   "notes": "walk-in, carpet, hanging rods + shelves; interior size unmeasured"
+   "notes": "walk-in, carpet, rod + hat shelf, interior extends west/southwest (IMG_9309); size unmeasured"
   },
   {
    "name": "his-closet-door",
    "type": "opening",
    "footprint": [
     [
-     -10.38,
-     6.7
+     -6.43,
+     0.7
     ],
     [
-     -10.22,
-     6.7
+     -6.27,
+     0.7
     ],
     [
-     -10.22,
-     9.1
+     -6.27,
+     3.1
     ],
     [
-     -10.38,
-     9.1
+     -6.43,
+     3.1
     ]
    ],
    "height": 8.0,
    "label": "his closet door",
    "estimated": true,
-   "notes": "opening measured >=1.7 tiles along sill; 2.4 assumed (near jamb hidden behind WC door leaf)"
+   "notes": "opening >=1.7 measured along sill, 2.4 assumed; directly LEFT of his sink position"
   },
   {
    "name": "his-vanity",
    "type": "vanity",
    "footprint": [
     [
-     -10.3,
-     9.15
+     -6.35,
+     3.98
     ],
     [
-     -7.5,
-     9.15
+     -4.5,
+     3.98
     ],
     [
-     -7.5,
-     11.0
+     -4.5,
+     6.78
     ],
     [
-     -10.3,
-     11.0
+     -6.35,
+     6.78
     ]
    ],
    "height": 3.1,
    "label": "his vanity",
-   "notes": "front faces SOUTH; sink run with raised 42\" bar ledge; mirror + 4-light sconce on wall above; taller than hers"
-  },
-  {
-   "name": "corner-cheek",
-   "type": "wall",
-   "footprint": [
-    [
-     -7.5,
-     9.15
-    ],
-    [
-     -7.15,
-     9.15
-    ],
-    [
-     -7.15,
-     11.0
-    ],
-    [
-     -7.5,
-     11.0
-    ]
-   ],
-   "height": 10.0,
-   "label": "corner-cheek",
-   "notes": "wall stub proud of his vanity face"
+   "notes": "front faces EAST; sink + raised granite return at south end; mirror on west wall; taller than hers"
   },
   {
    "name": "makeup-desk",
    "type": "vanity",
    "footprint": [
     [
-     -7.15,
-     9.4
+     -6.35,
+     6.78
     ],
     [
-     -4.45,
-     8.8
+     -4.5,
+     6.78
     ],
     [
-     -4.45,
+     -3.1,
+     9.6
+    ],
+    [
+     -3.1,
      11.0
     ],
     [
-     -7.15,
+     -6.35,
      11.0
     ]
    ],
    "height": 2.5,
    "label": "makeup desk",
    "estimated": true,
-   "notes": "low counter with kneehole + chair spanning the clipped NW corner diagonally; 45-degree corner mirror on the wall facet above; drawer under counter; flanked by cabinets"
+   "notes": "low counter, kneehole + chair on the diagonal, drawer; 45-deg corner mirror on wall facet above; granite steps down from his counter"
   },
   {
    "name": "her-vanity",
    "type": "vanity",
    "footprint": [
     [
-     -4.45,
-     9.3
+     -3.1,
+     9.6
     ],
     [
-     -1.95,
-     9.3
+     -0.6,
+     9.6
     ],
     [
-     -1.95,
+     -0.6,
      11.0
     ],
     [
-     -4.45,
+     -3.1,
      11.0
     ]
    ],
    "height": 2.9,
    "label": "her vanity",
-   "notes": "front faces SOUTH; single sink; mirror + 4-light sconce above; outlet on wall segment east of it"
+   "estimated": true,
+   "notes": "front faces SOUTH; single sink; mirror + 4-light sconce; kick lands near tile row 10; depth needs confirmation"
   },
   {
    "name": "her-closet-door",
    "type": "opening",
    "footprint": [
     [
-     -0.95,
+     0.4,
      10.92
     ],
     [
-     1.85,
+     3.1,
      10.92
     ],
     [
-     1.85,
+     3.1,
      11.08
     ],
     [
-     -0.95,
+     0.4,
      11.08
     ]
    ],
    "height": 8.0,
    "label": "her closet door",
-   "notes": "open doorway with door leaf parked inside; carpet sill; hats shelf + rods inside"
+   "notes": "open doorway, door leaf parks inside; carpet sill; shower door parks across it when open"
   },
   {
    "name": "her-closet",
    "type": "closet",
    "footprint": [
     [
-     -1.95,
+     -0.6,
      11.0
     ],
     [
-     2.85,
+     4.1,
      11.0
     ],
     [
-     2.85,
+     4.1,
      16.0
     ],
     [
-     -1.95,
+     -0.6,
      16.0
     ]
    ],
    "height": 10.0,
    "label": "her closet",
    "estimated": true,
-   "notes": "walk-in, carpet; interior unmeasured \u2014 nominal 5 ft deep box"
+   "notes": "walk-in, carpet, hat shelf; interior unmeasured - nominal 5 ft box"
   },
   {
    "name": "shower",
    "type": "shower",
    "footprint": [
     [
-     2.4,
+     3.65,
      7.6
     ],
     [
-     5.1,
+     5.9,
      7.6
     ],
     [
-     5.1,
+     5.9,
      11.0
     ],
     [
-     2.4,
+     3.65,
      11.0
     ]
    ],
    "height": 8.0,
    "label": "shower",
    "estimated": true,
-   "notes": "glass front is a N-S plane FACING WEST: hinged frameless door (north, ~2.2t, parks open over her closet doorway) + fixed panel (south ~1.2t); low tiled curb under the glass; brown tile walls + mosaic band; plumbing on east wall"
+   "notes": "N-S glass front FACING WEST: frameless hinged door (north, ~2.2t) + fixed panel (~1.2t); low tiled curb; brown tile + mosaic band; plumbing on east wall"
   },
   {
    "name": "tub-deck",
    "type": "tub",
    "footprint": [
     [
-     1.6,
-     0.0
+     1.85,
+     0
     ],
     [
-     5.1,
-     0.0
+     5.9,
+     0
     ],
     [
-     5.1,
+     5.9,
      4.0
     ],
     [
-     1.6,
+     1.85,
      4.0
     ]
    ],
    "height": 1.7,
    "label": "tub deck",
    "estimated": true,
-   "notes": "white-paneled platform, tile top; drop-in garden tub; window with blinds above (east wall); south extent hidden behind open entry leaf in photos \u2014 assumed to reach the south wall"
+   "notes": "white-paneled platform, tile top, drop-in garden tub; window above; south extent hidden behind open entry leaf - assumed to reach south wall"
   },
   {
    "name": "tub-basin",
    "type": "fixture",
    "footprint": [
     [
-     2.0,
+     2.25,
      0.4
     ],
     [
-     4.7,
+     5.5,
      0.4
     ],
     [
-     4.7,
+     5.5,
      3.6
     ],
     [
-     2.0,
+     2.25,
      3.6
     ]
    ],
@@ -590,31 +572,29 @@
  ],
  "params": {
   "depth": 11.0,
-  "width": 15.4,
-  "entry_left_jamb_wx": 8.95,
-  "entry_opening": 2.7,
-  "wc_door_west_wx": 5.25,
+  "width": 12.25,
+  "sw_stub": 0.7,
   "wc_door": 3.0,
+  "switch_stub": 1.3,
+  "entry_opening": 2.7,
   "wc_inner_depth": 4.5,
   "wc_inner_width": 3.6,
-  "his_closet_door_s": 6.7,
+  "his_closet_stub": 0.7,
   "his_closet_door": 2.4,
+  "closet_to_vanity": 0.88,
   "his_vanity_len": 2.8,
   "his_vanity_depth": 1.85,
-  "cheek": 0.35,
-  "kneehole": 2.7,
-  "desk_depth": 1.6,
+  "desk_diag_end_wx": 3.25,
+  "her_front_wy": 9.6,
   "her_vanity_len": 2.5,
-  "her_vanity_depth": 1.7,
+  "her_vanity_depth": 1.4,
   "her_wall_seg": 0.6,
   "casing": 0.4,
-  "her_closet_door": 2.8,
+  "her_closet_door": 2.7,
   "shower_gap": 0.15,
-  "shower_width": 2.7,
   "shower_depth": 3.4,
-  "tub_deck_west_wx": 11.9,
+  "deck_gap": 0.5,
   "tub_deck_north_wy": 4.0,
-  "tub_deck_south_wy": 0.0,
   "h_ceiling": 10.0,
   "h_vanity_his": 3.1,
   "h_vanity_her": 2.9,
