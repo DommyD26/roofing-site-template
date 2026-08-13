@@ -1,13 +1,14 @@
 /* Service worker: precache the app shell so the course works offline
    and installs as an app. Bump VERSION whenever files change. */
 
-const VERSION = "rce-v6";
+const VERSION = "rce-v7";
 const SHELL = [
   "./",
   "./index.html",
   "./assets/styles.css",
   "./assets/course.js",
   "./assets/course-data.js",
+  "./assets/course-extras.js",
   "./manifest.webmanifest",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",

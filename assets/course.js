@@ -576,6 +576,10 @@
     panel.appendChild(cta);
     wrap.appendChild(panel);
 
+    // reading assignment
+    var rb = readingBox(id);
+    if (rb) wrap.appendChild(rb);
+
     // lessons
     var lsec = el("section", "");
     lsec.appendChild(el("h2", "section-title", "Lessons"));
@@ -637,6 +641,30 @@
     return wrap;
   }
 
+  function readingBox(chId) {
+    var r = window.COURSE_READING && window.COURSE_READING[chId];
+    if (!r) return null;
+    return el("aside", "book-note reading-note",
+      '📖 <strong>Step 1 — Read the book first:</strong> ' + esc(r.ref) +
+      '. <a href="' + esc(C.bookUrl) + '" target="_blank" rel="noopener">Open the book</a>, read the assigned pages in the author\'s own words, then come back here for the lesson recap and test.');
+  }
+
+  function recapBlock(chId, li) {
+    var r = window.COURSE_RECAPS && window.COURSE_RECAPS[chId + "|" + li];
+    if (!r) return null;
+    function ul(items, icon) {
+      return "<ul>" + items.map(function (x) { return "<li>" + icon + " " + esc(x) + "</li>"; }).join("") + "</ul>";
+    }
+    return el("section", "recap",
+      "<h2>📌 Lesson recap</h2>" +
+      '<div class="recap-grid">' +
+      '<div class="recap-cell"><h3>Summary</h3><p>' + esc(r.sum) + "</p></div>" +
+      '<div class="recap-cell"><h3>Key points</h3>' + ul(r.points, "▸") + "</div>" +
+      '<div class="recap-cell"><h3>Things to remember</h3>' + ul(r.remember, "🧠") + "</div>" +
+      '<div class="recap-cell"><h3>Tips &amp; tricks</h3>' + ul(r.tips, "💡") + "</div>" +
+      "</div>");
+  }
+
   function viewLesson(chId, li) {
     var ch = chapterById(chId);
     if (!ch || !ch.lessons[li]) return viewHome();
@@ -648,7 +676,11 @@
     wrap.appendChild(el("header", "lesson-head",
       '<p class="kicker">' + esc(ch.title) + " · Lesson " + (li + 1) + " of " + ch.lessons.length + " · ~" + l.min + " min read</p>" +
       "<h1>" + esc(l.t) + "</h1>"));
+    var rb = readingBox(chId);
+    if (rb) wrap.appendChild(rb);
     wrap.appendChild(el("section", "lesson-section lesson-body", l.html));
+    var rc = recapBlock(chId, li);
+    if (rc) wrap.appendChild(rc);
 
     var pager = el("div", "pager");
     pager.appendChild(li > 0

@@ -575,6 +575,45 @@ table.history a { color: var(--navy); }
 .badge-card h3 { margin: 0 0 0.3rem; color: var(--navy); font-size: 1rem; }
 .badge-card p { margin: 0 0 0.6rem; font-size: 0.82rem; color: var(--muted); }
 
+/* ---------- reading assignments & lesson recaps ---------- */
+
+.reading-note { border-left-color: var(--navy); background: #eef2f9; border-color: #cdd8ea; }
+.reading-note a { color: var(--navy); font-weight: 700; }
+
+.recap {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--brick);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+.recap > h2 { margin: 0 0 0.9rem; color: var(--brick); font-size: 1.15rem; }
+.recap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.recap-cell h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--navy);
+  border-bottom: 2px solid var(--parchment);
+  padding-bottom: 0.25rem;
+}
+.recap-cell p { margin: 0; font-size: 0.92rem; }
+.recap-cell ul { margin: 0; padding-left: 0; list-style: none; }
+.recap-cell li {
+  font-size: 0.88rem;
+  padding: 0.22rem 0;
+  border-bottom: 1px dashed var(--line);
+  line-height: 1.45;
+}
+.recap-cell li:last-child { border-bottom: none; }
+
 /* ---------- name capture / leaderboard / feedback ---------- */
 
 .name-banner, .who-box {
