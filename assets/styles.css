@@ -575,6 +575,53 @@ table.history a { color: var(--navy); }
 .badge-card h3 { margin: 0 0 0.3rem; color: var(--navy); font-size: 1rem; }
 .badge-card p { margin: 0 0 0.6rem; font-size: 0.82rem; color: var(--muted); }
 
+/* ---------- name capture / leaderboard / feedback ---------- */
+
+.name-banner, .who-box {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--brick);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.2rem;
+  margin-bottom: 1.25rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.92rem;
+  box-shadow: var(--shadow);
+}
+.name-fields {
+  display: inline-flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-left: 0.6rem;
+  vertical-align: middle;
+}
+.name-fields input {
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: "Segoe UI", sans-serif;
+  width: 10rem;
+  max-width: 40vw;
+}
+.who-box { border-left-color: var(--navy); margin-top: 1rem; }
+tr.me-row td { background: var(--parchment); font-weight: 700; }
+.feedback-link {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.42rem 0.5rem;
+  margin-top: 0.4rem;
+  border-top: 1px dashed var(--line);
+  border-radius: 6px;
+  color: var(--brick) !important;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.feedback-link:hover { background: var(--red-bg); }
+.side-sep { border-top: 1px dashed var(--line); margin: 0.4rem 0; }
+
 /* ---------- toasts ---------- */
 
 #toasts {

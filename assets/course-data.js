@@ -15,6 +15,11 @@ window.COURSE = {
   title: "Roofing Construction & Estimating",
   subtitle: "The Certification E-Course",
   bookUrl: "https://drive.google.com/file/d/1ZG6sCgc3P_V1si596NiOlgW5_caGKJ7g/view",
+  feedbackEmail: "dominicgpetro386@gmail.com",
+  /* Leaderboard backend: paste your Google Apps Script Web App URL here
+     (ends in /exec). See LEADERBOARD-SETUP.md. Empty = leaderboard shows
+     setup instructions and scores stay device-only. */
+  leaderboardUrl: "",
   passScore: 70,
   finalPassScore: 80,
   practiceSize: 20,
