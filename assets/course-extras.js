@@ -6,17 +6,18 @@
 window.COURSE_READING = {
   measuring: { ref: "Book Chapter 1 — Measuring and Calculating Roofs (pp. 1–22), plus Appendix A (Roof-Slope Factors, p. 430) and Appendix B (Valley Length Factors, p. 431)" },
   sheathing: { ref: "Book Chapter 2 — Roof Sheathing and Decking (pp. 23–34)" },
-  underlayment: { ref: "Book Chapter 3 — Underlayment (pp. 35–70)" },
+  underlayment: { ref: "Book Chapter 3 — Underlayment, Drip Edge, Eaves & Valley Flashing (pp. 35–70)" },
   asphalt: { ref: "Book Chapter 4 — Asphalt Shingles (pp. ~71–120)" },
+  rollroofing: { ref: "Book Chapter 5 — Mineral-Surfaced Roll Roofing (pp. ~121–148)" },
   wood: { ref: "Book Chapter 6 — Wood Shingles and Shakes (pp. ~149–187)" },
   tile: { ref: "Book Chapter 7 — Tile Roofing (pp. ~188–219)" },
   slate: { ref: "Book Chapter 8 — Slate Roofing (pp. ~220–244)" },
   metal: { ref: "Book Chapter 9 — Metal Roofing and Siding (pp. 245–276)" },
-  lowslope: { ref: "Book Chapter 5 — Mineral-Surfaced Roll Roofing (pp. ~121–148) and Chapter 10 — Built-Up Roofing (pp. 277–318)" },
-  singleply: { ref: "Book Chapter 11 — Elastomeric Roofing (pp. 319–336) and Chapter 13 — Roof Coatings (pp. 369–386)" },
-  flashing: { ref: "Book Chapter 3 — Eaves & Valley Flashing (pp. 60–70), Chapter 12 — Wall Flashing (pp. 359–367), and Chapter 14 — Attic Ventilation & Gutters (pp. 407–412)" },
+  lowslope: { ref: "Book Chapter 10 — Built-Up Roofing (pp. 277–318)" },
+  singleply: { ref: "Book Chapter 11 — Elastomeric Roofing (pp. 319–336)" },
   insulation: { ref: "Book Chapter 12 — Insulation, Vapor Retarders and Waterproofing (pp. 337–368)" },
-  repair: { ref: "Book Chapter 14 — Roofing Repair and Maintenance (pp. 387–412)" },
+  coatings: { ref: "Book Chapter 13 — Roof Coatings (pp. 369–386)" },
+  repair: { ref: "Book Chapter 14 — Roofing Repair and Maintenance, incl. Attic Ventilation & Gutters (pp. 387–412)" },
   estimating: { ref: "Book Chapter 15 — Estimating (and Maximizing) Production Rates (pp. 413–429) and Appendix C — Equations Used in This Book (p. 432)" }
 };
 
@@ -189,16 +190,30 @@ window.COURSE_RECAPS = {
     tips: ["Core cuts before re-cover bids — wet insulation stays wet under new roof", "Gravel-surfaced BUR hides damage; probe, don't assume"]
   },
   "lowslope|1": {
-    sum: "Mod-bit is factory-built BUR — APP torches, SBS flexes and self-adheres — and roll roofing remains the honest budget cover; torch discipline is non-negotiable.",
-    points: ["APP = torch; SBS = torch/mop/cold-process/self-adhered (the flame-free residential answer)", "Base + granulated cap; laps 3–4\" side, 6\" end, staggered; granules pressed into seam bleed-out", "Torch safety: permits, extinguishers, never flame-to-deck, 1-hour fire watch minimum", "90-lb roll roofing: 8–12 year cover for sheds/outbuildings, single or double coverage"],
+    sum: "Mod-bit is factory-built BUR — APP torches, SBS flexes and self-adheres — and flat-roof flashing details (cants, base flashings, expansion joints) are their own craft; torch discipline is non-negotiable.",
+    points: ["APP = torch; SBS = torch/mop/cold-process/self-adhered (the flame-free residential answer)", "Base + granulated cap; laps 3–4\" side, 6\" end, staggered; granules pressed into seam bleed-out", "Torch safety: permits, extinguishers, never flame-to-deck, 1-hour fire watch minimum", "Base flashings climb walls over cant strips; expansion joints get bellows details"],
     remember: ["Torch-to-base-sheet, never torch into concealed cavities", "Rolls ≈ 1 square net each; two-layer systems double the count"],
-    tips: ["Sell roll roofing as exactly what it is — cheap and short-lived — and you keep the customer", "Smoldering hidden starts end roofing companies; the fire watch is sacred"]
+    tips: ["Never leave an open edge overnight — water cut-offs close every shift", "Smoldering hidden starts end roofing companies; the fire watch is sacred"]
   },
   "lowslope|2": {
     sum: "Flat still means 1/4\" per foot of drainage — ponding kills membranes and warranties, and fixing it with tapered systems and crickets is estimating work.",
     points: ["Ponding = standing water 48 hours after rain", "Fix with tapered insulation packages, crickets between drains, added drains/scuppers", "Count and inspect drains, scuppers and overflows on every low-slope bid", "Moisture scans pay for themselves on big re-covers"],
     remember: ["Tapered packages come with shop drawings and their own pricing", "A new membrane draining to a clogged drain is a scheduled warranty claim"],
     tips: ["Walk the roof during or right after rain when you can — water tells the truth", "Photograph ponding rings; they sell the tapered upgrade for you"]
+  },
+
+  /* ---------- rollroofing ---------- */
+  "rollroofing|0": {
+    sum: "Mineral-surfaced roll roofing is the honest budget cover — 36\" rolls, about a square each, laid exposed-nail, concealed-nail, or double-coverage as slope drops.",
+    points: ["Uses: sheds, porches, barns, outbuildings — an 8–12 year cover at low cost", "Exposed-nail single coverage needs ~2/12+; concealed-nail is cleaner and tighter", "Double coverage (selvage lap) puts two layers everywhere — usable to ~1/12", "End laps ~6\", staggered, cemented; upper courses always over lower"],
+    remember: ["A 90-lb roll ≈ one square before laps", "Roll roofing also lines valleys under shingle roofs (18\" + 36\" strips)"],
+    tips: ["Warm and relax the rolls before laying or fight cracks all day", "Sell it as exactly what it is — cheap and short-lived — and you keep the customer"]
+  },
+  "rollroofing|1": {
+    sum: "Single coverage ≈ a square per roll minus laps; double coverage halves that — and the 36\" module creates strip waste on odd-width roofs.",
+    points: ["Single: figure ~90–95 sq ft net per roll", "Double: figure ~half a square net — the roll count doubles", "Odd widths fight the 36\" module — raise the waste factor", "Cement by the gallon against lap footage; nails; drip edge; primer on dusty decks"],
+    remember: ["Fastest roof covering in the book — labor prices low", "Minimum job charges protect the trip on small sheds"],
+    tips: ["Quote shed jobs with a floor price, not just per-square math", "Count lap cement honestly — running out mid-course ruins the seal"]
   },
 
   /* ---------- 10. singleply ---------- */
@@ -214,27 +229,35 @@ window.COURSE_RECAPS = {
     remember: ["Details — corners, boots, T-patches, terminations — separate 20-year roofs from callback machines", "Ballast = verified structure + hail/debris exposure check"],
     tips: ["Watch the welder's speed on cold mornings — that's where cold welds are born", "A seam probe in your pocket makes you the sharpest person on any TPO inspection"]
   },
-  "singleply|2": {
+  "coatings|1": {
     sum: "Coatings and SPF restore sound roofs at a fraction of replacement — silicone for ponding, acrylic for economy, urethane for traffic, foam for insulation-plus-waterproofing — but prep and mils decide everything.",
     points: ["Silicone: ponding champion, recoat-only-with-silicone, slick wet", "Acrylic: economical, wants drainage and dry cure windows; urethane: toughest traffic layer", "SPF: ~R-6+/inch, self-flashing, seamless — needs UV topcoat with granules and trained applicators", "Workflow: clean → repair wet insulation/seams → rust treat → reinforce details → adhesion test → spec mils"],
     remember: ["Coverage runs gallons/sq at spec dry-film thickness — skimped mils are THE coating failure", "Coatings convert into inspect-and-recoat maintenance agreements"],
     tips: ["Test-patch adhesion before promising anything on an unknown roof", "Overspray drifts — mask, monitor wind, and park cars far away on SPF days"]
   },
 
-  /* ---------- 11. flashing ---------- */
-  "flashing|0": {
+  /* ---------- coatings ---------- */
+  "coatings|0": {
+    sum: "Coating chemistry is the choice: silicone for ponding, acrylic for economy with drainage, urethane for traffic — and reflective white carries an energy story.",
+    points: ["Silicone: ponding champion, UV-immortal, recoat-only-with-silicone, slick wet", "Acrylic: economical and easy, wants positive drainage and dry cure windows", "Urethane: toughest film — traffic zones and hail country, often the base coat", "Aluminum coatings remain the smooth-BUR/mod-bit maintenance standard"],
+    remember: ["System warranties hinge on inspection, primer and specified mils", "White reflective coatings sell on cooling costs and membrane life"],
+    tips: ["Match the chemistry to the roof's drainage before quoting anything", "Read the spec sheet, not the sales sheet"]
+  },
+
+  /* ---------- 11. flashing (dissolved into ch3 & ch14) ---------- */
+  "underlayment|3": {
     sum: "Water always beats caulk; shaped metal that laps downhill beats water — drip edge, step, counter, valley, cricket and boot details are the whole game.",
     points: ["Step flashing = one piece per course, woven in; a bent strip is not step flashing", "Counterflashing covers step/base flashing — reglet into masonry or behind siding", "Open W-valley for longevity/debris; closed-cut for production; membrane under either", "Chimneys >24\" wide get a cricket on the high side; neoprene boots are America's #1 small leak"],
     remember: ["Reusing old flashing = inheriting old leaks — replace with the roof", "Drip edge protects the deck edge and fascia at eaves and rakes"],
     tips: ["Upgrade boots to silicone or metal-collar versions and say so in the bid", "Photograph your flashing details — they close the next sale"]
   },
-  "flashing|1": {
+  "repair|3": {
     sum: "Balanced ventilation — soffit intake low, ridge exhaust high — extends shingle life, stops ice dams and rot, and protects the manufacturer's warranty.",
     points: ["Baseline 1/150 NFA (1/300 balanced with vapor retarder)", "About half the vent area low, half high; never mix exhaust types on one attic", "Blocked soffits (paint, insulation) starve the system — baffles keep the path open", "Convert NFA math to product: ridge vent ~18 sq in/LF"],
     remember: ["A fan or turbine near a ridge vent short-circuits airflow — and can pull in weather", "Under-ventilated attics give manufacturers warranty-proration ammunition"],
     tips: ["Document the ventilation fix in every proposal — honest upsell, warranty protection", "Frost on nails in winter attics = ventilation sales call"]
   },
-  "flashing|2": {
+  "repair|4": {
     sum: "The roof's job ends when water is away from the foundation: sized gutters, pitched runs, enough downspouts, and extensions that actually discharge clear.",
     points: ["5\" K-style standard, 6\" for big/steep roofs and intense rain", "Slope 1/16\"–1/8\" per foot toward outlets", "2\"×3\" downspout ≈ 600 sq ft of roof; 3\"×4\" ≈ 1,200", "Hangers 24\"–36\" (closer in snow); hidden hangers with screws"],
     remember: ["Estimate gutter + downspout LF plus elbows, miters, end caps, outlets, guards", "Discharge 4'+ from the foundation or the basement pays for it"],
