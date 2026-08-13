@@ -685,7 +685,7 @@
 
   function viewFinal() {
     var ready = C.chapters.filter(function (ch) { return chapterPassed(ch.id); }).length;
-    var sub = C.finalSize + " questions across all 12 chapters. Pass at <strong>" + C.finalPassScore +
+    var sub = C.finalSize + " questions across all " + C.chapters.length + " chapters. Pass at <strong>" + C.finalPassScore +
       "%</strong> to earn your certificate." +
       (ready < C.chapters.length ? " <em>(You've passed " + ready + "/" + C.chapters.length +
         " chapter tests — finishing them first is strongly recommended.)</em>" : "");
@@ -911,7 +911,7 @@
       '<h2>Certificate of Completion</h2>' +
       '<p class="cert-awarded">This certifies that</p>' +
       '<p class="cert-name" id="cert-name">' + esc(DB.name || "Your Name Here") + "</p>" +
-      '<p class="cert-awarded">has completed all twelve chapters of study and passed the certification examination<br>with a best score of <strong>' + best + "%</strong></p>" +
+      '<p class="cert-awarded">has completed all ' + C.chapters.length + ' chapters of study and passed the certification examination<br>with a best score of <strong>' + best + "%</strong></p>" +
       '<div class="cert-foot"><span>Earned ' + fmtDate(earnedTs) + "</span><span>🏆</span><span>Pass standard: " + C.finalPassScore + "%</span></div>" +
       "</div>"));
     return wrap;
