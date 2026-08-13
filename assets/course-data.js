@@ -23,7 +23,7 @@ window.COURSE = {
   passScore: 70,
   finalPassScore: 80,
   practiceSize: 20,
-  finalSize: 36,
+  finalSize: 42,
 
   masteryLevels: [
     { min: 90, label: "Nailed it", icon: "🔨", cls: "m-nailed" },
@@ -562,7 +562,7 @@ window.COURSE = {
         {
           t: "Coatings and restoration: the service-revenue play",
           min: 10,
-          html: "<p>Fluid-applied restoration puts a new weather surface on a sound old roof at a fraction of replacement cost:</p><ul><li><strong>Silicone:</strong> the ponding-water champion; single-coat-capable, but recoat-only-with-silicone thereafter, and slick when wet.</li><li><strong>Acrylic:</strong> economical, easy, reflective — wants positive drainage and dry-weather cure windows.</li><li><strong>Urethane:</strong> toughest traffic/impact resistance, common as a base with silicone or acrylic top.</li></ul><p>The workflow is non-negotiable: clean (usually pressure-wash), repair wet insulation and failed seams first, treat rust, reinforce seams and details with fabric or mastic, verify adhesion with test patches, then apply to the specified <strong>dry-film thickness</strong> — coverage runs in gallons per square at spec mils, and skimping mils is the classic coating failure.</p><div class='tip'>💡 <strong>Business model:</strong> coating jobs convert into maintenance agreements — annual inspection, minor repairs, scheduled recoat. Recurring revenue smooths the storm-cycle rollercoaster.</div>"
+          html: "<p>Fluid-applied restoration puts a new weather surface on a sound old roof at a fraction of replacement cost:</p><ul><li><strong>Silicone:</strong> the ponding-water champion; single-coat-capable, but recoat-only-with-silicone thereafter, and slick when wet.</li><li><strong>Acrylic:</strong> economical, easy, reflective — wants positive drainage and dry-weather cure windows.</li><li><strong>Urethane:</strong> toughest traffic/impact resistance, common as a base with silicone or acrylic top.</li></ul><p>The workflow is non-negotiable: clean (usually pressure-wash), repair wet insulation and failed seams first, treat rust, reinforce seams and details with fabric or mastic, verify adhesion with test patches, then apply to the specified <strong>dry-film thickness</strong> — coverage runs in gallons per square at spec mils, and skimping mils is the classic coating failure.</p><p><strong>Sprayed polyurethane foam (SPF) roofing</strong> is the related specialty: closed-cell foam sprayed directly on the deck or old roof (~R-6+/inch, self-flashing around penetrations, no seams at all), then protected from UV with a silicone or acrylic topcoat and embedded granules. SPF demands tight weather windows, trained applicators and overspray control — but it insulates and waterproofs in one pass and recoats indefinitely.</p><div class='tip'>💡 <strong>Business model:</strong> coating jobs convert into maintenance agreements — annual inspection, minor repairs, scheduled recoat. Recurring revenue smooths the storm-cycle rollercoaster.</div>"
         }
       ],
       bank: [
@@ -575,7 +575,8 @@ window.COURSE = {
         { cat: "Attachment & seams", q: "A ballasted EPDM roof requires:", a: ["Nothing special", "Structure verified for the rock/paver weight", "Torch permits", "Steep slope"], correct: 1 },
         { cat: "Coatings & restoration", q: "The best coating chemistry for ponding-water areas:", a: ["Acrylic", "Silicone", "Latex paint", "Linseed oil"], correct: 1 },
         { cat: "Coatings & restoration", q: "The classic coating failure is:", a: ["Too many coats", "Under-applying the specified dry-film thickness", "Cleaning too well", "Using fabric at seams"], correct: 1 },
-        { cat: "Coatings & restoration", q: "Before any coating goes down you must:", a: ["Just spray it", "Clean, repair, reinforce seams and verify adhesion with test patches", "Remove all flashing", "Add gravel"], correct: 1 }
+        { cat: "Coatings & restoration", q: "Before any coating goes down you must:", a: ["Just spray it", "Clean, repair, reinforce seams and verify adhesion with test patches", "Remove all flashing", "Add gravel"], correct: 1 },
+        { cat: "Coatings & restoration", q: "SPF (spray foam) roofing must be protected from UV by:", a: ["Nothing — foam is UV-stable", "A silicone or acrylic topcoat, often with granules", "Gravel ballast only", "Paint thinner"], correct: 1 }
       ],
       gens: [
         {
@@ -657,7 +658,114 @@ window.COURSE = {
       ]
     },
 
-    /* ================= 12. ESTIMATING ================= */
+    /* ================= 12. INSULATION/VAPOR/WATERPROOFING ================= */
+    {
+      id: "insulation",
+      title: "Insulation, Vapor Retarders & Waterproofing",
+      tagline: "The roof system doesn't stop at the shingles — heat, moisture and water vapor all have to be managed, or the building rots from the inside.",
+      cats: ["Insulation & R-value", "Vapor & moisture control", "Waterproofing & sealants"],
+      lessons: [
+        {
+          t: "Insulation materials and R-values",
+          min: 12,
+          html: "<p>Insulation resists heat flow, and <strong>R-value</strong> is the score: higher R, slower heat loss. R-values add — an R-19 batt over R-19 of blown fill is roughly R-38. What the roofer meets in the field:</p><ul><li><strong>Blown-in (loose fill):</strong> fiberglass (~R-2.5/inch) and cellulose (~R-3.5/inch) — the standard for attic floors; fast to top up during a re-roof.</li><li><strong>Batts and blankets:</strong> fiberglass/mineral wool between framing; R-13 to R-38 common. Gaps and compression destroy rated performance — a batt stuffed around wiring loses a chunk of its R.</li><li><strong>Rigid board:</strong> polyiso (~R-6/inch, the commercial roof standard), XPS (~R-5), EPS (~R-4). On low-slope roofs the insulation IS part of the roof system — mechanically fastened or adhered under the membrane, often tapered to create drainage slope.</li><li><strong>Spray polyurethane foam:</strong> closed-cell ~R-6+/inch, air-seals as it insulates.</li></ul><p>Codes commonly call for attic insulation in the <strong>R-38 to R-60</strong> range depending on climate zone. A re-roof is the cheapest moment to fix a cold attic — access is open and crews are already there: real upsell, real energy savings.</p><div class='tip'>💡 <strong>Keep the vents breathing:</strong> insulation jammed into the eaves blocks soffit intake and cooks the roof. Install baffles at every rafter bay before topping up blown fill.</div>"
+        },
+        {
+          t: "Vapor retarders and moisture control",
+          min: 10,
+          html: "<p>Warm air carries water vapor, and vapor drives toward the cold side of an assembly. When it hits a cold surface — the underside of sheathing in January — it condenses, and wet sheathing grows mold, rusts fasteners, and delaminates.</p><ul><li><strong>Vapor retarders</strong> slow that drive. Rule of thumb in heating climates: the retarder goes on the <strong>warm-in-winter side</strong> — behind the ceiling drywall, under the attic insulation. Hot-humid climates can reverse or omit it; mixed climates get the most argument and the most 'smart' membranes.</li><li>Classes run from Class I (poly sheet, true barrier) to Class III (latex paint). More vapor-open assemblies dry faster; barriers in the wrong place trap water — two retarders sandwiching an assembly is how you build a terrarium.</li><li><strong>Air sealing beats vapor math:</strong> most attic moisture rides air leaks (top plates, can lights, bath fans venting into the attic) — seal the leaks and duct fans outdoors before adding insulation.</li><li>On low-slope roofs, a deck-level <strong>base-sheet vapor retarder</strong> protects the insulation above it on high-humidity buildings (pools, laundries, kitchens).</li></ul><div class='tip'>💡 <strong>Field diagnostic:</strong> frost on nail tips in the attic in winter, rusty nail heads, or matted gray insulation under the ridge = moisture problem. Fix ventilation and air sealing with the re-roof, or the new deck rots like the old one.</div>"
+        },
+        {
+          t: "Waterproofing, dampproofing and sealants",
+          min: 10,
+          html: "<p>Below the roofline, the same physics continues — and roofing contractors get asked about all of it:</p><ul><li><strong>Dampproofing</strong> is a spray/trowel asphalt coating on foundation walls that resists soil moisture. <strong>Waterproofing</strong> is a heavier, continuous membrane (rubberized asphalt sheet, bentonite, fluid-applied) that holds back actual water pressure. They are not the same product and don't carry the same warranty.</li><li><strong>Wall flashing</strong> in masonry (through-wall flashing with weeps) moves water that gets inside a wall back out. Sill pans, head flashings and kick-out flashings at roof-wall intersections keep siding walls dry — a missing kick-out is a classic hidden-rot generator.</li><li><strong>Sealant families:</strong> silicone (UV-immortal, unpaintable), polyurethane (tough, paintable, joint movement), butyl (concealed laps, tacky forever), acrylic/latex (paintable, light duty). Joint design matters: proper width-to-depth, backer rod so the bead stretches in two directions, primed surfaces where specified.</li><li>Caulk is a <strong>component</strong>, never the strategy: it finishes flashed details; it never substitutes for them.</li></ul>"
+        }
+      ],
+      bank: [
+        { cat: "Insulation & R-value", q: "R-value measures:", a: ["Resistance to heat flow — higher is better", "Weight per square", "Water resistance", "Fire rating"], correct: 0 },
+        { cat: "Insulation & R-value", q: "The rigid insulation standard on commercial low-slope roofs (~R-6/inch) is:", a: ["EPS", "Polyisocyanurate (polyiso)", "Fiberglass batt", "Rockwool"], correct: 1 },
+        { cat: "Insulation & R-value", q: "Tapered insulation packages exist to:", a: ["Save money", "Create drainage slope on flat roofs", "Add weight", "Replace membranes"], correct: 1 },
+        { cat: "Insulation & R-value", q: "Blown insulation pushed tight into the eaves:", a: ["Improves airflow", "Blocks soffit intake — baffles are required", "Is code-required", "Stops ice dams"], correct: 1 },
+        { cat: "Vapor & moisture control", q: "In a heating climate, the vapor retarder belongs:", a: ["On the cold side", "On the warm-in-winter side (under the attic insulation)", "On both sides", "Nowhere"], correct: 1 },
+        { cat: "Vapor & moisture control", q: "Most attic moisture actually arrives via:", a: ["Vapor diffusing through drywall", "Air leaks — top plates, can lights, bath fans dumping into the attic", "The shingles", "Rising damp"], correct: 1 },
+        { cat: "Vapor & moisture control", q: "Frost on nail tips and rusty nail heads in a winter attic signal:", a: ["Normal aging", "A moisture/ventilation problem to fix during the re-roof", "Bad shingles", "Too much insulation"], correct: 1 },
+        { cat: "Waterproofing & sealants", q: "The difference between dampproofing and waterproofing:", a: ["Just marketing", "Waterproofing is a continuous membrane rated to resist water pressure; dampproofing only resists soil moisture", "Dampproofing is stronger", "Color"], correct: 1 },
+        { cat: "Waterproofing & sealants", q: "Backer rod in a sealant joint exists to:", a: ["Add color", "Control joint depth so the bead stretches properly in two directions", "Replace primer", "Hold the caulk gun"], correct: 1 },
+        { cat: "Waterproofing & sealants", q: "A missing kick-out flashing where a roof edge meets a sidewall causes:", a: ["Nothing", "Concentrated runoff behind the siding and hidden wall rot", "Better drainage", "Lighter gutter loads"], correct: 1 }
+      ],
+      gens: [
+        {
+          cat: "Insulation & R-value",
+          gen: function (R) {
+            var m = R.pick([[3.5, "cellulose (~R-3.5/inch)"], [2.5, "blown fiberglass (~R-2.5/inch)"]]);
+            var target = R.pick([38, 49, 60]);
+            var inches = Math.ceil(target / m[0]);
+            return {
+              q: "You're topping an attic up to R-" + target + " using " + m[1] + ". About how many total inches of fill does that take (round up)?",
+              a: [inches + " inches", Math.ceil(inches / 2) + " inches", (inches + 8) + " inches", target + " inches"],
+              correct: 0
+            };
+          }
+        }
+      ]
+    },
+
+    /* ================= 13. REPAIR & RE-ROOFING ================= */
+    {
+      id: "repair",
+      title: "Roof Repair, Maintenance & Re-Roofing",
+      tagline: "Finding leaks, judging hail and wind damage, and making the overlay-vs-tear-off call — the service side of the business, where trust is built.",
+      cats: ["Leak diagnosis & repair", "Storm damage assessment", "Re-roofing decisions"],
+      lessons: [
+        {
+          t: "Finding the source of leaks — and fixing them for good",
+          min: 12,
+          html: "<p>The wet ceiling spot is the <em>end</em> of the story, not the beginning: water enters high, travels down rafters, decking and pipes, and shows up feet away from the breach. Diagnosis discipline:</p><ul><li><strong>Start at the usual suspects:</strong> penetrations and flashings cause the great majority of leaks — pipe boots (cracked neoprene), chimney and skylight flashing, wall step flashing, valleys, and nail pops. Field-of-shingle failures are rarer than customers think.</li><li><strong>Work uphill from the stain:</strong> in the attic with a flashlight, follow water tracks, rust trails and dark staining up-slope to the entry point. Measure from a common reference (chimney, vent) inside, then locate the same spot on the roof.</li><li><strong>Recreate it when hidden:</strong> a garden-hose test, one zone at a time from the bottom up, with a spotter inside. Moisture meters and infrared cameras find saturated insulation on low-slope roofs.</li><li><strong>Repair like it's permanent:</strong> replace the boot or flashing, weave in new shingles matching the exposure — smeared roof cement is a 12-month bandage that makes the real repair harder later.</li></ul><p><strong>Maintenance programs</strong> — annual inspection, sealant touch-up, debris/gutter cleaning, photo report — keep small problems small and keep your name on the roof between storms. Recurring revenue, warranty protection, first call for the eventual replacement.</p>"
+        },
+        {
+          t: "Assessing hail and wind damage",
+          min: 12,
+          html: "<p>Storm work runs on honest, documented assessment — the adjuster and the homeowner both need to trust your eyes.</p><ul><li><strong>Hail on asphalt</strong> looks like a bruise: a dark round spot where granules are knocked away, often soft underneath, sometimes a star-shaped mat fracture visible from behind. Random pattern, no straight lines. Distinguish from <strong>blistering</strong> (raised, pattern follows manufacturing) and simple age (uniform granule loss in wear paths).</li><li><strong>Read the soft metals first:</strong> dents in gutters, downspouts, vents, flashings and AC fins prove hail size and direction — if the soft metals are clean, be skeptical of 'hail damage' on the shingles.</li><li><strong>The test square:</strong> mark a 10' × 10' square per slope and count qualifying hits; many carriers use thresholds (commonly ~8+ hits per square on asphalt) to total a slope. Chalk the hits, photograph everything, note slope direction.</li><li><strong>Wind damage</strong> shows as creased, folded-back or missing tabs — creases mean the seal broke and the shingle flexed; those shingles are done even if they lie back down.</li><li><strong>Document like a pro:</strong> date-stamped photos wide-then-close, ladder-line, address shot, every slope, every accessory. Your file should let someone who never visited approve the claim.</li></ul><div class='tip'>💡 <strong>Integrity is the sales strategy:</strong> telling a homeowner their roof does NOT have claimable damage earns you the referral and the replacement years later. Chalking phantom hits earns you a fraud file.</div>"
+        },
+        {
+          t: "Re-roofing: overlay vs. tear-off",
+          min: 10,
+          html: "<p>Every aging asphalt roof reaches the same fork: <strong>overlay</strong> (new shingles over old) or <strong>tear-off</strong>. Code allows a maximum of <strong>two layers</strong> of asphalt shingles — one existing layer is the most you can go over.</p><p><strong>Overlay is acceptable only when</strong> the existing layer is single, flat and well-adhered, the deck is sound, and there's no widespread curling or moisture. It saves tear-off labor and disposal — but it hides the deck, telegraphs old defects through, runs hotter (shorter life), adds weight, and many manufacturers trim the warranty.</p><p><strong>Tear-off wins</strong> whenever there are two layers, wood shakes underneath, soft decking, extensive leak history, or when the customer wants full warranty and ice-and-water at the eaves — you can't dry-in a deck you never exposed. Storm/insurance work is effectively always tear-off.</p><p><strong>Estimating re-roofing</strong> adds the demolition math: tear-off labor by layer and pitch, disposal at ~250–350 lbs per square per layer, dumpster count and placement, landscaping/pool/driveway protection, magnet sweep for nails, and the per-sheet decking unit price in writing. Demolition safety is part of the bid: falling debris zones, chutes or wheelbarrow runs, and never opening more roof than the day's weather window can close.</p>"
+        }
+      ],
+      bank: [
+        { cat: "Leak diagnosis & repair", q: "The wet spot on a ceiling usually sits:", a: ["Directly under the breach", "Downhill from the entry point — water travels along framing and decking", "At the ridge", "At the gutter"], correct: 1 },
+        { cat: "Leak diagnosis & repair", q: "The most common leak sources are:", a: ["The middle of open shingle field", "Penetrations and flashings — boots, chimneys, skylights, walls, valleys", "Ridge caps", "Gable trim"], correct: 1 },
+        { cat: "Leak diagnosis & repair", q: "A hose test is run:", a: ["Whole roof at once", "One zone at a time, from the bottom of the roof upward, with a spotter inside", "Top down, fast", "Only in winter"], correct: 1 },
+        { cat: "Leak diagnosis & repair", q: "Smearing roof cement over a failed flashing is:", a: ["A permanent repair", "A short-lived bandage that complicates the real repair", "Manufacturer-approved", "Better than replacement"], correct: 1 },
+        { cat: "Storm damage assessment", q: "Fresh hail damage on an asphalt shingle looks like:", a: ["A straight scratch line", "A random dark bruise of missing granules, sometimes soft, with possible mat fracture", "Uniform granule loss in walk paths", "Raised blisters in a pattern"], correct: 1 },
+        { cat: "Storm damage assessment", q: "Before calling shingle damage hail, check:", a: ["The lawn", "Soft metals — gutters, vents, flashings, AC fins — for matching dents", "The neighbor's roof only", "Paint color"], correct: 1 },
+        { cat: "Storm damage assessment", q: "A creased, folded-back shingle tab after a windstorm:", a: ["Is fine once it lies flat again", "Is broken — the seal and mat have failed", "Needs caulk only", "Proves hail"], correct: 1 },
+        { cat: "Storm damage assessment", q: "The standard hail inspection area marked on each slope is:", a: ["A 10' × 10' test square", "The whole slope", "One shingle", "A 3' circle"], correct: 0 },
+        { cat: "Re-roofing decisions", q: "Code allows how many total layers of asphalt shingles?", a: ["One", "Two", "Three", "Unlimited"], correct: 1 },
+        { cat: "Re-roofing decisions", q: "Which condition REQUIRES tear-off rather than overlay?", a: ["A single flat well-adhered layer", "Two existing layers or soft decking", "New gutters", "A 6/12 pitch"], correct: 1 },
+        { cat: "Re-roofing decisions", q: "Overlays cost less up front but:", a: ["Last longer", "Hide the deck, run hotter, and often trim the warranty", "Weigh less", "Improve ventilation"], correct: 1 }
+      ],
+      gens: [
+        {
+          cat: "Re-roofing decisions",
+          gen: function (R) {
+            var sq = R.int(20, 45);
+            var layers = R.pick([1, 2]);
+            var tons = sq * layers * 300 / 2000;
+            var cap = R.pick([10, 12]);
+            var dumpsters = Math.ceil(tons / cap);
+            return {
+              q: "Tear-off: " + sq + " squares, " + layers + " layer" + (layers > 1 ? "s" : "") + " at ~300 lbs per square-layer, hauled in " + cap + "-ton dumpsters. How many dumpster loads (round up)?",
+              a: [dumpsters + " load" + (dumpsters > 1 ? "s" : ""), (dumpsters + 2) + " loads", Math.max(1, dumpsters - 1) + " load(s)", (dumpsters + 5) + " loads"],
+              correct: 0
+            };
+          }
+        }
+      ]
+    },
+
+    /* ================= 14. ESTIMATING ================= */
     {
       id: "estimating",
       title: "Estimating, Overhead & Bidding to Win",
@@ -675,6 +783,11 @@ window.COURSE = {
           html: "<p><strong>Overhead is not profit.</strong> Overhead is every cost of existing that no single job creates: office/shop rent, truck payments and fuel, liability insurance, phones and software, advertising, estimating time (including all the bids you lose), the bookkeeper, and <em>your own salary</em>. Total it annually, divide by expected annual direct-cost volume, and you get your overhead percentage — for many roofing companies, <strong>15–30% on direct costs</strong>.</p><p><strong>Profit</strong> is what remains after ALL costs, direct and overhead. It's the company's reward for risk — warranty reserve, slow-season cash, growth capital. Pricing formula:</p><p style='text-align:center'><strong>Price = Direct Cost × (1 + Overhead%) × (1 + Profit%)</strong></p><p>Example: $10,000 direct × 1.25 overhead × 1.10 profit = <strong>$13,750</strong>. Skip the overhead layer and that \"10% profit\" job actually loses money — the office still got paid, just out of your pocket.</p><p><strong>Discount math nobody survives ignoring:</strong> at a 10% net margin, a \"small\" 5% discount hands away <em>half the profit</em>. Know your break-even to the dollar before you negotiate a nickel.</p>"
         },
         {
+          t: "Production rates and labor unit prices",
+          min: 10,
+          html: "<p>Labor is priced two ways, and good estimators use both:</p><ul><li><strong>Production rates:</strong> squares per crew-day by material, pitch, stories and cut-up factor. A crew that lays 25 squares/day on a walkable gable ranch might do 12 on a two-story 10/12 hip. Multiply crew-day cost (loaded rates × crew size) by days.</li><li><strong>Unit prices:</strong> labor per square (or LF for trim/gutters) built FROM those rates — faster to apply, easy to compare against subs' quotes, and the format insurance estimates use.</li></ul><p><strong>Published price books and software databases</strong> (national averages) are a starting point, never gospel: they don't know your crew, your market's wages, or that this house has a dead-valley and a 40' eave height. Adjust or be burned.</p><p><strong>Maximizing production is estimating leverage:</strong> boom delivery to the ridge instead of ladder-humping, staging tear-off and dry-in so the roof never waits on material, specialized roles (cutter, nailer, flashing man) instead of everyone doing everything, starting the sun-baked slopes early. Every crew-hour saved at the same price is margin — and every job's actual hours logged against the estimate makes the next estimate sharper.</p><div class='tip'>💡 <strong>Your numbers beat the book's:</strong> after ten job-costed roofs you'll know YOUR squares-per-day within a square. That database is a competitive weapon nobody can copy.</div>"
+        },
+        {
           t: "Bidding strategy and the contract that protects you",
           min: 12,
           html: "<p>Winning work is a system, not a mood:</p><ul><li><strong>Qualify before you bid:</strong> decision-maker identified, budget reality checked, timeline honest. The wrong customer at the right price is still a loss.</li><li><strong>Track your bid-hit ratio</strong> by job type and lead source. Winning nearly everything means you're underpriced; winning nothing means you're mis-targeted or over-market. Healthy ratios often land in the 25–40% range on qualified residential leads.</li><li><strong>Scope in writing:</strong> exactly what's included; exactly what's excluded; unit prices for hidden conditions (decking per sheet, fascia per LF); brand/color/warranty specifics; payment schedule tied to milestones; change-order procedure. \"Turn your estimate into a bid, and your bid into a contract\" — verbal agreements roof nothing.</li><li><strong>Present value, not just price:</strong> ventilation fixes, ice-dam protection, workmanship warranty, photos of your flashing details. When you're never the cheapest, you need to be the clearest.</li><li><strong>Insurance/storm work:</strong> scope from the adjuster's estimate line-for-line, supplement legitimately with documentation, and keep the homeowner informed — trust is the entire storm business.</li></ul><div class='tip'>💡 <strong>The Friday habit:</strong> job-cost every completed job against its estimate — materials, hours, dump fees. Twenty minutes a week turns every roof into tuition for the next hundred bids.</div>"
@@ -684,6 +797,8 @@ window.COURSE = {
         { cat: "Direct costs & labor", q: "A 'loaded' labor rate includes:", a: ["Base wage only", "Wage plus payroll taxes, workers' comp and benefits", "Wage plus profit", "Overtime only"], correct: 1 },
         { cat: "Direct costs & labor", q: "The most valuable productivity data comes from:", a: ["National estimating books", "Job-costing your own crews on every job", "Supplier salesmen", "Competitors' rumors"], correct: 1 },
         { cat: "Direct costs & labor", q: "Which belongs in job-specific direct costs?", a: ["Office rent", "Permits, disposal tonnage and steep charges for this job", "Your salary", "The bookkeeper"], correct: 1 },
+        { cat: "Direct costs & labor", q: "Published price books and estimating databases should be treated as:", a: ["Exact gospel", "A starting point to adjust with your own crew's tracked production rates", "Useless", "A legal requirement"], correct: 1 },
+        { cat: "Direct costs & labor", q: "Which move directly raises crew production (squares/day)?", a: ["Ladder-humping bundles", "Boom delivery of material to the ridge and staged tear-off/dry-in", "Starting shaded slopes first", "Smaller dumpsters"], correct: 1 },
         { cat: "Overhead & profit", q: "In pricing a job, overhead is best defined as:", a: ["The same as profit", "The indirect cost of running the business, recovered on every job", "Only office rent", "Optional on small jobs"], correct: 1 },
         { cat: "Overhead & profit", q: "Which of these is OVERHEAD, not a direct job cost?", a: ["Shingles", "Advertising and estimating time", "The job's dumpster", "This job's permit"], correct: 1 },
         { cat: "Overhead & profit", q: "At a 10% net margin, a 5% discount gives away:", a: ["5% of profit", "Nothing", "About half your profit", "Only overhead"], correct: 2 },
