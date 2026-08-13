@@ -679,7 +679,7 @@ window.COURSE = {
         { cat: "Direct costs & labor", q: "A 'loaded' labor rate includes:", a: ["Base wage only", "Wage plus payroll taxes, workers' comp and benefits", "Wage plus profit", "Overtime only"], correct: 1 },
         { cat: "Direct costs & labor", q: "The most valuable productivity data comes from:", a: ["National estimating books", "Job-costing your own crews on every job", "Supplier salesmen", "Competitors' rumors"], correct: 1 },
         { cat: "Direct costs & labor", q: "Which belongs in job-specific direct costs?", a: ["Office rent", "Permits, disposal tonnage and steep charges for this job", "Your salary", "The bookkeeper"], correct: 1 },
-        { cat: "Overhead & profit", q: "Overhead is:", a: ["The same as profit", "The indirect cost of running the business, recovered on every job", "Only office rent", "Optional on small jobs"], correct: 1 },
+        { cat: "Overhead & profit", q: "In pricing a job, overhead is best defined as:", a: ["The same as profit", "The indirect cost of running the business, recovered on every job", "Only office rent", "Optional on small jobs"], correct: 1 },
         { cat: "Overhead & profit", q: "Which of these is OVERHEAD, not a direct job cost?", a: ["Shingles", "Advertising and estimating time", "The job's dumpster", "This job's permit"], correct: 1 },
         { cat: "Overhead & profit", q: "At a 10% net margin, a 5% discount gives away:", a: ["5% of profit", "Nothing", "About half your profit", "Only overhead"], correct: 2 },
         { cat: "Overhead & profit", q: "The pricing formula is:", a: ["Price = cost + gut feel", "Price = direct cost × (1 + OH%) × (1 + profit%)", "Price = competitor's bid − $500", "Price = materials × 2 always"], correct: 1 },

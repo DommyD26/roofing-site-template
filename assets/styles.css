@@ -261,6 +261,7 @@ h1, h2, h3, .btn, .badge, .kicker, .card-meta, .side-nav, .site-header, .quiz-re
   color: var(--muted);
 }
 .exam-card { background: var(--parchment); border-color: #d9cfae; }
+.exam-card p, .exam-card .card-meta { color: #4b5563; }
 
 .badge {
   display: inline-block;
@@ -269,10 +270,10 @@ h1, h2, h3, .btn, .badge, .kicker, .card-meta, .side-nav, .site-header, .quiz-re
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
   background: var(--line);
-  color: var(--muted);
+  color: #4a5361;
 }
-.badge.pass { background: var(--green-bg); color: var(--green); }
-.badge.retry { background: var(--amber-bg); color: #9a6b1f; }
+.badge.pass { background: var(--green-bg); color: #1d5c38; }
+.badge.retry { background: var(--amber-bg); color: #775217; }
 
 /* ---------- lesson ---------- */
 
@@ -363,14 +364,14 @@ label.opt:hover { background: var(--paper); }
 fieldset.q.correct { border-color: var(--green); background: var(--green-bg); }
 fieldset.q.wrong { border-color: var(--red); background: var(--red-bg); }
 fieldset.q.correct label.opt.is-answer span,
-fieldset.q.wrong label.opt.is-answer span { color: var(--green); font-weight: 700; }
+fieldset.q.wrong label.opt.is-answer span { color: #1d5c38; font-weight: 700; }
 fieldset.q.wrong label.opt.is-answer span::after { content: " ← correct answer"; font-size: 0.78rem; }
 
 .quiz-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
 .quiz-result { margin: 0; font-weight: 700; font-size: 0.95rem; }
 .quiz-result.pass { color: var(--green); }
 .quiz-result.fail { color: var(--red); }
-.quiz-result.warn { color: #9a6b1f; }
+.quiz-result.warn { color: #775217; }
 
 .certificate {
   margin-top: 1.5rem;
@@ -521,15 +522,15 @@ fieldset.q.wrong label.opt.is-answer span::after { content: " ← correct answer
   border-radius: 999px;
   white-space: nowrap;
 }
-.m-nailed  { background: var(--green-bg); color: var(--green); }
+.m-nailed  { background: var(--green-bg); color: #1d5c38; }
 .cat-bar-fill.m-nailed { background: var(--green); }
-.m-solid   { background: #e7f0fb; color: #23538f; }
+.m-solid   { background: #e7f0fb; color: #1c4374; }
 .cat-bar-fill.m-solid { background: #3f76bd; }
-.m-getting { background: var(--amber-bg); color: #9a6b1f; }
+.m-getting { background: var(--amber-bg); color: #775217; }
 .cat-bar-fill.m-getting { background: #d99a2b; }
-.m-punch   { background: var(--red-bg); color: var(--red); }
+.m-punch   { background: var(--red-bg); color: #8f2b2b; }
 .cat-bar-fill.m-punch { background: var(--red); }
-.m-none    { background: var(--line); color: var(--muted); }
+.m-none    { background: var(--line); color: #4a5361; }
 
 .q-src { display: block; font-size: 0.72rem; color: var(--muted); font-weight: 400; margin-top: 0.15rem; }
 
@@ -566,7 +567,9 @@ table.history a { color: var(--navy); }
   text-align: center;
   box-shadow: var(--shadow);
 }
-.badge-card.locked { opacity: 0.55; filter: grayscale(0.6); }
+.badge-card.locked { border-style: dashed; background: var(--paper); }
+.badge-card.locked .badge-icon { filter: grayscale(1); opacity: 0.45; }
+.badge-card.locked h3 { color: #4a5361; }
 .badge-card.earned { border-color: #d9b98a; background: linear-gradient(180deg, #fffdf6, #fff); }
 .badge-icon { font-size: 2.2rem; display: block; margin-bottom: 0.4rem; }
 .badge-card h3 { margin: 0 0 0.3rem; color: var(--navy); font-size: 1rem; }

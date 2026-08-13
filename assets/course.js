@@ -13,17 +13,30 @@
 
   /* ---------------- storage ---------------- */
 
-  function load() {
-    try {
-      var d = JSON.parse(localStorage.getItem(KEY)) || {};
-      d.attempts = d.attempts || [];
-      d.badges = d.badges || {};
-      d.read = d.read || {};
-      d.name = d.name || "";
-      return d;
-    } catch (e) { return { attempts: [], badges: {}, read: {}, name: "" }; }
+  function plainObject(v) {
+    return v !== null && typeof v === "object" && !Array.isArray(v);
   }
-  function save() { localStorage.setItem(KEY, JSON.stringify(DB)); }
+  function load() {
+    var fallback = { attempts: [], badges: {}, read: {}, name: "" };
+    try {
+      var d = JSON.parse(localStorage.getItem(KEY));
+      if (!plainObject(d)) return fallback;
+      d.attempts = Array.isArray(d.attempts)
+        ? d.attempts.filter(function (a) {
+            return plainObject(a) && typeof a.score === "number" && typeof a.total === "number" &&
+              typeof a.kind === "string" && plainObject(a.cats || {});
+          })
+        : [];
+      if (!plainObject(d.badges)) d.badges = {};
+      if (!plainObject(d.read)) d.read = {};
+      if (typeof d.name !== "string") d.name = "";
+      return d;
+    } catch (e) { return fallback; }
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(DB)); }
+    catch (e) { /* storage full/blocked: keep running in-memory */ }
+  }
   var DB = load();
 
   /* ---------------- helpers ---------------- */
@@ -749,18 +762,29 @@
 
   function route() {
     var hash = location.hash || "#/home";
-    var view;
-    var m;
-    if ((m = hash.match(/^#\/chapter\/([\w-]+)\/lesson\/(\d+)$/))) view = viewLesson(m[1], Number(m[2]));
-    else if ((m = hash.match(/^#\/chapter\/([\w-]+)$/))) view = viewChapter(m[1]);
-    else if ((m = hash.match(/^#\/test\/([\w-]+)$/))) view = viewChapterTest(m[1]);
-    else if (hash === "#/practice") view = viewPractice();
-    else if (hash === "#/final") view = viewFinal();
-    else if (hash === "#/stats") view = viewStats();
-    else if (hash === "#/badges") view = viewBadges();
-    else if (hash === "#/certificate") view = viewCertificate();
+    var view, title = "Course Home";
+    var m, ch;
+    if ((m = hash.match(/^#\/chapter\/([\w-]+)\/lesson\/(\d+)$/))) {
+      view = viewLesson(m[1], Number(m[2]));
+      ch = chapterById(m[1]);
+      title = ch && ch.lessons[Number(m[2])] ? ch.lessons[Number(m[2])].t : title;
+    } else if ((m = hash.match(/^#\/chapter\/([\w-]+)$/))) {
+      view = viewChapter(m[1]);
+      ch = chapterById(m[1]);
+      title = ch ? ch.title : title;
+    } else if ((m = hash.match(/^#\/test\/([\w-]+)$/))) {
+      view = viewChapterTest(m[1]);
+      ch = chapterById(m[1]);
+      title = ch ? ch.title + " — Test" : title;
+    }
+    else if (hash === "#/practice") { view = viewPractice(); title = "Practice Test"; }
+    else if (hash === "#/final") { view = viewFinal(); title = "Certification Exam"; }
+    else if (hash === "#/stats") { view = viewStats(); title = "My Stats"; }
+    else if (hash === "#/badges") { view = viewBadges(); title = "Badges"; }
+    else if (hash === "#/certificate") { view = viewCertificate(); title = "Certificate"; }
     else view = viewHome();
 
+    document.title = title + " · Roofing Construction & Estimating E-Course";
     app.innerHTML = "";
     app.appendChild(view);
     renderSidebar();
