@@ -17,7 +17,7 @@
     return v !== null && typeof v === "object" && !Array.isArray(v);
   }
   function load() {
-    var fallback = { attempts: [], badges: {}, read: {}, name: "" };
+    var fallback = { attempts: [], badges: {}, read: {}, name: "", firstName: "", lastName: "", playerId: "" };
     try {
       var d = JSON.parse(localStorage.getItem(KEY));
       if (!plainObject(d)) return fallback;
@@ -30,6 +30,9 @@
       if (!plainObject(d.badges)) d.badges = {};
       if (!plainObject(d.read)) d.read = {};
       if (typeof d.name !== "string") d.name = "";
+      if (typeof d.firstName !== "string") d.firstName = "";
+      if (typeof d.lastName !== "string") d.lastName = "";
+      if (typeof d.playerId !== "string") d.playerId = "";
       return d;
     } catch (e) { return fallback; }
   }
@@ -182,6 +185,61 @@
     });
   }
 
+  /* ---------------- leaderboard backend ---------------- */
+
+  function saveName(first, last) {
+    DB.firstName = first.trim().slice(0, 40);
+    DB.lastName = last.trim().slice(0, 40);
+    if (!DB.playerId) DB.playerId = "p" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+    var full = (DB.firstName + " " + DB.lastName).trim();
+    if (full) DB.name = full; // prefills the certificate
+    save();
+  }
+
+  /* Fire-and-forget score submission to the Google Apps Script endpoint.
+     text/plain avoids a CORS preflight; failures never disturb the app. */
+  function submitScore(attempt) {
+    if (!C.leaderboardUrl || !DB.firstName || typeof fetch !== "function") return;
+    try {
+      fetch(C.leaderboardUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({
+          playerId: DB.playerId, first: DB.firstName, last: DB.lastName,
+          kind: attempt.kind, chapter: attempt.chapter || "",
+          score: attempt.score, correct: attempt.correct, total: attempt.total, ts: attempt.ts
+        })
+      }).catch(function () { /* offline or endpoint down — local history still has it */ });
+    } catch (e) { /* never let telemetry break the app */ }
+  }
+
+  function nameBanner() {
+    if (DB.firstName) return null;
+    var box = el("div", "name-banner",
+      "<strong>👷 Who's training?</strong> Enter your name so your scores show up on the team leaderboard." +
+      '<span class="name-fields">' +
+      '<input id="nb-first" maxlength="40" placeholder="First name" autocomplete="given-name">' +
+      '<input id="nb-last" maxlength="40" placeholder="Last name" autocomplete="family-name">' +
+      '<button class="btn primary" id="nb-save" type="button">Save</button></span>');
+    box.querySelector("#nb-save").onclick = function () {
+      var f = box.querySelector("#nb-first").value.trim();
+      var l = box.querySelector("#nb-last").value.trim();
+      if (!f) { box.querySelector("#nb-first").focus(); return; }
+      saveName(f, l);
+      toast("👋 Welcome, <strong>" + esc(DB.firstName) + "</strong> — your scores now count on the leaderboard.");
+      route();
+    };
+    return box;
+  }
+
+  function feedbackHref() {
+    var body = "What I was doing:\n\n\nWhat happened / my suggestion:\n\n\n---\nPage: " + (location.hash || "#/home") +
+      "\nDevice: " + navigator.userAgent;
+    return "mailto:" + C.feedbackEmail +
+      "?subject=" + encodeURIComponent("Roofing Course feedback") +
+      "&body=" + encodeURIComponent(body);
+  }
+
   function toast(html) {
     var zone = document.getElementById("toasts");
     var t = el("div", "toast", html);
@@ -249,6 +307,8 @@
 
     var questions = opts.rebuild();
     window.__lastTest = questions; // test/QA hook: lets automated checks verify grading
+    var banner = nameBanner();
+    if (banner) wrap.appendChild(banner);
     var box = el("section", "quiz");
     var form = el("form", "quiz-form");
 
@@ -309,11 +369,13 @@
 
       var score = Math.round(right / questions.length * 100);
       var passed = score >= opts.pass;
-      DB.attempts.push({
+      var attempt = {
         ts: Date.now(), kind: opts.kind, chapter: opts.chapter || null,
         score: score, correct: right, total: questions.length, cats: cats
-      });
+      };
+      DB.attempts.push(attempt);
       save();
+      submitScore(attempt);
 
       result.innerHTML = (passed ? "✅ " : "❌ ") + score + "% — " + right + "/" + questions.length +
         " correct. " + (passed ? "Passed!" : "You need " + opts.pass + "%. Review and retake — the numbers will be new.");
@@ -411,10 +473,15 @@
     nav.appendChild(el("div", "side-sep"));
     nav.appendChild(navLink("#/practice", "🎯 Practice Test (" + C.practiceSize + " Q)", null));
     nav.appendChild(navLink("#/final", "🏆 Certification Exam", finalPassed()));
+    nav.appendChild(navLink("#/leaderboard", "🏁 Leaderboard", null));
     nav.appendChild(navLink("#/stats", "📊 My Stats", null));
     var bCount = Object.keys(DB.badges).length;
     nav.appendChild(navLink("#/badges", "🎖️ Badges (" + bCount + "/" + C.badges.length + ")", null));
     if (finalPassed()) nav.appendChild(navLink("#/certificate", "📜 My Certificate", null));
+    var fb = el("a", "feedback-link");
+    fb.href = feedbackHref();
+    fb.innerHTML = '<span class="check"></span>💬 Send feedback';
+    nav.appendChild(fb);
     side.appendChild(nav);
 
     document.querySelectorAll(".sidebar a").forEach(function (a) {
@@ -428,6 +495,8 @@
     var wrap = el("div", "view");
     var passedCount = C.chapters.filter(function (ch) { return chapterPassed(ch.id); }).length;
     var totalMin = C.chapters.reduce(function (s, ch) { return s + chapterMinutes(ch); }, 0);
+    var banner = nameBanner();
+    if (banner) wrap.appendChild(banner);
 
     wrap.appendChild(el("section", "hero",
       '<p class="kicker">Certification e-course</p>' +
@@ -641,6 +710,21 @@
       '<p class="kicker">Your record</p><h1>My Stats</h1>' +
       '<p class="lede">Every test you take is saved. Chapter scores are the average of every test you\'ve ever taken for that chapter.</p>'));
 
+    var who = el("section", "who-box");
+    who.innerHTML = "<strong>Training as:</strong> " +
+      (DB.firstName ? esc((DB.firstName + " " + DB.lastName).trim()) : "<em>no name set — scores aren't reaching the leaderboard</em>") +
+      ' <span class="name-fields"><input id="st-first" maxlength="40" placeholder="First name" value="' + esc(DB.firstName) + '">' +
+      '<input id="st-last" maxlength="40" placeholder="Last name" value="' + esc(DB.lastName) + '">' +
+      '<button class="btn" id="st-save" type="button">Update name</button></span>';
+    who.querySelector("#st-save").onclick = function () {
+      var f = who.querySelector("#st-first").value.trim();
+      if (!f) { who.querySelector("#st-first").focus(); return; }
+      saveName(f, who.querySelector("#st-last").value);
+      toast("✏️ Name updated: <strong>" + esc((DB.firstName + " " + DB.lastName).trim()) + "</strong>");
+      route();
+    };
+    wrap.appendChild(who);
+
     var overallAvg = DB.attempts.length
       ? Math.round(DB.attempts.reduce(function (s, a) { return s + a.score; }, 0) / DB.attempts.length) : null;
     var strip = el("section", "stat-strip");
@@ -699,6 +783,81 @@
     };
     danger.appendChild(reset);
     wrap.appendChild(danger);
+    return wrap;
+  }
+
+  function viewLeaderboard() {
+    var wrap = el("div", "view");
+    wrap.appendChild(el("header", "lesson-head",
+      '<p class="kicker">Team standings</p><h1>Leaderboard</h1>' +
+      '<p class="lede">Every graded test submits automatically (once you\'ve entered your name). Rankings: certified first, then chapters passed, then average score.</p>'));
+
+    var banner = nameBanner();
+    if (banner) wrap.appendChild(banner);
+
+    if (!C.leaderboardUrl) {
+      wrap.appendChild(el("aside", "book-note warn",
+        "🛠️ <strong>Leaderboard backend not connected yet.</strong> The course owner needs to complete the one-time Google Sheets setup in " +
+        "<code>LEADERBOARD-SETUP.md</code> (3 minutes), then paste the Web App URL into <code>assets/course-data.js</code>. " +
+        "Until then, scores are saved on each device only."));
+      return wrap;
+    }
+
+    var status = el("p", "muted", "Loading team scores…");
+    wrap.appendChild(status);
+    var holder = el("div", "");
+    wrap.appendChild(holder);
+
+    fetch(C.leaderboardUrl + (C.leaderboardUrl.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (rows) {
+        status.remove();
+        if (!Array.isArray(rows) || !rows.length) {
+          holder.appendChild(el("p", "muted", "No scores submitted yet — be the first: take any chapter test."));
+          return;
+        }
+        // aggregate per player
+        var players = {};
+        rows.forEach(function (r) {
+          if (!r || typeof r.score !== "number" && isNaN(Number(r.score))) return;
+          var key = r.playerId || ((r.first || "") + "|" + (r.last || ""));
+          var p = players[key] = players[key] || { first: r.first || "?", last: r.last || "", tests: 0, sum: 0, chapters: {}, certified: false };
+          var score = Number(r.score) || 0;
+          p.tests++; p.sum += score;
+          if (r.kind === "chapter" && r.chapter) p.chapters[r.chapter] = Math.max(p.chapters[r.chapter] || 0, score);
+          if (r.kind === "final" && score >= C.finalPassScore) p.certified = true;
+        });
+        var list = Object.keys(players).map(function (k) {
+          var p = players[k];
+          p.passed = Object.keys(p.chapters).filter(function (ch) { return p.chapters[ch] >= C.passScore; }).length;
+          p.avg = Math.round(p.sum / p.tests);
+          return p;
+        }).sort(function (a, b) {
+          if (a.certified !== b.certified) return a.certified ? -1 : 1;
+          if (a.passed !== b.passed) return b.passed - a.passed;
+          return b.avg - a.avg;
+        });
+        var medals = ["🥇", "🥈", "🥉"];
+        var table = el("table", "history");
+        table.innerHTML = "<tr><th>Rank</th><th>Name</th><th>Tests</th><th>Avg</th><th>Chapters passed</th><th>Certified</th></tr>" +
+          list.map(function (p, i) {
+            return "<tr" + (p.first === DB.firstName && p.last === DB.lastName ? ' class="me-row"' : "") + "><td>" + (medals[i] || "#" + (i + 1)) + "</td>" +
+              "<td>" + esc((p.first + " " + p.last).trim()) + "</td>" +
+              "<td>" + p.tests + "</td><td>" + p.avg + "%</td>" +
+              "<td>" + p.passed + "/" + C.chapters.length + "</td>" +
+              "<td>" + (p.certified ? "🏆" : "—") + "</td></tr>";
+          }).join("");
+        holder.appendChild(el("div", "table-scroll")).appendChild(table);
+        var refresh = el("button", "btn", "↻ Refresh standings");
+        refresh.onclick = function () { route(); };
+        var actions = el("div", "pager");
+        actions.appendChild(refresh);
+        holder.appendChild(actions);
+      })
+      .catch(function () {
+        status.textContent = "Couldn't reach the leaderboard right now — check your connection and refresh. Your scores are still saved and will show up once submitted attempts land.";
+        status.className = "muted";
+      });
     return wrap;
   }
 
@@ -778,6 +937,7 @@
       title = ch ? ch.title + " — Test" : title;
     }
     else if (hash === "#/practice") { view = viewPractice(); title = "Practice Test"; }
+    else if (hash === "#/leaderboard") { view = viewLeaderboard(); title = "Leaderboard"; }
     else if (hash === "#/final") { view = viewFinal(); title = "Certification Exam"; }
     else if (hash === "#/stats") { view = viewStats(); title = "My Stats"; }
     else if (hash === "#/badges") { view = viewBadges(); title = "Badges"; }
