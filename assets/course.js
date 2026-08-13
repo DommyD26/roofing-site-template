@@ -235,6 +235,7 @@
       '<p class="lede">' + opts.subtitle + "</p>"));
 
     var questions = opts.rebuild();
+    window.__lastTest = questions; // test/QA hook: lets automated checks verify grading
     var box = el("section", "quiz");
     var form = el("form", "quiz-form");
 
@@ -311,10 +312,10 @@
       var again = el("button", "btn", "↻ Retake with fresh questions & new numbers");
       again.onclick = function () {
         questions = opts.rebuild();
+        window.__lastTest = questions;
         report.innerHTML = "";
         renderQuestions();
         window.scrollTo(0, 0);
-        bindSubmit();
       };
       var actions = el("div", "pager");
       actions.appendChild(again);
@@ -328,7 +329,6 @@
       awardNewBadges();
       renderSidebar();
     };
-    function bindSubmit() { /* onsubmit persists on the form element */ }
 
     box.appendChild(form);
     wrap.appendChild(box);
@@ -537,7 +537,7 @@
           return "<tr><td>" + fmtDate(a.ts) + "</td><td>" + a.score + "% (" + a.correct + "/" + a.total + ")</td><td>" +
             (a.score >= C.passScore ? '<span class="badge pass">Pass</span>' : '<span class="badge retry">Retake</span>') + "</td></tr>";
         }).join("");
-      hsec.appendChild(table);
+      hsec.appendChild(el("div", "table-scroll")).appendChild(table);
       wrap.appendChild(hsec);
     }
 
@@ -713,7 +713,9 @@
       wrap.appendChild(linkBtn("#/final", "Go to the Certification Exam →", "primary"));
       return wrap;
     }
-    var best = Math.max.apply(null, DB.attempts.filter(function (a) { return a.kind === "final"; }).map(function (a) { return a.score; }));
+    var finals = DB.attempts.filter(function (a) { return a.kind === "final"; });
+    var best = Math.max.apply(null, finals.map(function (a) { return a.score; }));
+    var earnedTs = finals.filter(function (a) { return a.score >= C.finalPassScore; })[0].ts;
 
     var bar = el("div", "cert-controls no-print");
     var input = el("input", "cert-name-input");
@@ -738,7 +740,7 @@
       '<p class="cert-awarded">This certifies that</p>' +
       '<p class="cert-name" id="cert-name">' + esc(DB.name || "Your Name Here") + "</p>" +
       '<p class="cert-awarded">has completed all twelve chapters of study and passed the certification examination<br>with a best score of <strong>' + best + "%</strong></p>" +
-      '<div class="cert-foot"><span>' + fmtDate(Date.now()) + "</span><span>🏆</span><span>Pass standard: " + C.finalPassScore + "%</span></div>" +
+      '<div class="cert-foot"><span>Earned ' + fmtDate(earnedTs) + "</span><span>🏆</span><span>Pass standard: " + C.finalPassScore + "%</span></div>" +
       "</div>"));
     return wrap;
   }
