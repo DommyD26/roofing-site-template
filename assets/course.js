@@ -423,6 +423,7 @@
     });
     Object.keys(byChapter).forEach(function (chId) {
       var ch = chapterById(chId);
+      if (!ch) return;
       var block = el("div", "report-ch");
       var avg = chapterAvg(chId);
       block.appendChild(el("h3", "",
@@ -794,7 +795,8 @@
       var ht = el("table", "history");
       ht.innerHTML = "<tr><th>Date</th><th>Test</th><th>Score</th><th>Result</th></tr>" +
         DB.attempts.slice().reverse().map(function (a) {
-          var name = a.kind === "chapter" ? chapterById(a.chapter).title + " test"
+          var ch = a.kind === "chapter" ? chapterById(a.chapter) : null;
+          var name = a.kind === "chapter" ? (ch ? ch.title : "Retired chapter") + " test"
             : a.kind === "practice" ? "Practice test" : "Certification exam";
           return "<tr><td>" + fmtDate(a.ts) + "</td><td>" + esc(name) + "</td><td>" + a.score +
             "% (" + a.correct + "/" + a.total + ")</td><td>" +

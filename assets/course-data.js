@@ -23,7 +23,7 @@ window.COURSE = {
   passScore: 70,
   finalPassScore: 80,
   practiceSize: 20,
-  finalSize: 42,
+  finalSize: 45,
 
   masteryLevels: [
     { min: 90, label: "Nailed it", icon: "🔨", cls: "m-nailed" },
@@ -169,9 +169,9 @@ window.COURSE = {
     /* ================= 3. UNDERLAYMENT ================= */
     {
       id: "underlayment",
-      title: "Underlayment & Dry-In",
-      tagline: "The roof's second line of defense — and the layer that protects the job (and your liability) between tear-off and final roofing.",
-      cats: ["Materials", "Installation & laps", "Estimating dry-in"],
+      title: "Underlayment, Dry-In & Flashing",
+      tagline: "The roof's second line of defense — underlayment, drip edge, eaves membrane and the flashing details that decide whether a roof ever leaks.",
+      cats: ["Materials", "Installation & laps", "Estimating dry-in", "Flashing details"],
       lessons: [
         {
           t: "Felt, synthetics and self-adhering membranes",
@@ -187,6 +187,11 @@ window.COURSE = {
           t: "Estimating the dry-in package",
           min: 8,
           html: "<p>Coverage math you'll use weekly:</p><ul><li><strong>No. 15 felt:</strong> ~4 squares per roll. <strong>No. 30:</strong> ~2 squares per roll.</li><li><strong>Synthetics:</strong> commonly ~10 squares per roll (varies 4–10 — read the label).</li><li><strong>Ice &amp; water:</strong> rolls are typically 3' × 33'–75'; estimate by <strong>lineal feet</strong> of eave, valley, and penetration perimeter, then convert to rolls.</li></ul><p>Rolls = net roof area ÷ coverage per roll, rounded up, plus a roll for laps/waste on cut-up roofs. Double-coverage areas literally double the quantity — don't forget the porch that's at 3/12.</p><p>Add the accessories that ride with dry-in: cap nails, drip edge (eaves + rakes LF), and any temporary protection. On steep pitches add labor: everything above 8/12 slows the whole dry-in operation.</p>"
+        },
+        {
+          t: "Flashing: metal beats caulk, every time",
+          min: 14,
+          html: "<p>Caulk is a gasket, not a water strategy. Flashing is shaped metal that <em>laps</em> water downhill. The details every roof estimate must account for:</p><ul><li><strong>Drip edge</strong> at eaves and rakes — kicks water off the deck edge into the gutter, protects the fascia.</li><li><strong>Step flashing</strong> where shingles meet a sloped wall: one L-shaped piece <em>per course</em>, woven in, each lapping the one below. One continuous bent strip is not step flashing — it's a leak with extra steps.</li><li><strong>Counterflashing</strong> covers the top of step/base flashing: let into a masonry reglet or behind siding/housewrap so water can't get behind the assembly.</li><li><strong>Valley treatment:</strong> open metal (W-profile with center rib, hemmed edges) for longevity and debris shedding; closed-cut for production asphalt work; membrane-lined beneath either.</li><li><strong>Chimneys:</strong> base flashing low side, step flashing up the sides, and a <strong>cricket/saddle</strong> on the high side of any chimney wider than ~24\" to split the water. Counterflash the whole assembly.</li><li><strong>Penetrations:</strong> pipe boots (the sun-rotted neoprene boot is America's most common roof leak — upgrade to silicone or metal-collar versions), vent flashings shingled in top-over-bottom.</li></ul><p><strong>Reuse of old flashing is false economy</strong> — a new roof plumbed into 25-year-old bent metal inherits 25-year-old leaks. Replace it with the roof.</p>"
         }
       ],
       bank: [
@@ -199,7 +204,12 @@ window.COURSE = {
         { cat: "Installation & laps", q: "For shingles between 2/12 and 4/12, underlayment must be:", a: ["Skipped", "Double coverage (or a self-adhered base)", "Installed vertically", "Stapled only at the ridge"], correct: 1 },
         { cat: "Installation & laps", q: "The dry-in discipline rule is:", a: ["Open the whole roof Monday", "Never open more roof than you can dry-in the same day", "Dry-in is optional in summer", "Underlayment can wait for the shingle delivery"], correct: 1 },
         { cat: "Estimating dry-in", q: "A roll of No. 15 felt covers about:", a: ["1 square", "4 squares", "10 squares", "20 squares"], correct: 1 },
-        { cat: "Estimating dry-in", q: "Ice & water membrane is estimated by:", a: ["Squares of field area only", "Lineal feet of eaves, valleys and penetration perimeters", "Number of bundles", "Ridge length only"], correct: 1 }
+        { cat: "Estimating dry-in", q: "Ice & water membrane is estimated by:", a: ["Squares of field area only", "Lineal feet of eaves, valleys and penetration perimeters", "Number of bundles", "Ridge length only"], correct: 1 },
+        { cat: "Flashing details", q: "Along a sloped wall, shingles get:", a: ["One long bent strip", "Step flashing — one piece woven into each course", "Caulk only", "No flashing"], correct: 1 },
+        { cat: "Flashing details", q: "Counterflashing's job is to:", a: ["Replace step flashing", "Cover the top edge of base/step flashing so water can't get behind it", "Hold the gutter", "Ventilate the ridge"], correct: 1 },
+        { cat: "Flashing details", q: "A cricket (saddle) is built:", a: ["At the eave", "On the high side of a wide chimney to split water flow", "Inside the attic", "Under downspouts"], correct: 1 },
+        { cat: "Flashing details", q: "America's most common small roof leak is:", a: ["The ridge cap", "The sun-rotted neoprene pipe boot", "The drip edge", "The gable trim"], correct: 1 },
+        { cat: "Flashing details", q: "Reusing old flashing on a new roof is:", a: ["Standard practice", "False economy — it inherits the old leaks", "Required by code", "Cheaper and better"], correct: 1 }
       ],
       gens: [
         {
@@ -286,7 +296,52 @@ window.COURSE = {
       ]
     },
 
-    /* ================= 5. WOOD ================= */
+    /* ================= 5. ROLL ROOFING ================= */
+    {
+      id: "rollroofing",
+      title: "Mineral-Surfaced Roll Roofing",
+      tagline: "The budget workhorse for sheds, porches and outbuildings — quick to lay, honest when sold for what it is, and full of lap details that matter.",
+      cats: ["Materials & uses", "Installation methods", "Estimating roll roofing"],
+      lessons: [
+        {
+          t: "Roll roofing systems and how they go down",
+          min: 10,
+          html: "<p><strong>Mineral-surfaced roll roofing</strong> (the classic \"90-lb\") is asphalt-saturated felt with granules, sold in 36\"-wide rolls that cover about one square. It's the economy answer for sheds, porches, lean-tos, barns and outbuildings — an honest 8–12 year cover at a fraction of shingle cost, installed in hours instead of days.</p><ul><li><strong>Exposed-nail (single coverage):</strong> courses lap 2–4\", nails driven through the overlap into cement — fastest, cheapest, shortest-lived, needs ~2/12 or better.</li><li><strong>Concealed-nail:</strong> nails hidden under the lap with cement sealing the joint — cleaner look, better wind behavior.</li><li><strong>Double coverage:</strong> selvage-edge product with roughly half of each roll overlapped by the next course, giving two layers everywhere. This is the low-slope option — usable down to about 1/12 — and the coverage math halves accordingly.</li><li><strong>Laps and ends:</strong> end laps ~6\", staggered between courses, all laps cemented; upper courses always over lower so water sheds over, never under.</li></ul><p>Roll roofing also serves as <strong>valley lining</strong> under shingle roofs — an 18\" strip face-down, then a 36\" strip face-up, cemented, before the field material is woven or cut in.</p><div class='tip'>💡 <strong>Cold-weather caution:</strong> roll roofing gets brittle when cold. Store rolls warm and unroll them to relax before laying, or you'll fight cracks and bubbles the whole job.</div>"
+        },
+        {
+          t: "Estimating roll roofing",
+          min: 8,
+          html: "<p>The math is friendly, with two traps:</p><ul><li><strong>Single coverage:</strong> one roll ≈ one square, minus laps — figure a roll covers about 90–95 sq ft net once head and end laps are taken out.</li><li><strong>Double coverage:</strong> the selvage lap eats roughly half the roll — figure about half a square of net coverage per roll, so the roll count doubles.</li><li><strong>Layout waste:</strong> rolls are a 36\" module. A roof dimension that doesn't divide nicely by the module generates strip waste on every course — a cut-up or odd-width roof can push waste well past the usual 10%.</li><li><strong>Accessories:</strong> lap/plastic cement by the gallon (check coverage per gallon against lap footage), nails, drip edge, and primer on dusty decks.</li></ul><p>Labor prices low — it's the fastest roof covering in the book — but don't give away the trip: minimum job charges protect you on the small sheds this product lives on.</p>"
+        }
+      ],
+      bank: [
+        { cat: "Materials & uses", q: "A roll of 90-lb mineral-surfaced roll roofing covers about:", a: ["One square (before laps)", "Four squares", "Ten squares", "A quarter square"], correct: 0 },
+        { cat: "Materials & uses", q: "Mineral-surfaced roll roofing is honestly sold as:", a: ["A 40-year system", "A budget 8–12 year cover for sheds and outbuildings", "A slate substitute", "A commercial standard"], correct: 1 },
+        { cat: "Materials & uses", q: "Under shingle roofs, roll roofing commonly serves as:", a: ["Ridge caps", "Valley lining (18\" strip face-down, 36\" strip face-up)", "Starter course", "Hip caps"], correct: 1 },
+        { cat: "Installation methods", q: "Double-coverage roll roofing works on lower slopes because:", a: ["It's heavier", "The selvage lap puts two layers everywhere", "It uses more nails", "The granules seal it"], correct: 1 },
+        { cat: "Installation methods", q: "Concealed-nail application beats exposed-nail because:", a: ["It's faster", "Nails are protected under cemented laps — cleaner and more weathertight", "It needs no cement", "It uses fewer rolls"], correct: 1 },
+        { cat: "Installation methods", q: "End laps in roll roofing should be:", a: ["Aligned in a straight line up the roof", "~6\", staggered between courses, and cemented", "Left dry", "Facing uphill"], correct: 1 },
+        { cat: "Estimating roll roofing", q: "Going from single to double coverage does what to the roll count?", a: ["Nothing", "Roughly doubles it", "Halves it", "Adds 10%"], correct: 1 },
+        { cat: "Estimating roll roofing", q: "A roof width that doesn't fit the 36\" roll module causes:", a: ["No effect", "Strip waste on every course — raise the waste factor", "Faster installation", "Fewer laps"], correct: 1 }
+      ],
+      gens: [
+        {
+          cat: "Estimating roll roofing",
+          gen: function (R) {
+            var sq = R.int(3, 12);
+            var mode = R.pick([["single coverage (~1 square net per roll)", 1], ["double coverage (~1/2 square net per roll)", 2]]);
+            var rolls = Math.ceil(sq * mode[1] * 1.1);
+            return {
+              q: "A " + sq + "-square shed roof gets " + mode[0] + " with 10% waste. How many rolls do you order (round up)?",
+              a: [rolls + " rolls", (rolls + 4) + " rolls", Math.max(1, rolls - 2) + " rolls", (sq) + " rolls"],
+              correct: 0
+            };
+          }
+        }
+      ]
+    },
+
+    /* ================= 6. WOOD ================= */
     {
       id: "wood",
       title: "Wood Shingles & Shakes",
@@ -493,9 +548,9 @@ window.COURSE = {
     /* ================= 9. LOW SLOPE ================= */
     {
       id: "lowslope",
-      title: "Low-Slope: BUR, Mod-Bit & Roll Roofing",
+      title: "Built-Up Roofing (BUR) & Mod-Bit",
       tagline: "When the roof goes flat the rules change: continuous membranes, laps, drainage — and fire discipline on every torch job.",
-      cats: ["Built-up roofing", "Mod-bit & roll roofing", "Drainage & safety"],
+      cats: ["Built-up roofing", "Mod-bit & torch work", "Drainage & safety"],
       lessons: [
         {
           t: "Built-up roofing: the original membrane",
@@ -503,9 +558,9 @@ window.COURSE = {
           html: "<p>A <strong>built-up roof (BUR)</strong> is site-built waterproofing: alternating plies of reinforcing felt and hot bitumen — \"three-ply\" and \"four-ply\" describe exactly that — finished with flood coat and gravel, a mineral cap sheet, or a reflective coating. The redundancy is the appeal: four plies means four chances to stop water.</p><p>The work is its own trade: kettle temperatures around 450–500°F, moppers and felt-layers in rhythm, EVT (equiviscous temperature) discipline so plies actually bond. Estimating: felt by squares <em>per ply</em>, bitumen at roughly 20–25 lbs per square per mopping plus the flood coat (~60 lbs), gravel ~400 lbs/sq, insulation, cants at every wall, and edge metal. Kettle work also carries real insurance and safety overhead — price it in.</p><p>You'll meet BUR mostly in repair, restoration and tear-off decisions on older commercial stock — knowing how it's built tells you what you're cutting into.</p>"
         },
         {
-          t: "Modified bitumen and roll roofing",
+          t: "Modified bitumen: factory-built BUR",
           min: 12,
-          html: "<p><strong>Modified bitumen</strong> is factory-built BUR: asphalt blended with polymers, reinforced, rolled at ~1 square of net coverage per roll.</p><ul><li><strong>APP</strong> (plastic-modified): torch-applied — the flame melts the underside into the substrate.</li><li><strong>SBS</strong> (rubber-modified): the flexible one — torch, hot mop, cold-process adhesive, or <strong>self-adhered</strong> (the residential-friendly, flame-free option over porches and low garages).</li></ul><p>Systems run base sheet + granulated cap; laps 3–4\" side, 6\" end, staggered; granules pressed into the bleed-out at seams for UV cover. <strong>Torch safety is non-negotiable:</strong> hot-work permit where required, charged extinguishers on deck, never torch directly on wood decks or into concealed cavities (torch-to-base-sheet, not torch-to-deck), and a <strong>minimum 1-hour fire watch after the last flame</strong> — smoldering starts in hidden cavities are how roofing companies end.</p><p><strong>Mineral-surfaced roll roofing</strong> (90-lb) remains the budget answer on sheds and outbuildings: single- or double-coverage, 2\"–4\" laps cemented and nailed. Short life (8–12 years), low cost, honest product when sold as exactly that.</p>"
+          html: "<p><strong>Modified bitumen</strong> is factory-built BUR: asphalt blended with polymers, reinforced, rolled at ~1 square of net coverage per roll.</p><ul><li><strong>APP</strong> (plastic-modified): torch-applied — the flame melts the underside into the substrate.</li><li><strong>SBS</strong> (rubber-modified): the flexible one — torch, hot mop, cold-process adhesive, or <strong>self-adhered</strong> (the residential-friendly, flame-free option over porches and low garages).</li></ul><p>Systems run base sheet + granulated cap; laps 3–4\" side, 6\" end, staggered; granules pressed into the bleed-out at seams for UV cover. <strong>Torch safety is non-negotiable:</strong> hot-work permit where required, charged extinguishers on deck, never torch directly on wood decks or into concealed cavities (torch-to-base-sheet, not torch-to-deck), and a <strong>minimum 1-hour fire watch after the last flame</strong> — smoldering starts in hidden cavities are how roofing companies end.</p><p><strong>Flat-roof flashing is its own craft:</strong> base flashings run up walls and curbs over cant strips (the 45° transition that lets membrane turn a corner without cracking), metal counterflashing covers the top, and <strong>expansion joints</strong> get their own bellows-style details wherever the building itself moves. Temporary roofs and water cut-offs protect the job mid-stream — never leave an open edge overnight.</p>"
         },
         {
           t: "Drainage: the flat-roof estimator's first question",
@@ -517,17 +572,16 @@ window.COURSE = {
         { cat: "Built-up roofing", q: "A built-up roof is made of:", a: ["One thick membrane", "Alternating plies of reinforcing felt and bitumen", "Metal panels", "Interlocking tiles"], correct: 1 },
         { cat: "Built-up roofing", q: "\"Four-ply BUR\" refers to:", a: ["Four coats of paint", "Four alternating felt/bitumen layers of redundancy", "Four inches of gravel", "Four drains"], correct: 1 },
         { cat: "Built-up roofing", q: "BUR bitumen quantity is estimated at roughly:", a: ["2 lbs/sq per mopping", "20–25 lbs/sq per mopping plus the flood coat", "100 lbs/sq per mopping", "None — it's self-adhered"], correct: 1 },
-        { cat: "Mod-bit & roll roofing", q: "APP modified bitumen is typically applied by:", a: ["Nails only", "Torch", "Staples", "Clips"], correct: 1 },
-        { cat: "Mod-bit & roll roofing", q: "The flame-free mod-bit option suited to residential porches is:", a: ["APP torch", "Self-adhered SBS", "Hot-mopped BUR", "Coal tar"], correct: 1 },
-        { cat: "Mod-bit & roll roofing", q: "After torch work stops, the crew must:", a: ["Leave immediately", "Maintain a fire watch (minimum ~1 hour)", "Hose the roof", "Remove all flashing"], correct: 1 },
-        { cat: "Mod-bit & roll roofing", q: "Mineral-surfaced 90-lb roll roofing is honestly sold as:", a: ["A 40-year system", "A budget 8–12 year cover for sheds and outbuildings", "A slate substitute", "A commercial standard"], correct: 1 },
+        { cat: "Mod-bit & torch work", q: "APP modified bitumen is typically applied by:", a: ["Nails only", "Torch", "Staples", "Clips"], correct: 1 },
+        { cat: "Mod-bit & torch work", q: "The flame-free mod-bit option suited to residential porches is:", a: ["APP torch", "Self-adhered SBS", "Hot-mopped BUR", "Coal tar"], correct: 1 },
+        { cat: "Mod-bit & torch work", q: "After torch work stops, the crew must:", a: ["Leave immediately", "Maintain a fire watch (minimum ~1 hour)", "Hose the roof", "Remove all flashing"], correct: 1 },
         { cat: "Drainage & safety", q: "Ponding water is defined as water standing:", a: ["During rain", "48 hours after rain", "10 minutes after rain", "In the gutters"], correct: 1 },
         { cat: "Drainage & safety", q: "Minimum design slope for 'flat' roofs is:", a: ["Zero", "1/4\" per foot", "2\" per foot", "4/12"], correct: 1 },
         { cat: "Drainage & safety", q: "Ponding is corrected with:", a: ["Thicker gravel", "Tapered insulation, crickets, or added drains/scuppers", "More sealant", "Paint"], correct: 1 }
       ],
       gens: [
         {
-          cat: "Mod-bit & roll roofing",
+          cat: "Mod-bit & torch work",
           gen: function (R) {
             var sq = R.int(12, 45);
             var waste = R.pick([8, 10, 12]);
@@ -545,9 +599,9 @@ window.COURSE = {
     /* ================= 10. SINGLE PLY ================= */
     {
       id: "singleply",
-      title: "Single-Ply Membranes & Coatings",
-      tagline: "TPO, PVC and EPDM own modern commercial roofing; fluid-applied coatings extend aging roofs — and both feed a service business.",
-      cats: ["Membrane systems", "Attachment & seams", "Coatings & restoration"],
+      title: "Elastomeric & Single-Ply Roofing",
+      tagline: "TPO, PVC and EPDM own modern commercial roofing — membrane choice, attachment method and seam quality decide whether it lasts twenty years.",
+      cats: ["Membrane systems", "Attachment & seams", "Details & estimating"],
       lessons: [
         {
           t: "EPDM, TPO and PVC: choosing among the big three",
@@ -558,11 +612,6 @@ window.COURSE = {
           t: "Attachment methods and seam quality control",
           min: 10,
           html: "<p>Three ways to hold a membrane down:</p><ul><li><strong>Fully adhered:</strong> bonded to insulation/deck — cleanest look, best wind uplift on the field, priciest.</li><li><strong>Mechanically attached:</strong> screws and plates in the seam rows — fastest and cheapest; the membrane flutters in wind between rows.</li><li><strong>Ballasted:</strong> loose-laid EPDM under river rock or pavers — needs structure for the weight and stays out of hail/wind-borne-debris zones.</li></ul><p><strong>Seams are the roof.</strong> Welded systems get test welds each morning (temperature, speed, pressure change with the weather), a seam probe on every cooled seam, and periodic destructive test cuts patched properly. Details — inside/outside corners, pipe boots, T-joint patches, terminations at walls and edge metal — separate a 20-year roof from a 5-year callback machine. Wind design (corner/perimeter enhancement) comes from the uplift calcs, not habit.</p>"
-        },
-        {
-          t: "Coatings and restoration: the service-revenue play",
-          min: 10,
-          html: "<p>Fluid-applied restoration puts a new weather surface on a sound old roof at a fraction of replacement cost:</p><ul><li><strong>Silicone:</strong> the ponding-water champion; single-coat-capable, but recoat-only-with-silicone thereafter, and slick when wet.</li><li><strong>Acrylic:</strong> economical, easy, reflective — wants positive drainage and dry-weather cure windows.</li><li><strong>Urethane:</strong> toughest traffic/impact resistance, common as a base with silicone or acrylic top.</li></ul><p>The workflow is non-negotiable: clean (usually pressure-wash), repair wet insulation and failed seams first, treat rust, reinforce seams and details with fabric or mastic, verify adhesion with test patches, then apply to the specified <strong>dry-film thickness</strong> — coverage runs in gallons per square at spec mils, and skimping mils is the classic coating failure.</p><p><strong>Sprayed polyurethane foam (SPF) roofing</strong> is the related specialty: closed-cell foam sprayed directly on the deck or old roof (~R-6+/inch, self-flashing around penetrations, no seams at all), then protected from UV with a silicone or acrylic topcoat and embedded granules. SPF demands tight weather windows, trained applicators and overspray control — but it insulates and waterproofs in one pass and recoats indefinitely.</p><div class='tip'>💡 <strong>Business model:</strong> coating jobs convert into maintenance agreements — annual inspection, minor repairs, scheduled recoat. Recurring revenue smooths the storm-cycle rollercoaster.</div>"
         }
       ],
       bank: [
@@ -573,84 +622,18 @@ window.COURSE = {
         { cat: "Attachment & seams", q: "A mechanically attached membrane is held by:", a: ["Glue over 100% of the deck", "Screws and plates in the seam rows", "River rock ballast", "Suction"], correct: 1 },
         { cat: "Attachment & seams", q: "Morning test welds exist because:", a: ["The crew needs practice", "Weld settings change with temperature and weather", "The membrane is cheaper then", "Inspectors require coffee breaks"], correct: 1 },
         { cat: "Attachment & seams", q: "A ballasted EPDM roof requires:", a: ["Nothing special", "Structure verified for the rock/paver weight", "Torch permits", "Steep slope"], correct: 1 },
-        { cat: "Coatings & restoration", q: "The best coating chemistry for ponding-water areas:", a: ["Acrylic", "Silicone", "Latex paint", "Linseed oil"], correct: 1 },
-        { cat: "Coatings & restoration", q: "The classic coating failure is:", a: ["Too many coats", "Under-applying the specified dry-film thickness", "Cleaning too well", "Using fabric at seams"], correct: 1 },
-        { cat: "Coatings & restoration", q: "Before any coating goes down you must:", a: ["Just spray it", "Clean, repair, reinforce seams and verify adhesion with test patches", "Remove all flashing", "Add gravel"], correct: 1 },
-        { cat: "Coatings & restoration", q: "SPF (spray foam) roofing must be protected from UV by:", a: ["Nothing — foam is UV-stable", "A silicone or acrylic topcoat, often with granules", "Gravel ballast only", "Paint thinner"], correct: 1 }
+        { cat: "Details & estimating", q: "A single-ply estimate takes off the field squares plus:", a: ["Nothing else", "A separate count of flashings, corners, boots, terminations and edge metal", "Just screws", "Paint"], correct: 1 },
+        { cat: "Details & estimating", q: "Wind-uplift design requires enhanced attachment:", a: ["Nowhere", "In corner and perimeter zones per the uplift calculations", "Only at drains", "Only on EPDM"], correct: 1 },
       ],
       gens: [
         {
-          cat: "Coatings & restoration",
+          cat: "Details & estimating",
           gen: function (R) {
-            var sq = R.int(30, 120);
-            var rate = R.pick([1.5, 2, 2.5]);
-            var gals = Math.ceil(sq * rate);
+            var sq = R.int(40, 160);
+            var rolls = Math.ceil(sq * 1.1 / 10);
             return {
-              q: "A silicone spec calls for " + rate + " gallons per square at final dry-film thickness. For a " + sq + "-square roof, how many gallons (round up)?",
-              a: [gals + " gallons", Math.ceil(gals / 2) + " gallons", (gals + 15) + " gallons", (gals + 40) + " gallons"],
-              correct: 0
-            };
-          }
-        }
-      ]
-    },
-
-    /* ================= 11. FLASHING/VENT/GUTTERS ================= */
-    {
-      id: "flashing",
-      title: "Flashing, Ventilation & Gutters",
-      tagline: "Roofs rarely leak in the field — they leak at the details. This is where reputations (and callback budgets) are made.",
-      cats: ["Flashing details", "Attic ventilation", "Gutters & drainage"],
-      lessons: [
-        {
-          t: "Flashing: metal beats caulk, every time",
-          min: 14,
-          html: "<p>Caulk is a gasket, not a water strategy. Flashing is shaped metal that <em>laps</em> water downhill. The details every roof estimate must account for:</p><ul><li><strong>Drip edge</strong> at eaves and rakes — kicks water off the deck edge into the gutter, protects the fascia.</li><li><strong>Step flashing</strong> where shingles meet a sloped wall: one L-shaped piece <em>per course</em>, woven in, each lapping the one below. One continuous bent strip is not step flashing — it's a leak with extra steps.</li><li><strong>Counterflashing</strong> covers the top of step/base flashing: let into a masonry reglet or behind siding/housewrap so water can't get behind the assembly.</li><li><strong>Valley treatment:</strong> open metal (W-profile with center rib, hemmed edges) for longevity and debris shedding; closed-cut for production asphalt work; membrane-lined beneath either.</li><li><strong>Chimneys:</strong> base flashing low side, step flashing up the sides, and a <strong>cricket/saddle</strong> on the high side of any chimney wider than ~24\" to split the water. Counterflash the whole assembly.</li><li><strong>Penetrations:</strong> pipe boots (the sun-rotted neoprene boot is America's most common roof leak — upgrade to silicone or metal-collar versions), vent flashings shingled in top-over-bottom.</li></ul><p><strong>Reuse of old flashing is false economy</strong> — a new roof plumbed into 25-year-old bent metal inherits 25-year-old leaks. Replace it with the roof.</p>"
-        },
-        {
-          t: "Attic ventilation: the roof's climate control",
-          min: 10,
-          html: "<p>A vented attic flushes heat in summer (cooler shingles, longer life, lower cooling bills) and moisture in winter (no condensation rot, fewer ice dams). The code baseline: <strong>1 sq ft of net free vent area (NFA) per 150 sq ft of attic floor</strong> — improved to 1/300 with a balanced system (about half the vent area high, half low) and a ceiling vapor retarder where required.</p><ul><li><strong>Balanced means intake AND exhaust:</strong> soffit vents low bringing air in, ridge vent (or box vents) high letting it out. Exhaust without intake just pulls conditioned air — or rain — through whatever gap it can find.</li><li><strong>Never mix exhaust types</strong> on one attic: a power fan or turbine near a ridge vent short-circuits the airflow, pulling air (and weather) in through the ridge instead of the soffits.</li><li>Verify soffit vents aren't painted shut or insulation-blocked — baffles at the eaves keep the intake path open.</li><li>Convert NFA math to product: each vent style publishes NFA per unit or per lineal foot (ridge vent commonly ~18 sq in/LF).</li></ul><div class='tip'>💡 <strong>Warranty leverage:</strong> shingle manufacturers can prorate or deny claims on under-ventilated attics. Documenting the ventilation fix in your proposal protects the customer's warranty — and upsells honestly.</div>"
-        },
-        {
-          t: "Gutters and getting water away from the building",
-          min: 8,
-          html: "<p>The roof's job ends only when water is away from the foundation:</p><ul><li><strong>Sizing:</strong> 5\" K-style handles most homes; 6\" for big/steep roofs and high-intensity rain regions; half-round for historic looks; box gutters on commercial.</li><li><strong>Slope</strong> runs toward downspouts at about 1/16\"–1/8\" per foot — visually level, functionally pitched.</li><li><strong>Downspouts:</strong> one 2\"×3\" per ~600 sq ft of roof served (3\"×4\" ≈ 1,200 sq ft); extensions/leaders discharging 4'+ from the foundation.</li><li><strong>Hangers</strong> every 24\"–36\" (closer in snow country); hidden hangers with screws over spikes.</li><li>Estimate by LF of gutter + downspout, plus elbows, miters (inside/outside corners), end caps, outlets and guards. Seamless machine-run aluminum priced per LF is the residential standard.</li></ul>"
-        }
-      ],
-      bank: [
-        { cat: "Flashing details", q: "Along a sloped wall, shingles get:", a: ["One long bent strip", "Step flashing — one piece woven into each course", "Caulk only", "No flashing"], correct: 1 },
-        { cat: "Flashing details", q: "Counterflashing's job is to:", a: ["Replace step flashing", "Cover the top edge of base/step flashing so water can't get behind it", "Hold the gutter", "Ventilate the ridge"], correct: 1 },
-        { cat: "Flashing details", q: "A cricket (saddle) is built:", a: ["At the eave", "On the high side of a wide chimney to split water flow", "Inside the attic", "Under downspouts"], correct: 1 },
-        { cat: "Flashing details", q: "America's most common small roof leak is:", a: ["The ridge cap", "The sun-rotted neoprene pipe boot", "The drip edge", "The gable trim"], correct: 1 },
-        { cat: "Flashing details", q: "Reusing old flashing on a new roof is:", a: ["Standard practice", "False economy — it inherits the old leaks", "Required by code", "Cheaper and better"], correct: 1 },
-        { cat: "Attic ventilation", q: "The common code baseline for attic ventilation is:", a: ["1/50", "1 sq ft NFA per 150 sq ft of attic (1/300 balanced with vapor retarder)", "1/1000", "No requirement"], correct: 1 },
-        { cat: "Attic ventilation", q: "Balanced ventilation pairs:", a: ["Two exhaust types", "Soffit intake low with ridge exhaust high", "Fans with turbines", "No intake, all exhaust"], correct: 1 },
-        { cat: "Attic ventilation", q: "Mixing a power fan with a ridge vent on one attic:", a: ["Doubles airflow", "Short-circuits airflow and can pull weather in through the ridge", "Is code-required", "Saves energy"], correct: 1 },
-        { cat: "Gutters & drainage", q: "Gutter slope toward downspouts should be about:", a: ["Dead level", "1/16\"–1/8\" per foot", "1\" per foot", "Sloped away from downspouts"], correct: 1 },
-        { cat: "Gutters & drainage", q: "A 2\"×3\" downspout serves roughly:", a: ["100 sq ft of roof", "600 sq ft of roof", "5,000 sq ft of roof", "Unlimited area"], correct: 1 }
-      ],
-      gens: [
-        {
-          cat: "Attic ventilation",
-          gen: function (R) {
-            var attic = R.int(12, 30) * 100;
-            var nfa = Math.round(attic / 150 * 144);
-            return {
-              q: "An attic floor measures " + attic.toLocaleString() + " sq ft. At the 1/150 baseline, how much net free vent area is required (in square inches)?",
-              a: [nfa.toLocaleString() + " sq in", Math.round(nfa / 2).toLocaleString() + " sq in", (attic).toLocaleString() + " sq in", Math.round(nfa * 2).toLocaleString() + " sq in"],
-              correct: 0
-            };
-          }
-        },
-        {
-          cat: "Gutters & drainage",
-          gen: function (R) {
-            var area = R.int(18, 42) * 100;
-            var ds = Math.ceil(area / 600);
-            return {
-              q: "A roof drains " + area.toLocaleString() + " sq ft to its gutters. Using 2\"×3\" downspouts at one per ~600 sq ft, how many downspouts minimum?",
-              a: [ds + " downspouts", Math.max(1, ds - 2) + " downspouts", (ds + 4) + " downspouts", "1 downspout"],
+              q: "A mechanically attached TPO roof measures " + sq + " squares. Using 10' x 100' rolls (10 squares gross) with 10% for laps and details, how many rolls (round up)?",
+              a: [rolls + " rolls", (rolls + 6) + " rolls", Math.max(1, rolls - 3) + " rolls", sq + " rolls"],
               correct: 0
             };
           }
@@ -710,12 +693,58 @@ window.COURSE = {
       ]
     },
 
-    /* ================= 13. REPAIR & RE-ROOFING ================= */
+    /* ================= 13. ROOF COATINGS ================= */
+    {
+      id: "coatings",
+      title: "Roof Coatings",
+      tagline: "Fluid-applied restoration and spray foam — extending sound roofs for a fraction of replacement cost, and feeding the maintenance-contract business.",
+      cats: ["Coating chemistries", "Application & restoration", "SPF roofing"],
+      lessons: [
+        {
+          t: "Choosing the chemistry: silicone, acrylic, urethane",
+          min: 10,
+          html: "<p>Fluid-applied coatings put a new weather surface on a sound old roof — metal, mod-bit, BUR or single-ply — at a fraction of replacement cost. The chemistry is the choice:</p><ul><li><strong>Silicone:</strong> the ponding-water champion — it simply doesn't mind sitting water. Single-coat-capable, extremely UV-stable. Trade-offs: slick when wet, attracts dirt, and once a roof is siliconed it can only be recoated with silicone.</li><li><strong>Acrylic:</strong> the economical, easy-working, reflective choice — but water-based, so it wants positive drainage and dry weather to cure. Not for ponding areas.</li><li><strong>Urethane:</strong> the toughest film — best traffic and impact resistance, common as a base coat under silicone or acrylic tops on walkway zones and hail-prone roofs.</li><li><strong>Aluminum/asphalt cutback coatings</strong> remain the maintenance standard on smooth-surface BUR and mod-bit — reflectivity and UV protection on a budget.</li></ul><p>Reflective white coatings also carry an energy story: cooler membrane, cooler building, longer roof life — a real selling point on air-conditioned commercial boxes.</p><div class='tip'>💡 <strong>Warranty note:</strong> manufacturer system warranties (10/15/20-year) hinge on their inspection, their primer and their specified mils — follow the spec sheet, not the sales sheet.</div>"
+        },
+        {
+          t: "SPF roofing and the restoration workflow",
+          min: 10,
+          html: "<p><strong>Sprayed polyurethane foam (SPF)</strong> is the coating world's structural cousin: closed-cell foam sprayed directly on the deck or existing roof (~R-6+ per inch), self-flashing around penetrations, completely seamless, then protected from UV by a silicone or acrylic topcoat with embedded granules. It insulates and waterproofs in one pass and can be recoated indefinitely — but it demands trained applicators, tight weather windows, and serious overspray control (downwind cars are the classic SPF lawsuit).</p><p><strong>The restoration workflow is non-negotiable, whatever the product:</strong></p><ol><li><strong>Clean</strong> — usually pressure-wash; adhesion lives or dies here.</li><li><strong>Repair first</strong> — replace wet insulation (verified by moisture scan or cores), fix failed seams and rusted metal; coatings restore sound roofs, they don't resurrect dead ones.</li><li><strong>Reinforce details</strong> — seams, transitions and penetrations get fabric and mastic before any field coating.</li><li><strong>Verify adhesion</strong> — test patches on the actual roof, pulled after cure.</li><li><strong>Hit the mils</strong> — coverage runs in gallons per square at the specified dry-film thickness. Under-applying mils is THE classic coating failure.</li></ol><div class='tip'>💡 <strong>Business model:</strong> coating jobs convert naturally into maintenance agreements — annual inspection, minor repairs, scheduled recoat. Recurring revenue smooths the storm-cycle rollercoaster.</div>"
+        }
+      ],
+      bank: [
+        { cat: "Coating chemistries", q: "The best coating chemistry for ponding-water areas:", a: ["Acrylic", "Silicone", "Latex paint", "Linseed oil"], correct: 1 },
+        { cat: "Coating chemistries", q: "Acrylic coatings are a poor choice where:", a: ["The roof drains well", "Water ponds — they're water-based and want drainage", "It's sunny", "The deck is metal"], correct: 1 },
+        { cat: "Coating chemistries", q: "Once a roof has been coated with silicone, future recoats must be:", a: ["Acrylic", "Silicone", "Asphalt", "Anything"], correct: 1 },
+        { cat: "Coating chemistries", q: "Urethane coatings earn their keep as:", a: ["The cheapest option", "The tough traffic/impact layer, often under other topcoats", "A vapor barrier", "A primer only"], correct: 1 },
+        { cat: "Application & restoration", q: "The classic coating failure is:", a: ["Too many coats", "Under-applying the specified dry-film thickness", "Cleaning too well", "Using fabric at seams"], correct: 1 },
+        { cat: "Application & restoration", q: "Before any coating goes down you must:", a: ["Just spray it", "Clean, repair, reinforce seams and verify adhesion with test patches", "Remove all flashing", "Add gravel"], correct: 1 },
+        { cat: "Application & restoration", q: "Wet insulation under a roof slated for coating must be:", a: ["Coated over — it dries out", "Found (moisture scan/cores) and replaced first", "Ignored", "Painted"], correct: 1 },
+        { cat: "SPF roofing", q: "SPF (spray foam) roofing must be protected from UV by:", a: ["Nothing — foam is UV-stable", "A silicone or acrylic topcoat, often with granules", "Gravel ballast only", "Paint thinner"], correct: 1 },
+        { cat: "SPF roofing", q: "SPF roofing insulates at roughly:", a: ["R-1 per inch", "R-6+ per inch while also waterproofing", "R-20 per inch", "It doesn't insulate"], correct: 1 }
+      ],
+      gens: [
+        {
+          cat: "Application & restoration",
+          gen: function (R) {
+            var sq = R.int(30, 120);
+            var rate = R.pick([1.5, 2, 2.5]);
+            var gals = Math.ceil(sq * rate);
+            return {
+              q: "A silicone spec calls for " + rate + " gallons per square at final dry-film thickness. For a " + sq + "-square roof, how many gallons (round up)?",
+              a: [gals + " gallons", Math.ceil(gals / 2) + " gallons", (gals + 15) + " gallons", (gals + 40) + " gallons"],
+              correct: 0
+            };
+          }
+        }
+      ]
+    },
+
+    /* ================= 14. REPAIR & RE-ROOFING ================= */
     {
       id: "repair",
       title: "Roof Repair, Maintenance & Re-Roofing",
       tagline: "Finding leaks, judging hail and wind damage, and making the overlay-vs-tear-off call — the service side of the business, where trust is built.",
-      cats: ["Leak diagnosis & repair", "Storm damage assessment", "Re-roofing decisions"],
+      cats: ["Leak diagnosis & repair", "Storm damage assessment", "Re-roofing decisions", "Attic ventilation", "Gutters & drainage"],
       lessons: [
         {
           t: "Finding the source of leaks — and fixing them for good",
@@ -731,6 +760,16 @@ window.COURSE = {
           t: "Re-roofing: overlay vs. tear-off",
           min: 10,
           html: "<p>Every aging asphalt roof reaches the same fork: <strong>overlay</strong> (new shingles over old) or <strong>tear-off</strong>. Code allows a maximum of <strong>two layers</strong> of asphalt shingles — one existing layer is the most you can go over.</p><p><strong>Overlay is acceptable only when</strong> the existing layer is single, flat and well-adhered, the deck is sound, and there's no widespread curling or moisture. It saves tear-off labor and disposal — but it hides the deck, telegraphs old defects through, runs hotter (shorter life), adds weight, and many manufacturers trim the warranty.</p><p><strong>Tear-off wins</strong> whenever there are two layers, wood shakes underneath, soft decking, extensive leak history, or when the customer wants full warranty and ice-and-water at the eaves — you can't dry-in a deck you never exposed. Storm/insurance work is effectively always tear-off.</p><p><strong>Estimating re-roofing</strong> adds the demolition math: tear-off labor by layer and pitch, disposal at ~250–350 lbs per square per layer, dumpster count and placement, landscaping/pool/driveway protection, magnet sweep for nails, and the per-sheet decking unit price in writing. Demolition safety is part of the bid: falling debris zones, chutes or wheelbarrow runs, and never opening more roof than the day's weather window can close.</p>"
+        },
+{
+          t: "Attic ventilation: the roof's climate control",
+          min: 10,
+          html: "<p>A vented attic flushes heat in summer (cooler shingles, longer life, lower cooling bills) and moisture in winter (no condensation rot, fewer ice dams). The code baseline: <strong>1 sq ft of net free vent area (NFA) per 150 sq ft of attic floor</strong> — improved to 1/300 with a balanced system (about half the vent area high, half low) and a ceiling vapor retarder where required.</p><ul><li><strong>Balanced means intake AND exhaust:</strong> soffit vents low bringing air in, ridge vent (or box vents) high letting it out. Exhaust without intake just pulls conditioned air — or rain — through whatever gap it can find.</li><li><strong>Never mix exhaust types</strong> on one attic: a power fan or turbine near a ridge vent short-circuits the airflow, pulling air (and weather) in through the ridge instead of the soffits.</li><li>Verify soffit vents aren't painted shut or insulation-blocked — baffles at the eaves keep the intake path open.</li><li>Convert NFA math to product: each vent style publishes NFA per unit or per lineal foot (ridge vent commonly ~18 sq in/LF).</li></ul><div class='tip'>💡 <strong>Warranty leverage:</strong> shingle manufacturers can prorate or deny claims on under-ventilated attics. Documenting the ventilation fix in your proposal protects the customer's warranty — and upsells honestly.</div>"
+        },
+{
+          t: "Gutters and getting water away from the building",
+          min: 8,
+          html: "<p>The roof's job ends only when water is away from the foundation:</p><ul><li><strong>Sizing:</strong> 5\" K-style handles most homes; 6\" for big/steep roofs and high-intensity rain regions; half-round for historic looks; box gutters on commercial.</li><li><strong>Slope</strong> runs toward downspouts at about 1/16\"–1/8\" per foot — visually level, functionally pitched.</li><li><strong>Downspouts:</strong> one 2\"×3\" per ~600 sq ft of roof served (3\"×4\" ≈ 1,200 sq ft); extensions/leaders discharging 4'+ from the foundation.</li><li><strong>Hangers</strong> every 24\"–36\" (closer in snow country); hidden hangers with screws over spikes.</li><li>Estimate by LF of gutter + downspout, plus elbows, miters (inside/outside corners), end caps, outlets and guards. Seamless machine-run aluminum priced per LF is the residential standard.</li></ul>"
         }
       ],
       bank: [
@@ -744,7 +783,12 @@ window.COURSE = {
         { cat: "Storm damage assessment", q: "The standard hail inspection area marked on each slope is:", a: ["A 10' × 10' test square", "The whole slope", "One shingle", "A 3' circle"], correct: 0 },
         { cat: "Re-roofing decisions", q: "Code allows how many total layers of asphalt shingles?", a: ["One", "Two", "Three", "Unlimited"], correct: 1 },
         { cat: "Re-roofing decisions", q: "Which condition REQUIRES tear-off rather than overlay?", a: ["A single flat well-adhered layer", "Two existing layers or soft decking", "New gutters", "A 6/12 pitch"], correct: 1 },
-        { cat: "Re-roofing decisions", q: "Overlays cost less up front but:", a: ["Last longer", "Hide the deck, run hotter, and often trim the warranty", "Weigh less", "Improve ventilation"], correct: 1 }
+        { cat: "Re-roofing decisions", q: "Overlays cost less up front but:", a: ["Last longer", "Hide the deck, run hotter, and often trim the warranty", "Weigh less", "Improve ventilation"], correct: 1 },
+        { cat: "Attic ventilation", q: "The common code baseline for attic ventilation is:", a: ["1/50", "1 sq ft NFA per 150 sq ft of attic (1/300 balanced with vapor retarder)", "1/1000", "No requirement"], correct: 1 },
+        { cat: "Attic ventilation", q: "Balanced ventilation pairs:", a: ["Two exhaust types", "Soffit intake low with ridge exhaust high", "Fans with turbines", "No intake, all exhaust"], correct: 1 },
+        { cat: "Attic ventilation", q: "Mixing a power fan with a ridge vent on one attic:", a: ["Doubles airflow", "Short-circuits airflow and can pull weather in through the ridge", "Is code-required", "Saves energy"], correct: 1 },
+        { cat: "Gutters & drainage", q: "Gutter slope toward downspouts should be about:", a: ["Dead level", "1/16\"–1/8\" per foot", "1\" per foot", "Sloped away from downspouts"], correct: 1 },
+        { cat: "Gutters & drainage", q: "A 2\"×3\" downspout serves roughly:", a: ["100 sq ft of roof", "600 sq ft of roof", "5,000 sq ft of roof", "Unlimited area"], correct: 1 }
       ],
       gens: [
         {
@@ -758,6 +802,30 @@ window.COURSE = {
             return {
               q: "Tear-off: " + sq + " squares, " + layers + " layer" + (layers > 1 ? "s" : "") + " at ~300 lbs per square-layer, hauled in " + cap + "-ton dumpsters. How many dumpster loads (round up)?",
               a: [dumpsters + " load" + (dumpsters > 1 ? "s" : ""), (dumpsters + 2) + " loads", Math.max(1, dumpsters - 1) + " load(s)", (dumpsters + 5) + " loads"],
+              correct: 0
+            };
+          }
+        },
+        {
+          cat: "Attic ventilation",
+          gen: function (R) {
+            var attic = R.int(12, 30) * 100;
+            var nfa = Math.round(attic / 150 * 144);
+            return {
+              q: "An attic floor measures " + attic.toLocaleString() + " sq ft. At the 1/150 baseline, how much net free vent area is required (in square inches)?",
+              a: [nfa.toLocaleString() + " sq in", Math.round(nfa / 2).toLocaleString() + " sq in", (attic).toLocaleString() + " sq in", Math.round(nfa * 2).toLocaleString() + " sq in"],
+              correct: 0
+            };
+          }
+        },
+        {
+          cat: "Gutters & drainage",
+          gen: function (R) {
+            var area = R.int(18, 42) * 100;
+            var ds = Math.ceil(area / 600);
+            return {
+              q: "A roof drains " + area.toLocaleString() + " sq ft to its gutters. Using 2\"×3\" downspouts at one per ~600 sq ft, how many downspouts minimum?",
+              a: [ds + " downspouts", Math.max(1, ds - 2) + " downspouts", (ds + 4) + " downspouts", "1 downspout"],
               correct: 0
             };
           }
