@@ -1,16 +1,31 @@
 {
-  "name": "Roofing Construction & Estimating — Certification E-Course",
+  "name": "Roofing Construction & Estimating \u2014 Certification E-Course",
   "short_name": "Roofing Course",
-  "description": "12-chapter certification course: lessons, graded tests with fresh numbers every attempt, skill rankings, badges and a certification exam.",
+  "description": "15-chapter certification course matching the book chapter-for-chapter: reading assignments, lessons with recaps, graded tests with fresh numbers every attempt, skill rankings, badges, a team leaderboard and a certification exam.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#faf8f2",
-  "theme_color": "#1e3358",
+  "background_color": "#f5f6f8",
+  "theme_color": "#0f2444",
   "icons": [
-    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "assets/icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
