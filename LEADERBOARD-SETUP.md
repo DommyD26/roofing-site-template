@@ -13,7 +13,7 @@ The `/exec` URL stays exactly the same — nothing else changes. The site
 auto-detects the upgrade (it pings the backend before ever sending progress
 data), so deploying v2 flips backups on everywhere with no other steps.
 Backups appear in a new **Progress** tab in the sheet, one row per person,
-keyed by their backup code.
+keyed by their Unique ID.
 
 ---
 
