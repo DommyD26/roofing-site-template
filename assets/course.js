@@ -500,116 +500,192 @@
 
   /* ---------------- quiz rendering & grading ---------------- */
 
+  /* ---------------- paginated test engine ----------------
+     One question per screen, Back on the left / Next on the right.
+     Every answer auto-saves to localStorage (separate from progress,
+     never synced to the cloud), so an interrupted test resumes exactly
+     where it left off — same questions, same answers, same position. */
+
+  var QUIZ_KEY = "rce-quiz";
+  function quizStore() {
+    try { var s = JSON.parse(localStorage.getItem(QUIZ_KEY)); return plainObject(s) ? s : {}; }
+    catch (e) { return {}; }
+  }
+  function saveQuizStore(s) {
+    try { localStorage.setItem(QUIZ_KEY, JSON.stringify(s)); } catch (e) {}
+  }
+
   function testView(opts) {
-    // opts: {kind: 'chapter'|'practice'|'final', chapter?, title, subtitle, pass, rebuild()}
+    // opts: {kind: 'chapter'|'practice'|'final', chapter?, kicker, title, subtitle, pass, rebuild()}
+    var storeId = opts.kind === "chapter" ? "chapter|" + opts.chapter : opts.kind;
     var wrap = el("div", "view");
     wrap.appendChild(el("header", "lesson-head",
       '<p class="kicker">' + esc(opts.kicker) + "</p><h1>" + esc(opts.title) + "</h1>" +
       '<p class="lede">' + opts.subtitle + "</p>"));
 
-    var questions = opts.rebuild();
-    window.__lastTest = questions; // test/QA hook: lets automated checks verify grading
     var banner = nameBanner();
     if (banner) wrap.appendChild(banner);
-    var box = el("section", "quiz");
-    var form = el("form", "quiz-form");
 
-    function renderQuestions() {
-      form.innerHTML = "";
-      questions.forEach(function (item, qi) {
-        var f = el("fieldset", "q");
-        var chTitle = opts.kind === "chapter" ? "" :
-          ' <span class="q-src">' + esc(chapterById(item.chapter).title) + "</span>";
-        f.appendChild(el("legend", "", (qi + 1) + ". " + esc(item.q) + chTitle));
-        item.a.forEach(function (optTxt, oi) {
-          var lab = el("label", "opt");
-          lab.innerHTML = '<input type="radio" name="q' + qi + '" value="' + oi + '"> <span>' + esc(optTxt) + "</span>";
-          f.appendChild(lab);
-        });
-        form.appendChild(f);
-      });
-      var actions = el("div", "quiz-actions");
-      var submit = el("button", "btn primary", "Grade my test");
-      submit.type = "submit";
-      actions.appendChild(submit);
-      actions.appendChild(el("p", "quiz-result", ""));
-      form.appendChild(actions);
+    var all = quizStore();
+    var saved = all[storeId];
+    var state, resumed = false;
+    if (saved && Array.isArray(saved.questions) && saved.questions.length && plainObject(saved.answers)) {
+      state = saved;
+      resumed = true;
+      if (typeof state.pos !== "number" || state.pos < 0 || state.pos >= state.questions.length) state.pos = 0;
+    } else {
+      state = { questions: opts.rebuild(), answers: {}, pos: 0, ts: Date.now() };
     }
-    renderQuestions();
+    window.__lastTest = state.questions; // QA hook
 
+    function persist() { var s = quizStore(); s[storeId] = state; saveQuizStore(s); }
+    function clearSaved() { var s = quizStore(); delete s[storeId]; saveQuizStore(s); }
+    if (!resumed) persist();
+
+    var box = el("section", "quiz");
     var report = el("div", "");
+    wrap.appendChild(box);
+    wrap.appendChild(report);
 
-    form.onsubmit = function (ev) {
-      ev.preventDefault();
-      var result = form.querySelector(".quiz-result");
-      var right = 0, answered = 0;
-      var cats = {};
-      questions.forEach(function (item, qi) {
-        var picked = form.querySelector('input[name="q' + qi + '"]:checked');
-        if (picked) answered++;
+    function answeredCount() { return Object.keys(state.answers).length; }
+    function srcLabel(q) {
+      if (opts.kind === "chapter") return "";
+      var ch = chapterById(q.chapter);
+      return ch ? ' <span class="q-src">' + esc(ch.title) + "</span>" : "";
+    }
+
+    function renderQuestion(note) {
+      var q = state.questions[state.pos];
+      var n = state.questions.length;
+      box.innerHTML = "";
+
+      var head = el("div", "quiz-head");
+      head.innerHTML =
+        '<div class="quiz-progress-row"><h2>Question ' + (state.pos + 1) + " of " + n + "</h2>" +
+        '<button type="button" class="quiz-restart" id="q-restart">↻ New questions</button></div>' +
+        '<div class="track"><div class="track-fill" style="width:' + Math.round(answeredCount() / n * 100) + '%"></div></div>' +
+        '<p class="quiz-autosave">' + answeredCount() + " of " + n + " answered · saves automatically</p>" +
+        (note ? '<p class="quiz-result warn">' + note + "</p>" : "");
+      box.appendChild(head);
+      head.querySelector("#q-restart").onclick = function () {
+        if (!confirm("Start over with a fresh set of questions? Your saved answers on this test will be discarded.")) return;
+        clearSaved();
+        state = { questions: opts.rebuild(), answers: {}, pos: 0, ts: Date.now() };
+        window.__lastTest = state.questions;
+        persist();
+        renderQuestion();
+      };
+
+      var f = el("fieldset", "q");
+      f.appendChild(el("legend", "", esc(q.q) + srcLabel(q)));
+      q.a.forEach(function (optTxt, oi) {
+        var lab = el("label", "opt");
+        lab.innerHTML = '<input type="radio" name="q" value="' + oi + '"' +
+          (state.answers[state.pos] === oi ? " checked" : "") + '> <span>' + esc(optTxt) + "</span>";
+        lab.querySelector("input").addEventListener("change", function () {
+          state.answers[state.pos] = oi;
+          persist(); // auto-save on every answer
+          var fill = head.querySelector(".track-fill");
+          if (fill) fill.style.width = Math.round(answeredCount() / n * 100) + "%";
+          var as = head.querySelector(".quiz-autosave");
+          if (as) as.textContent = answeredCount() + " of " + n + " answered · saved ✓";
+        });
+        f.appendChild(lab);
       });
-      if (answered < questions.length) {
-        result.textContent = "Answer all " + questions.length + " questions (" + (questions.length - answered) + " left).";
-        result.className = "quiz-result warn";
-        return;
-      }
-      questions.forEach(function (item, qi) {
-        var picked = form.querySelector('input[name="q' + qi + '"]:checked');
-        var ok = Number(picked.value) === item.correct;
+      box.appendChild(f);
+
+      var nav = el("div", "quiz-nav");
+      var back = el("button", "btn quiz-back", "← Back");
+      back.type = "button";
+      back.disabled = state.pos === 0;
+      back.onclick = function () {
+        if (state.pos > 0) { state.pos--; persist(); renderQuestion(); }
+      };
+      var isLast = state.pos === n - 1;
+      var next = el("button", "btn primary quiz-next", isLast ? "Submit test ✓" : "Next →");
+      next.type = "button";
+      next.onclick = function () {
+        if (!isLast) { state.pos++; persist(); renderQuestion(); return; }
+        var missing = [];
+        for (var i = 0; i < n; i++) if (typeof state.answers[i] !== "number") missing.push(i);
+        if (missing.length) {
+          state.pos = missing[0];
+          persist();
+          renderQuestion(missing.length + " question" + (missing.length > 1 ? "s" : "") + " still unanswered — here's the first one.");
+          return;
+        }
+        grade();
+      };
+      nav.appendChild(back);
+      nav.appendChild(next);
+      box.appendChild(nav);
+      window.scrollTo(0, 0);
+    }
+
+    function grade() {
+      var qns = state.questions;
+      var right = 0, cats = {};
+      qns.forEach(function (item, qi) {
+        var ok = state.answers[qi] === item.correct;
         if (ok) right++;
         var key = item.chapter + "|" + item.cat;
         cats[key] = cats[key] || { c: 0, t: 0 };
         cats[key].t++;
         if (ok) cats[key].c++;
-        var fs = form.querySelectorAll("fieldset.q")[qi];
-        fs.classList.add(ok ? "correct" : "wrong");
-        fs.querySelectorAll("label.opt").forEach(function (o, oi) {
-          o.classList.toggle("is-answer", oi === item.correct);
-          o.querySelector("input").disabled = true;
-        });
       });
-
-      var score = Math.round(right / questions.length * 100);
+      var score = Math.round(right / qns.length * 100);
       var passed = score >= opts.pass;
       var attempt = {
         ts: Date.now(), kind: opts.kind, chapter: opts.chapter || null,
-        score: score, correct: right, total: questions.length, cats: cats
+        score: score, correct: right, total: qns.length, cats: cats
       };
       DB.attempts.push(attempt);
       save();
       submitScore(attempt);
+      clearSaved();
 
-      result.innerHTML = (passed ? "✅ " : "❌ ") + score + "% — " + right + "/" + questions.length +
-        " correct. " + (passed ? "Passed!" : "You need " + opts.pass + "%. Review and retake — the numbers will be new.");
-      result.className = "quiz-result " + (passed ? "pass" : "fail");
-      form.querySelector("button").style.display = "none";
+      box.innerHTML = "";
+      box.appendChild(el("div", "quiz-head",
+        "<h2>Results</h2>" +
+        '<p class="quiz-result ' + (passed ? "pass" : "fail") + '">' +
+        (passed ? "✅ " : "❌ ") + score + "% — " + right + "/" + qns.length + " correct. " +
+        (passed ? "Passed!" : "You need " + opts.pass + "%. Review below and retake — the numbers will be new.") + "</p>"));
+      qns.forEach(function (item, qi) {
+        var ok = state.answers[qi] === item.correct;
+        var f = el("fieldset", "q " + (ok ? "correct" : "wrong"));
+        f.appendChild(el("legend", "", (qi + 1) + ". " + esc(item.q) + srcLabel(item)));
+        item.a.forEach(function (optTxt, oi) {
+          var lab = el("label", "opt" + (oi === item.correct ? " is-answer" : ""));
+          lab.innerHTML = '<input type="radio" disabled' + (state.answers[qi] === oi ? " checked" : "") + '> <span>' + esc(optTxt) + "</span>";
+          f.appendChild(lab);
+        });
+        box.appendChild(f);
+      });
 
       report.innerHTML = "";
       report.appendChild(attemptReport(cats, opts));
       var again = el("button", "btn", "↻ Retake with fresh questions & new numbers");
       again.onclick = function () {
-        questions = opts.rebuild();
-        window.__lastTest = questions;
+        state = { questions: opts.rebuild(), answers: {}, pos: 0, ts: Date.now() };
+        window.__lastTest = state.questions;
+        persist();
         report.innerHTML = "";
-        renderQuestions();
-        window.scrollTo(0, 0);
+        renderQuestion();
       };
       var actions = el("div", "pager");
       actions.appendChild(again);
-      if (opts.kind === "chapter") {
-        actions.appendChild(linkBtn("#/chapter/" + opts.chapter, "Back to chapter", ""));
-      } else {
-        actions.appendChild(linkBtn("#/stats", "See my stats →", ""));
-      }
+      if (opts.kind === "chapter") actions.appendChild(linkBtn("#/chapter/" + opts.chapter, "Back to chapter", ""));
+      else actions.appendChild(linkBtn("#/stats", "See my stats →", ""));
       report.appendChild(actions);
 
       awardNewBadges();
       renderSidebar();
-    };
+      window.scrollTo(0, 0);
+    }
 
-    box.appendChild(form);
-    wrap.appendChild(box);
-    wrap.appendChild(report);
+    renderQuestion(resumed && answeredCount() > 0
+      ? "▶ Picked up where you left off — " + answeredCount() + " answer" + (answeredCount() > 1 ? "s" : "") + " already saved."
+      : null);
     return wrap;
   }
 
@@ -1043,6 +1119,7 @@
       if (confirm("This clears every test score, badge and lesson-read mark on THIS device. Your last cloud backup stays untouched until your next test, so it can still be restored with your Unique ID. Continue?")) {
         DB = { attempts: [], badges: {}, read: {}, name: DB.name, firstName: DB.firstName, lastName: DB.lastName, playerId: DB.playerId, syncCode: DB.syncCode };
         skipNextCloud = true; // keep the cloud copy as a recovery point
+        try { localStorage.removeItem(QUIZ_KEY); } catch (e) {}
         save();
         route();
       }
