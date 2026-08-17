@@ -17,7 +17,7 @@
     return v !== null && typeof v === "object" && !Array.isArray(v);
   }
   function load() {
-    var fallback = { attempts: [], badges: {}, read: {}, name: "", firstName: "", lastName: "", playerId: "" };
+    var fallback = { attempts: [], badges: {}, read: {}, name: "", firstName: "", lastName: "", playerId: "", syncCode: "" };
     try {
       var d = JSON.parse(localStorage.getItem(KEY));
       if (!plainObject(d)) return fallback;
@@ -33,12 +33,16 @@
       if (typeof d.firstName !== "string") d.firstName = "";
       if (typeof d.lastName !== "string") d.lastName = "";
       if (typeof d.playerId !== "string") d.playerId = "";
+      if (typeof d.syncCode !== "string") d.syncCode = "";
       return d;
     } catch (e) { return fallback; }
   }
+  var skipNextCloud = false;
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(DB)); }
     catch (e) { /* storage full/blocked: keep running in-memory */ }
+    if (skipNextCloud) { skipNextCloud = false; return; }
+    cloudSaveSoon();
   }
   var DB = load();
 
@@ -185,6 +189,80 @@
     });
   }
 
+  /* ---------------- cloud progress sync ---------------- */
+
+  function ensureSyncCode() {
+    if (DB.syncCode) return DB.syncCode;
+    var chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+    var c = "";
+    for (var i = 0; i < 8; i++) c += chars[Math.floor(Math.random() * chars.length)];
+    DB.syncCode = c;
+    return c;
+  }
+  function prettyCode(c) { return c ? c.slice(0, 4) + "-" + c.slice(4) : ""; }
+
+  /* Backend capability check: v2 backends answer ?ping=1 with {progress:true};
+     v1 backends answer with the scores array. Cached per session so an old
+     deployment never receives progress posts it doesn't understand. */
+  var backendCaps = null;
+  function checkBackend(cb) {
+    if (!C.leaderboardUrl) { cb(false); return; }
+    if (backendCaps !== null) { cb(backendCaps); return; }
+    var sep = C.leaderboardUrl.indexOf("?") === -1 ? "?" : "&";
+    fetch(C.leaderboardUrl + sep + "ping=1")
+      .then(function (r) { return r.json(); })
+      .then(function (j) { backendCaps = !!(j && !Array.isArray(j) && j.progress); cb(backendCaps); })
+      .catch(function () { cb(false); /* transient: leave caps unknown for retry */ });
+  }
+
+  var cloudTimer = null;
+  function cloudSaveSoon() {
+    if (!C.leaderboardUrl || !DB.playerId || typeof fetch !== "function") return;
+    clearTimeout(cloudTimer);
+    cloudTimer = setTimeout(cloudSaveNow, 2500);
+  }
+  function cloudSaveNow() {
+    checkBackend(function (ok) {
+      if (!ok) return;
+      try {
+        fetch(C.leaderboardUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({
+            type: "progress",
+            code: ensureSyncCode(),
+            name: (DB.firstName + " " + DB.lastName).trim(),
+            data: JSON.stringify(DB)
+          })
+        }).catch(function () { /* offline — next save retries */ });
+      } catch (e) { /* never let backup break the app */ }
+    });
+  }
+
+  function restoreFromCode(rawCode, statusEl) {
+    var code = String(rawCode || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (code.length < 6) { statusEl.textContent = "Enter the full code (like ROOF-7K2M)."; return; }
+    statusEl.textContent = "Looking up your backup…";
+    var sep = C.leaderboardUrl.indexOf("?") === -1 ? "?" : "&";
+    fetch(C.leaderboardUrl + sep + "code=" + encodeURIComponent(code) + "&t=" + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j || !j.ok || !j.data) { statusEl.textContent = "No backup found for that code — double-check it."; return; }
+        var parsed;
+        try { parsed = JSON.parse(j.data); } catch (e) { parsed = null; }
+        if (!parsed || typeof parsed !== "object") { statusEl.textContent = "That backup looks damaged — take a new test to refresh it, then retry."; return; }
+        var who = j.name || "this player";
+        var when = j.when ? new Date(j.when).toLocaleDateString() : "recently";
+        if (!confirm("Restore " + who + "'s progress (backed up " + when + ")? This replaces everything currently on THIS device.")) {
+          statusEl.textContent = "";
+          return;
+        }
+        try { localStorage.setItem(KEY, j.data); } catch (e) {}
+        location.reload();
+      })
+      .catch(function () { statusEl.textContent = "Couldn't reach the backup service — check your connection and try again."; });
+  }
+
   /* ---------------- leaderboard backend ---------------- */
 
   function saveName(first, last) {
@@ -220,14 +298,23 @@
       '<span class="name-fields">' +
       '<input id="nb-first" maxlength="40" placeholder="First name" autocomplete="given-name">' +
       '<input id="nb-last" maxlength="40" placeholder="Last name" autocomplete="family-name">' +
-      '<button class="btn primary" id="nb-save" type="button">Save</button></span>');
+      '<button class="btn primary" id="nb-save" type="button">Save</button></span>' +
+      (C.leaderboardUrl ?
+        '<div class="restore-row">Already started on another device? ' +
+        '<input id="nb-code" maxlength="12" placeholder="Backup code (ROOF-7K2M)" autocapitalize="characters">' +
+        '<button class="btn" id="nb-restore" type="button">Restore my progress</button>' +
+        '<span class="restore-status" id="nb-status"></span></div>' : ""));
     box.querySelector("#nb-save").onclick = function () {
       var f = box.querySelector("#nb-first").value.trim();
       var l = box.querySelector("#nb-last").value.trim();
       if (!f) { box.querySelector("#nb-first").focus(); return; }
       saveName(f, l);
-      toast("👋 Welcome, <strong>" + esc(DB.firstName) + "</strong> — your scores now count on the leaderboard.");
+      toast("👋 Welcome, <strong>" + esc(DB.firstName) + "</strong> — your scores now count on the leaderboard, and your progress backs up automatically. Your backup code is in My Stats.");
       route();
+    };
+    var rBtn = box.querySelector("#nb-restore");
+    if (rBtn) rBtn.onclick = function () {
+      restoreFromCode(box.querySelector("#nb-code").value, box.querySelector("#nb-status"));
     };
     return box;
   }
@@ -758,6 +845,23 @@
     };
     wrap.appendChild(who);
 
+    if (C.leaderboardUrl && DB.playerId) {
+      ensureSyncCode();
+      save();
+      var sync = el("section", "who-box sync-box");
+      sync.innerHTML = "<strong>☁️ Backup &amp; transfer:</strong> your progress backs up automatically after every test. " +
+        "To pick up on another device (or after clearing this one), open the course there and enter your backup code: " +
+        '<span class="sync-code">' + esc(prettyCode(DB.syncCode)) + "</span>" +
+        '<div class="restore-row">Restore a backup onto THIS device: ' +
+        '<input id="st-code" maxlength="12" placeholder="Backup code" autocapitalize="characters">' +
+        '<button class="btn" id="st-restore" type="button">Restore</button>' +
+        '<span class="restore-status" id="st-status"></span></div>';
+      sync.querySelector("#st-restore").onclick = function () {
+        restoreFromCode(sync.querySelector("#st-code").value, sync.querySelector("#st-status"));
+      };
+      wrap.appendChild(sync);
+    }
+
     var overallAvg = DB.attempts.length
       ? Math.round(DB.attempts.reduce(function (s, a) { return s + a.score; }, 0) / DB.attempts.length) : null;
     var strip = el("section", "stat-strip");
@@ -809,8 +913,9 @@
     var danger = el("section", "danger-zone");
     var reset = el("button", "btn danger", "Reset ALL progress, history and badges");
     reset.onclick = function () {
-      if (confirm("This permanently clears every test score, badge and lesson-read mark on this device. Continue?")) {
-        DB = { attempts: [], badges: {}, read: {}, name: DB.name };
+      if (confirm("This clears every test score, badge and lesson-read mark on THIS device. Your last cloud backup stays untouched until your next test, so it can still be restored with your backup code. Continue?")) {
+        DB = { attempts: [], badges: {}, read: {}, name: DB.name, firstName: DB.firstName, lastName: DB.lastName, playerId: DB.playerId, syncCode: DB.syncCode };
+        skipNextCloud = true; // keep the cloud copy as a recovery point
         save();
         route();
       }

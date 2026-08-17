@@ -1,3 +1,22 @@
+# Backend v2 upgrade: cloud progress backup (~2 minutes)
+
+If your leaderboard is already live on a v1 deployment, upgrade to enable
+automatic progress backup + restore-by-code:
+
+1. Open the **Roofing Course Leaderboard** sheet → **Extensions → Apps Script**
+2. Select all the old code, paste the current contents of
+   [`leaderboard/Code.gs`](leaderboard/Code.gs) over it, hit 💾 save
+3. **Deploy → Manage deployments** → click the ✏️ pencil on the active
+   deployment → under **Version** choose **New version** → **Deploy**
+
+The `/exec` URL stays exactly the same — nothing else changes. The site
+auto-detects the upgrade (it pings the backend before ever sending progress
+data), so deploying v2 flips backups on everywhere with no other steps.
+Backups appear in a new **Progress** tab in the sheet, one row per person,
+keyed by their backup code.
+
+---
+
 # Leaderboard setup (one time, ~3 minutes)
 
 The leaderboard stores every test score in a **Google Sheet you own** and the
