@@ -496,6 +496,41 @@ h1, h2, h3 { letter-spacing: -0.015em; }
 }
 .name-fields input:focus { border-color: var(--navy); }
 .who-box { border-left-color: var(--navy); margin-top: 1rem; }
+.sync-box { border-left-color: #3f76bd; }
+.sync-code {
+  display: inline-block;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  color: var(--navy);
+  background: var(--blue-bg);
+  border: 1px dashed #9db8dd;
+  border-radius: 8px;
+  padding: 0.15rem 0.7rem;
+  margin-left: 0.3rem;
+  user-select: all;
+}
+.restore-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--line);
+  font-size: 0.86rem;
+}
+.restore-row input {
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-family: var(--font);
+  width: 13rem;
+  max-width: 55vw;
+  text-transform: uppercase;
+}
+.restore-status { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
 tr.me-row td { background: #fbf3e4; font-weight: 700; }
 .feedback-link {
   display: flex;
