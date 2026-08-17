@@ -10,7 +10,7 @@ and tracks every test you've ever taken.
   each with its own time estimate (~8.4 hours total). Every lesson opens with a book
   reading assignment (chapter + page range) and closes with a Summary / Key Points /
   Things to Remember / Tips & Tricks recap.
-- **Chapter tests (~10 Q), a 20-question practice test, and a 45-question certification exam**
+- **Chapter tests (~10 Q), a 30-question practice test (2 per chapter), and a 60-question certification exam (4 per chapter)**
   (70% passes chapters, 80% passes the exam) drawn from a 175-question bank.
 - **Fresh numbers every attempt** — math/takeoff problems are generated with new values
   each time, so retakes test skill, not memory.

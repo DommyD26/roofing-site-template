@@ -289,7 +289,7 @@
     var box = el("div", "install-banner");
     var canNative = !!window.__deferredInstall;
     box.innerHTML =
-      "<strong>📲 Put this course on your home screen</strong> — it opens like an app, works offline on the roof, and keeps your place." +
+      "<strong>📲 Put this course on your home screen</strong> — it opens like an app, works offline when remote, and keeps your place." +
       '<div class="install-steps">' +
       (canNative ? '<button class="btn primary" id="a2hs-go" type="button">Install now</button>'
                  : "<span>In " + info.name + ": " + info.steps + "</span>") +
@@ -474,25 +474,28 @@
     return shuffle(qs);
   }
 
+  /* Practice test: exactly 2 questions from every chapter (~half the time
+     one of the pair is a fresh-numbers generated problem). */
   function buildPractice() {
     var pool = [];
     C.chapters.forEach(function (ch) {
       var picks = shuffle(ch.bank).slice(0, 2);
-      // ~half the time swap one static for a fresh-numbers generated problem
       if (ch.gens.length && Math.random() < 0.5) picks[0] = R.pick(ch.gens);
       picks.forEach(function (e) { pool.push(materialize(e, ch)); });
     });
-    return shuffle(pool).slice(0, C.practiceSize);
+    return shuffle(pool);
   }
 
+  /* Certification exam: exactly 4 questions from every chapter —
+     3 from the bank plus 1 generated problem with fresh numbers. */
   function buildFinal() {
     var pool = [];
     C.chapters.forEach(function (ch) {
-      var statics = shuffle(ch.bank).slice(0, ch.gens.length ? 2 : 3);
+      var statics = shuffle(ch.bank).slice(0, ch.gens.length ? 3 : 4);
       statics.forEach(function (e) { pool.push(materialize(e, ch)); });
       if (ch.gens.length) pool.push(materialize(R.pick(ch.gens), ch));
     });
-    return shuffle(pool).slice(0, C.finalSize);
+    return shuffle(pool);
   }
 
   /* ---------------- quiz rendering & grading ---------------- */
@@ -678,6 +681,14 @@
     var bCount = Object.keys(DB.badges).length;
     nav.appendChild(navLink("#/badges", "🎖️ Badges (" + bCount + "/" + C.badges.length + ")", null));
     if (finalPassed()) nav.appendChild(navLink("#/certificate", "📜 My Certificate", null));
+    nav.appendChild(el("div", "side-sep"));
+    nav.appendChild(navLink("#/gear", "🧰 Tools & Equipment", null));
+    var bookA = el("a", "");
+    bookA.href = C.bookUrl;
+    bookA.target = "_blank";
+    bookA.rel = "noopener";
+    bookA.innerHTML = '<span class="check"></span>📖 Open the Book';
+    nav.appendChild(bookA);
     var fb = el("a", "feedback-link");
     fb.href = feedbackHref();
     fb.innerHTML = '<span class="check"></span>💬 Send feedback';
@@ -912,7 +923,7 @@
       kind: "practice", pass: C.passScore,
       kicker: "Practice test · " + C.practiceSize + " questions",
       title: "Practice Test",
-      subtitle: "Twenty questions drawn from every chapter — different questions and fresh numbers every time. Results feed your per-chapter skill rankings.",
+      subtitle: C.practiceSize + " questions — two from every chapter, with different questions and fresh numbers every time. Results feed your per-chapter skill rankings.",
       rebuild: buildPractice
     });
   }
@@ -1116,6 +1127,27 @@
     return wrap;
   }
 
+  function viewGear() {
+    var wrap = el("div", "view");
+    wrap.appendChild(el("header", "lesson-head",
+      '<p class="kicker">Get equipped</p><h1>Tools &amp; Equipment</h1>' +
+      '<p class="lede">Everything you physically need — for this course and for the work itself. Print it, screenshot it, or hand it to a new hire on day one.</p>'));
+    var grid = el("section", "gear-grid");
+    (C.gear || []).forEach(function (g) {
+      var card = el("div", "gear-card");
+      card.innerHTML = "<h2>" + g.icon + " " + esc(g.cat) + "</h2><ul>" +
+        g.items.map(function (it) {
+          return "<li><strong>" + esc(it.name) + "</strong>" +
+            (it.note ? '<span class="gear-note">' + esc(it.note) + "</span>" : "") + "</li>";
+        }).join("") + "</ul>";
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+    wrap.appendChild(el("aside", "book-note",
+      "🦺 <strong>Safety first, always:</strong> fall protection isn't optional gear — it's the difference between a career and a headline. If a roof feels beyond your setup, it is."));
+    return wrap;
+  }
+
   function viewBadges() {
     var wrap = el("div", "view");
     wrap.appendChild(el("header", "lesson-head",
@@ -1193,6 +1225,7 @@
     }
     else if (hash === "#/practice") { view = viewPractice(); title = "Practice Test"; }
     else if (hash === "#/leaderboard") { view = viewLeaderboard(); title = "Leaderboard"; }
+    else if (hash === "#/gear") { view = viewGear(); title = "Tools & Equipment"; }
     else if (hash === "#/final") { view = viewFinal(); title = "Certification Exam"; }
     else if (hash === "#/stats") { view = viewStats(); title = "My Stats"; }
     else if (hash === "#/badges") { view = viewBadges(); title = "Badges"; }
