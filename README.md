@@ -32,6 +32,19 @@ and tracks every test you've ever taken.
   "Install app"), offline-capable via a service worker.
 - No accounts and no hosting costs: static site + the owner's own Google Sheet.
 
+## Agent CRM (`/crm/`)
+
+A separate app for the business development team: a CRM for the real-estate
+agents who refer work to the company. Tracks each agent's referrals through a
+job pipeline (with revenue, cost, and auto-calculated profit), logs every
+touch (calls, texts, pop-bys, lunches, gifts), and surfaces who's gone cold
+via a days-since-last-activity follow-up queue. Includes email/text marketing
+blasts with merge-field templates and audience segments, CSV import/export,
+and an optional shared team backend (a Google Sheet + Apps Script the owner
+controls) that also sends personalized campaign emails through the owner's
+Gmail. Local-first, so it works with zero setup on a single device. Setup
+guide: [`CRM-SETUP.md`](CRM-SETUP.md).
+
 ## Running / deploying
 
 No build step. Options:
@@ -74,4 +87,6 @@ After changing files, bump `VERSION` in `sw.js` so installed apps pick up the up
 | `assets/course.js` | Router, test engine, scoring/history, badges, leaderboard, cloud backup, certificate |
 | `assets/styles.css` | Styling incl. print styles for the certificate |
 | `leaderboard/Code.gs`, `LEADERBOARD-SETUP.md` | Google Apps Script backend (scores + progress backups) and its setup guide |
+| `crm/index.html`, `crm/crm.js` | Agent CRM app for the BD team (referral tracking, marketing, follow-up queue) |
+| `crm/Code.gs`, `CRM-SETUP.md` | CRM's own Apps Script backend (team sync + campaign email) and setup guide |
 | `manifest.webmanifest`, `sw.js`, `assets/icons/` | PWA install + offline |
