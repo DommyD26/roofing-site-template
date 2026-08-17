@@ -861,6 +861,35 @@ fieldset.q.wrong label.opt.is-answer span { color: var(--green-text); font-weigh
 fieldset.q.wrong label.opt.is-answer span::after { content: " ← correct answer"; font-size: 0.78rem; }
 
 .quiz-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+
+/* paginated test navigation */
+.quiz-progress-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+.quiz-restart {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0.2rem;
+  white-space: nowrap;
+}
+.quiz-restart:hover { color: var(--ember); }
+.quiz-autosave { margin: 0.4rem 0 0.8rem; font-size: 0.76rem; font-weight: 600; color: var(--muted); }
+.quiz-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.quiz-nav .btn { min-width: 7.5rem; padding: 0.8rem 1.4rem; font-size: 0.95rem; }
+.quiz-nav .btn:disabled { opacity: 0.4; cursor: default; transform: none; box-shadow: none; }
 .quiz-result { margin: 0; font-weight: 800; font-size: 0.95rem; }
 .quiz-result.pass { color: var(--green-text); }
 .quiz-result.fail { color: var(--red-text); }
