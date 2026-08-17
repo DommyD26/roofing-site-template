@@ -37,7 +37,7 @@ window.COURSE = {
     { id: "perfect-square",   icon: "💯", name: "Perfect Square",    desc: "Score 100% on any test." },
     { id: "hot-streak",       icon: "🔥", name: "Hot Streak",        desc: "Pass 3 tests in a row." },
     { id: "comeback-kid",     icon: "🪜", name: "Comeback Kid",      desc: "Pass a chapter test you previously failed." },
-    { id: "practice-pro",     icon: "🎯", name: "Practice Pro",      desc: "Pass a 20-question practice test." },
+    { id: "practice-pro",     icon: "🎯", name: "Practice Pro",      desc: "Pass a full practice test." },
     { id: "iron-roofer",      icon: "🛠️", name: "Iron Roofer",       desc: "Take 10 tests of any kind." },
     { id: "dialed-in",        icon: "📐", name: "Dialed In",         desc: "Hold a 90%+ chapter average with 2+ attempts." },
     { id: "chapter-boss",     icon: "🏗️", name: "Chapter Boss",      desc: "Pass all 15 chapter tests." },
