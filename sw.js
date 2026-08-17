@@ -1,7 +1,7 @@
 /* Service worker: precache the app shell so the course works offline
    and installs as an app. Bump VERSION whenever files change. */
 
-const VERSION = "rce-v17";
+const VERSION = "rce-v18";
 const SHELL = [
   "./",
   "./index.html",

@@ -12,7 +12,15 @@
 
 var SHEET_NAME = "Scores";
 var PROGRESS_SHEET = "Progress";
+var EVENTS_SHEET = "Events";
 var MAX_PROGRESS_BYTES = 200000;
+var MAX_EVENT_ROWS_RETURNED = 3000;
+
+/* IMPORTANT (owner): set your own secret before deploying v3.
+   This key protects the Admin HQ dashboard — anyone who knows it can
+   read all trainee data. Pick something long and random, keep it out
+   of texts/emails, and change it here any time to revoke access. */
+var ADMIN_KEY = "CHANGE-ME-TO-YOUR-OWN-SECRET";
 
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -20,6 +28,7 @@ function doPost(e) {
   try {
     var d = JSON.parse(e.postData.contents);
     if (d && d.type === "progress") return saveProgress_(d);
+    if (d && d.type === "event") return saveEvent_(d);
     var sh = getSheet_();
     sh.appendRow([
       new Date(),
@@ -42,7 +51,8 @@ function doPost(e) {
 
 function doGet(e) {
   var p = (e && e.parameter) || {};
-  if (p.ping) return json_({ ok: true, progress: true, version: 2 });
+  if (p.ping) return json_({ ok: true, progress: true, version: 3 });
+  if (p.admin) return adminData_(String(p.key || ""));
   if (p.code) return loadProgress_(String(p.code));
 
   var sh = getSheet_();
@@ -95,6 +105,57 @@ function loadProgress_(rawCode) {
     }
   }
   return json_({ ok: false, error: "not found" });
+}
+
+function saveEvent_(d) {
+  var sh = getEventsSheet_();
+  sh.appendRow([
+    new Date(),
+    String(d.playerId || "").slice(0, 64),
+    String(d.name || "").slice(0, 80),
+    String(d.ev || "").slice(0, 32),
+    String(d.detail || "").slice(0, 120)
+  ]);
+  return json_({ ok: true });
+}
+
+/* Admin HQ endpoint: requires the ADMIN_KEY. Returns every player's
+   latest progress backup, all score rows, and recent activity events. */
+function adminData_(key) {
+  if (!ADMIN_KEY || ADMIN_KEY.indexOf("CHANGE-ME") === 0 || key !== ADMIN_KEY) {
+    return json_({ ok: false, error: "bad key" });
+  }
+  var out = { ok: true, players: [], scores: [], events: [] };
+
+  var ps = getProgressSheet_().getDataRange().getValues();
+  for (var i = 1; i < ps.length; i++) {
+    out.players.push({ code: ps[i][0], name: ps[i][1], updated: ps[i][2], data: ps[i][3] });
+  }
+  var ss = getSheet_().getDataRange().getValues();
+  for (var j = 1; j < ss.length; j++) {
+    out.scores.push({
+      when: ss[j][0], playerId: ss[j][1], first: ss[j][2], last: ss[j][3],
+      kind: ss[j][4], chapter: ss[j][5], score: Number(ss[j][6]),
+      correct: Number(ss[j][7]), total: Number(ss[j][8])
+    });
+  }
+  var es = getEventsSheet_().getDataRange().getValues();
+  var start = Math.max(1, es.length - MAX_EVENT_ROWS_RETURNED);
+  for (var k = start; k < es.length; k++) {
+    out.events.push({ when: es[k][0], playerId: es[k][1], name: es[k][2], ev: es[k][3], detail: es[k][4] });
+  }
+  return json_(out);
+}
+
+function getEventsSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName(EVENTS_SHEET);
+  if (!sh) {
+    sh = ss.insertSheet(EVENTS_SHEET);
+    sh.appendRow(["When", "Player ID", "Name", "Event", "Detail"]);
+    sh.setFrozenRows(1);
+  }
+  return sh;
 }
 
 function cleanCode_(c) {

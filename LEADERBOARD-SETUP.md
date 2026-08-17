@@ -1,3 +1,28 @@
+# Backend v3 upgrade: Admin HQ + activity tracking (~2 minutes)
+
+v3 adds the owner-only **Admin HQ** dashboard (`/admin/` on the site) and an
+activity log (visits, lessons read, tests started) in a new **Events** tab.
+
+1. Open the **Roofing Course Leaderboard** sheet → **Extensions → Apps Script**
+2. Paste the current [`leaderboard/Code.gs`](leaderboard/Code.gs) over the old code
+3. **Set your admin key**: near the top, replace
+   `var ADMIN_KEY = "CHANGE-ME-TO-YOUR-OWN-SECRET";`
+   with your own long random secret (this never goes in the repo — it lives
+   only in your deployed script). The dashboard refuses to serve any data
+   until the placeholder is replaced.
+4. 💾 Save → **Deploy → Manage deployments** → ✏️ pencil → **New version** → Deploy
+   (the `/exec` URL stays the same)
+5. Open `https://<your-site>/admin/`, enter that same key, and the crew
+   dashboard unlocks. The admin page is never linked from the course.
+
+Notes: the client only sends activity events once it detects a v3 backend,
+so nothing breaks if you delay this upgrade. To revoke dashboard access,
+change `ADMIN_KEY` and redeploy a new version. Good practice: tell your
+crew their training activity is tracked — it's normal for workplace
+training, and transparency keeps trust.
+
+---
+
 # Backend v2 upgrade: cloud progress backup (~2 minutes)
 
 If your leaderboard is already live on a v1 deployment, upgrade to enable
