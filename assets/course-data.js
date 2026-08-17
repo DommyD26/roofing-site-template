@@ -40,7 +40,7 @@ window.COURSE = {
     { id: "practice-pro",     icon: "🎯", name: "Practice Pro",      desc: "Pass a 20-question practice test." },
     { id: "iron-roofer",      icon: "🛠️", name: "Iron Roofer",       desc: "Take 10 tests of any kind." },
     { id: "dialed-in",        icon: "📐", name: "Dialed In",         desc: "Hold a 90%+ chapter average with 2+ attempts." },
-    { id: "chapter-boss",     icon: "🏗️", name: "Chapter Boss",      desc: "Pass all 12 chapter tests." },
+    { id: "chapter-boss",     icon: "🏗️", name: "Chapter Boss",      desc: "Pass all 15 chapter tests." },
     { id: "master-estimator", icon: "💰", name: "Master Estimator",  desc: "Score 90%+ on the Estimating & Bidding chapter." },
     { id: "certified",        icon: "🏆", name: "Certified Roofer",  desc: "Pass the certification exam." }
   ],
