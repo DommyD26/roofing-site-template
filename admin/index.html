@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin HQ — Roofing Course</title>
+  <style>
+    :root {
+      --navy:#16325c; --navy-deep:#0f2444; --ember:#b93d15; --gold:#e3c08d;
+      --page:#f5f6f8; --ink:#1b2534; --muted:#5b6472; --line:#e5e8ee;
+      --green:#1d5c38; --green-bg:#e8f4ec; --red:#8f2b2b; --red-bg:#fbecec;
+      --amber:#775217; --amber-bg:#fdf4e3; --blue:#1c4374; --blue-bg:#e7f0fb;
+      --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      --shadow:0 1px 2px rgba(15,36,68,.05),0 4px 16px rgba(15,36,68,.06);
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:var(--font);background:var(--page);color:var(--ink);line-height:1.55}
+    header{background:var(--navy-deep);color:#fff;padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+    header h1{margin:0;font-size:1.05rem}
+    header h1 span{color:var(--gold);font-weight:600}
+    header .right{margin-left:auto;display:flex;gap:.5rem;align-items:center}
+    main{max-width:1100px;margin:0 auto;padding:1.25rem}
+    .btn{padding:.55rem 1.1rem;border-radius:9px;border:1px solid #d4d9e2;background:#fff;color:var(--navy);font-weight:700;font-size:.85rem;cursor:pointer;font-family:var(--font)}
+    .btn.primary{background:var(--ember);border-color:var(--ember);color:#fff}
+    .btn.small{padding:.35rem .7rem;font-size:.78rem}
+    .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:1.15rem 1.3rem;margin-bottom:1rem}
+    .muted{color:var(--muted);font-size:.85rem}
+    input[type=password],input[type=text]{padding:.6rem .85rem;border:1px solid #d4d9e2;border-radius:9px;font-size:.95rem;font-family:var(--font)}
+    .gate{max-width:430px;margin:12vh auto;text-align:center}
+    .gate input{width:100%;margin:.8rem 0}
+    .stat-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.7rem;margin-bottom:1rem}
+    .stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:.8rem;text-align:center;box-shadow:var(--shadow)}
+    .stat strong{display:block;font-size:1.4rem;color:var(--navy)}
+    .stat span{font-size:.72rem;font-weight:600;color:var(--muted)}
+    table{width:100%;border-collapse:collapse;font-size:.85rem}
+    th,td{padding:.55rem .7rem;text-align:left;border-bottom:1px solid var(--line)}
+    th{background:var(--navy);color:#fff;font-size:.75rem;letter-spacing:.03em;position:sticky;top:0}
+    tr.clickable{cursor:pointer} tr.clickable:hover td{background:var(--blue-bg)}
+    .chip{display:inline-block;padding:.14rem .55rem;border-radius:999px;font-size:.7rem;font-weight:700}
+    .c-green{background:var(--green-bg);color:var(--green)} .c-amber{background:var(--amber-bg);color:var(--amber)}
+    .c-red{background:var(--red-bg);color:var(--red)} .c-blue{background:var(--blue-bg);color:var(--blue)}
+    .pi{font-weight:800;font-size:1.05rem;color:var(--navy)}
+    .bar{height:7px;background:var(--line);border-radius:99px;overflow:hidden;min-width:70px}
+    .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--ember),var(--navy))}
+    .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
+    .chgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.45rem;margin-top:.5rem}
+    .chcell{border:1px solid var(--line);border-radius:9px;padding:.45rem .6rem;font-size:.75rem}
+    .chcell strong{display:block;font-size:.9rem}
+    .feed{max-height:340px;overflow-y:auto;font-size:.8rem}
+    .feed div{padding:.35rem 0;border-bottom:1px dashed var(--line)}
+    .feed time{color:var(--muted);margin-right:.5rem;font-size:.72rem}
+    .backlink{color:var(--ember);font-weight:700;cursor:pointer;font-size:.85rem}
+    .err{color:var(--red);font-weight:700}
+    .table-scroll{overflow-x:auto;border-radius:12px;border:1px solid var(--line)}
+    h2{font-size:1.05rem;color:var(--navy);margin:0 0 .6rem}
+    .formula{font-size:.75rem;color:var(--muted);margin-top:.4rem}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏗️ Admin HQ <span>· Roofing Course Command Center</span></h1>
+    <div class="right">
+      <button class="btn small" id="refresh" style="display:none">↻ Refresh</button>
+      <button class="btn small" id="logout" style="display:none">Lock</button>
+    </div>
+  </header>
+  <main id="app"><p class="muted">Loading…</p></main>
+
+<script>
+(function () {
+  "use strict";
+  /* The course's backend URL — same Apps Script web app the course uses. */
+  var API = "https://script.google.com/macros/s/AKfycbywhBXmua9f96p0tOG-5LkkAyLO323SzfyfH6SfM74YzI0uo1C8Xh2LD69dPl6xUZCz/exec";
+  var TOTAL_CHAPTERS = 15, TOTAL_LESSONS = 46, PASS = 70, FINAL_PASS = 80;
+
+  var app = document.getElementById("app");
+  var refreshBtn = document.getElementById("refresh");
+  var logoutBtn = document.getElementById("logout");
+  var DATA = null;
+
+  function key() { try { return localStorage.getItem("hq-key") || ""; } catch (e) { return ""; } }
+  function setKey(k) { try { localStorage.setItem("hq-key", k); } catch (e) {} }
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function fmtD(x) { var d = new Date(x); return isNaN(d) ? "—" : d.toLocaleDateString(undefined, { month: "short", day: "numeric" }); }
+  function fmtDT(x) { var d = new Date(x); return isNaN(d) ? "—" : d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + " " + d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" }); }
+  function daysAgo(x) { var d = new Date(x); return isNaN(d) ? 9999 : Math.floor((Date.now() - d.getTime()) / 86400000); }
+
+  function gate(msg) {
+    refreshBtn.style.display = "none"; logoutBtn.style.display = "none";
+    app.innerHTML = '<div class="card gate"><h2>🔐 Owner access only</h2>' +
+      '<p class="muted">Enter your admin key. It never leaves this device except to your own Google backend.</p>' +
+      (msg ? '<p class="err">' + esc(msg) + "</p>" : "") +
+      '<input type="password" id="k" placeholder="Admin key" autocomplete="current-password">' +
+      '<button class="btn primary" id="go">Unlock</button></div>';
+    var input = document.getElementById("k");
+    document.getElementById("go").onclick = function () { setKey(input.value.trim()); loadData(); };
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") { setKey(input.value.trim()); loadData(); } });
+    input.focus();
+  }
+
+  function loadData() {
+    if (!key()) { gate(); return; }
+    app.innerHTML = '<p class="muted">Pulling the latest from your backend…</p>';
+    fetch(API + "?admin=1&key=" + encodeURIComponent(key()) + "&t=" + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j || !j.ok) { setKey(""); gate(j && j.error === "bad key" ? "Wrong key — or the backend still has the CHANGE-ME placeholder." : "Couldn't authenticate."); return; }
+        DATA = j;
+        render();
+      })
+      .catch(function () { app.innerHTML = '<div class="card"><p class="err">Could not reach the backend — check your connection and refresh.</p></div>'; });
+  }
+
+  /* ---------- profile building & ranking ---------- */
+
+  function buildProfiles() {
+    var byId = {};
+    function P(id, name) {
+      if (!byId[id]) byId[id] = { id: id, name: name || "Unknown", code: "", tests: [], events: [], read: 0, badges: 0, certified: false, chapters: {}, lastActive: 0, firstSeen: Infinity };
+      if (name && byId[id].name === "Unknown") byId[id].name = name;
+      return byId[id];
+    }
+    (DATA.scores || []).forEach(function (s) {
+      var p = P(s.playerId || s.first + "|" + s.last, (s.first + " " + s.last).trim());
+      p.tests.push(s);
+      var t = new Date(s.when).getTime() || 0;
+      if (t > p.lastActive) p.lastActive = t;
+      if (t && t < p.firstSeen) p.firstSeen = t;
+      if (s.kind === "chapter" && s.chapter) {
+        var c = p.chapters[s.chapter] = p.chapters[s.chapter] || { attempts: 0, best: 0, sum: 0 };
+        c.attempts++; c.sum += s.score; if (s.score > c.best) c.best = s.score;
+      }
+      if (s.kind === "final" && s.score >= FINAL_PASS) p.certified = true;
+    });
+    (DATA.players || []).forEach(function (row) {
+      var parsed = null;
+      try { parsed = JSON.parse(row.data); } catch (e) {}
+      if (!parsed) return;
+      var p = P(parsed.playerId || row.code, row.name);
+      p.code = row.code;
+      p.read = Object.keys(parsed.read || {}).length;
+      p.badges = Object.keys(parsed.badges || {}).length;
+      var t = new Date(row.updated).getTime() || 0;
+      if (t > p.lastActive) p.lastActive = t;
+    });
+    (DATA.events || []).forEach(function (ev) {
+      if (!ev.playerId || !byId[ev.playerId]) { if (ev.playerId) P(ev.playerId, ev.name); }
+      var p = byId[ev.playerId]; if (!p) return;
+      p.events.push(ev);
+      var t = new Date(ev.when).getTime() || 0;
+      if (t > p.lastActive) p.lastActive = t;
+      if (t && t < p.firstSeen) p.firstSeen = t;
+    });
+
+    var list = Object.keys(byId).map(function (k) {
+      var p = byId[k];
+      var passed = 0, bestSum = 0, chCount = 0;
+      Object.keys(p.chapters).forEach(function (c) {
+        chCount++; bestSum += p.chapters[c].best;
+        if (p.chapters[c].best >= PASS) passed++;
+      });
+      p.passed = passed;
+      var scores = p.tests.map(function (t) { return t.score; });
+      p.avg = scores.length ? Math.round(scores.reduce(function (a, b) { return a + b; }, 0) / scores.length) : 0;
+      // activity: distinct active days in the last 14
+      var days = {};
+      p.events.concat(p.tests.map(function (t) { return { when: t.when }; })).forEach(function (e) {
+        var d = new Date(e.when); if (isNaN(d)) return;
+        if (daysAgo(e.when) <= 14) days[d.toDateString()] = 1;
+      });
+      p.activeDays14 = Object.keys(days).length;
+      /* Performance Index (0–100):
+         35% chapters passed · 25% test average · 15% lessons read ·
+         15% certification · 10% recent activity (active days of last 14, capped at 7) */
+      p.pi = Math.round(
+        0.35 * (passed / TOTAL_CHAPTERS * 100) +
+        0.25 * p.avg +
+        0.15 * (Math.min(p.read, TOTAL_LESSONS) / TOTAL_LESSONS * 100) +
+        0.15 * (p.certified ? 100 : 0) +
+        0.10 * (Math.min(p.activeDays14, 7) / 7 * 100)
+      );
+      return p;
+    });
+    list.sort(function (a, b) { return b.pi - a.pi || b.passed - a.passed || b.avg - a.avg; });
+    return list;
+  }
+
+  function tier(pi) {
+    if (pi >= 80) return ['c-green', '🏆 Standout'];
+    if (pi >= 55) return ['c-blue', '💪 On track'];
+    if (pi >= 30) return ['c-amber', '🧰 Building'];
+    return ['c-red', '🚧 Just starting'];
+  }
+
+  /* ---------- views ---------- */
+
+  function render() {
+    refreshBtn.style.display = ""; logoutBtn.style.display = "";
+    var profiles = buildProfiles();
+    var totTests = (DATA.scores || []).length;
+    var certified = profiles.filter(function (p) { return p.certified; }).length;
+    var active7 = profiles.filter(function (p) { return daysAgo(p.lastActive) <= 7; }).length;
+
+    var html = '<div class="stat-strip">' +
+      '<div class="stat"><strong>' + profiles.length + '</strong><span>Trainees</span></div>' +
+      '<div class="stat"><strong>' + totTests + '</strong><span>Tests taken</span></div>' +
+      '<div class="stat"><strong>' + certified + '</strong><span>Certified</span></div>' +
+      '<div class="stat"><strong>' + active7 + '</strong><span>Active this week</span></div>' +
+      '<div class="stat"><strong>' + (DATA.events || []).length + '</strong><span>Logged actions</span></div></div>';
+
+    html += '<div class="card"><h2>Crew ranking</h2><div class="table-scroll"><table><tr>' +
+      '<th>#</th><th>Name</th><th>Index</th><th></th><th>Tier</th><th>Chapters</th><th>Avg</th><th>Lessons</th><th>Cert</th><th>Last active</th></tr>';
+    profiles.forEach(function (p, i) {
+      var t = tier(p.pi);
+      html += '<tr class="clickable" data-i="' + i + '"><td>' + (i + 1) + '</td>' +
+        '<td><strong>' + esc(p.name) + '</strong><br><span class="muted">' + esc(p.code || p.id) + '</span></td>' +
+        '<td class="pi">' + p.pi + '</td>' +
+        '<td><div class="bar"><i style="width:' + p.pi + '%"></i></div></td>' +
+        '<td><span class="chip ' + t[0] + '">' + t[1] + '</span></td>' +
+        '<td>' + p.passed + '/' + TOTAL_CHAPTERS + '</td>' +
+        '<td>' + (p.tests.length ? p.avg + '%' : '—') + '</td>' +
+        '<td>' + p.read + '/' + TOTAL_LESSONS + '</td>' +
+        '<td>' + (p.certified ? '🏆' : '—') + '</td>' +
+        '<td>' + (p.lastActive ? fmtD(p.lastActive) + ' (' + daysAgo(p.lastActive) + 'd)' : '—') + '</td></tr>';
+    });
+    html += '</table></div><p class="formula">Performance Index = 35% chapters passed + 25% test average + 15% lessons read + 15% certified + 10% recent activity. Tap a row for the full profile.</p></div>';
+
+    app.innerHTML = html;
+    app.querySelectorAll("tr.clickable").forEach(function (tr) {
+      tr.onclick = function () { renderProfile(profiles[Number(tr.getAttribute("data-i"))], Number(tr.getAttribute("data-i")) + 1); };
+    });
+  }
+
+  function renderProfile(p, rank) {
+    var t = tier(p.pi);
+    var html = '<p class="backlink" id="back">← Back to ranking</p>' +
+      '<div class="card"><h2>#' + rank + ' — ' + esc(p.name) + ' <span class="chip ' + t[0] + '">' + t[1] + '</span></h2>' +
+      '<div class="stat-strip">' +
+      '<div class="stat"><strong>' + p.pi + '</strong><span>Performance Index</span></div>' +
+      '<div class="stat"><strong>' + p.passed + '/' + TOTAL_CHAPTERS + '</strong><span>Chapters passed</span></div>' +
+      '<div class="stat"><strong>' + (p.tests.length ? p.avg + '%' : '—') + '</strong><span>Avg of ' + p.tests.length + ' tests</span></div>' +
+      '<div class="stat"><strong>' + p.read + '/' + TOTAL_LESSONS + '</strong><span>Lessons read</span></div>' +
+      '<div class="stat"><strong>' + p.badges + '/10</strong><span>Badges</span></div>' +
+      '<div class="stat"><strong>' + p.activeDays14 + '</strong><span>Active days (14d)</span></div></div>' +
+      '<p class="muted">Unique ID: <strong>' + esc(p.code || "—") + '</strong> · First seen ' + (isFinite(p.firstSeen) ? fmtD(p.firstSeen) : "—") + ' · Last active ' + (p.lastActive ? fmtDT(p.lastActive) : "—") + (p.certified ? ' · 🏆 CERTIFIED' : '') + '</p></div>';
+
+    html += '<div class="grid2"><div class="card"><h2>Per-chapter performance</h2><div class="chgrid">';
+    var chIds = Object.keys(p.chapters);
+    if (!chIds.length) html += '<p class="muted">No chapter tests yet.</p>';
+    chIds.forEach(function (c) {
+      var ch = p.chapters[c];
+      var avg = Math.round(ch.sum / ch.attempts);
+      var cls = ch.best >= 90 ? 'c-green' : ch.best >= PASS ? 'c-blue' : 'c-red';
+      html += '<div class="chcell"><strong>' + esc(c) + '</strong>best ' + ch.best + '% · avg ' + avg + '% · ' + ch.attempts + '×' +
+        ' <span class="chip ' + cls + '">' + (ch.best >= PASS ? 'passed' : 'not passed') + '</span></div>';
+    });
+    html += '</div></div>';
+
+    html += '<div class="card"><h2>Activity feed</h2><div class="feed">';
+    var feed = p.events.map(function (e) { return { when: e.when, txt: ({ visit: "📱 Opened the course", lesson: "📖 Read lesson ", test_start: "✏️ Started test ", badge: "🎖️ " }[e.ev] || e.ev + " ") + (e.detail || "") }; })
+      .concat(p.tests.map(function (s) {
+        var nm = s.kind === "chapter" ? "chapter " + s.chapter : s.kind;
+        return { when: s.when, txt: (s.score >= (s.kind === "final" ? FINAL_PASS : PASS) ? "✅" : "❌") + " Scored " + s.score + "% on " + nm + " (" + s.correct + "/" + s.total + ")" };
+      }));
+    feed.sort(function (a, b) { return new Date(b.when) - new Date(a.when); });
+    if (!feed.length) html += '<p class="muted">No activity yet.</p>';
+    feed.slice(0, 120).forEach(function (f) {
+      html += '<div><time>' + fmtDT(f.when) + '</time>' + esc(f.txt) + '</div>';
+    });
+    html += '</div></div></div>';
+
+    app.innerHTML = html;
+    document.getElementById("back").onclick = render;
+    window.scrollTo(0, 0);
+  }
+
+  refreshBtn.onclick = loadData;
+  logoutBtn.onclick = function () { setKey(""); gate("Locked."); };
+  loadData();
+})();
+</script>
+</body>
+</html>

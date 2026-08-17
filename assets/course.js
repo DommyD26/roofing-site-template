@@ -312,16 +312,42 @@
   /* Backend capability check: v2 backends answer ?ping=1 with {progress:true};
      v1 backends answer with the scores array. Cached per session so an old
      deployment never receives progress posts it doesn't understand. */
-  var backendCaps = null;
+  var backendCaps = null;      // true once the backend supports progress (v2+)
+  var backendVersion = 0;      // v3+ additionally accepts activity events
   function checkBackend(cb) {
     if (!C.leaderboardUrl) { cb(false); return; }
     if (backendCaps !== null) { cb(backendCaps); return; }
     var sep = C.leaderboardUrl.indexOf("?") === -1 ? "?" : "&";
     fetch(C.leaderboardUrl + sep + "ping=1")
       .then(function (r) { return r.json(); })
-      .then(function (j) { backendCaps = !!(j && !Array.isArray(j) && j.progress); cb(backendCaps); })
+      .then(function (j) {
+        backendCaps = !!(j && !Array.isArray(j) && j.progress);
+        backendVersion = (j && j.version) || (backendCaps ? 2 : 0);
+        cb(backendCaps);
+      })
       .catch(function () { cb(false); /* transient: leave caps unknown for retry */ });
   }
+
+  /* Lightweight activity log (v3 backends only): fire-and-forget, never
+     blocks the app, sends nothing until a name has been entered. */
+  function track(ev, detail) {
+    if (!C.leaderboardUrl || !DB.playerId || typeof fetch !== "function") return;
+    checkBackend(function (ok) {
+      if (!ok || backendVersion < 3) return;
+      try {
+        fetch(C.leaderboardUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({
+            type: "event", playerId: DB.playerId,
+            name: (DB.firstName + " " + DB.lastName).trim(),
+            ev: ev, detail: detail || ""
+          })
+        }).catch(function () {});
+      } catch (e) {}
+    });
+  }
+  var visitTracked = false;
 
   var cloudTimer = null;
   function cloudSaveSoon() {
@@ -553,7 +579,7 @@
 
     function persist() { var s = quizStore(); s[storeId] = state; saveQuizStore(s); }
     function clearSaved() { var s = quizStore(); delete s[storeId]; saveQuizStore(s); }
-    if (!resumed) persist();
+    if (!resumed) { persist(); track("test_start", storeId); }
 
     var box = el("section", "quiz");
     var report = el("div", "");
@@ -988,8 +1014,10 @@
     var ch = chapterById(chId);
     if (!ch || !ch.lessons[li]) return viewHome();
     var l = ch.lessons[li];
+    var firstRead = !DB.read[chId + "|" + li];
     DB.read[chId + "|" + li] = true;
     save();
+    if (firstRead) track("lesson", chId + "|" + (li + 1) + " " + l.t.slice(0, 60));
 
     var wrap = el("div", "view");
     wrap.appendChild(el("header", "lesson-head",
@@ -1449,4 +1477,5 @@
   document.getElementById("year").textContent = new Date().getFullYear();
   awardNewBadges();
   route();
+  if (!visitTracked && DB.playerId) { visitTracked = true; track("visit", location.hash || "#/home"); }
 })();
