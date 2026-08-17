@@ -19,7 +19,7 @@ window.COURSE = {
   /* Leaderboard backend: paste your Google Apps Script Web App URL here
      (ends in /exec). See LEADERBOARD-SETUP.md. Empty = leaderboard shows
      setup instructions and scores stay device-only. */
-  leaderboardUrl: "",
+  leaderboardUrl: "https://script.google.com/macros/s/AKfycbywhBXmua9f96p0tOG-5LkkAyLO323SzfyfH6SfM74YzI0uo1C8Xh2LD69dPl6xUZCz/exec",
   passScore: 70,
   finalPassScore: 80,
   practiceSize: 20,
