@@ -862,6 +862,18 @@ fieldset.q.wrong label.opt.is-answer span::after { content: " ← correct answer
 
 .quiz-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
 
+.explain {
+  margin: 0.5rem 0 0.15rem;
+  padding: 0.55rem 0.8rem;
+  background: var(--blue-bg);
+  border-left: 3px solid #3f76bd;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--blue-text);
+}
+.review-filter { display: flex; gap: 0.6rem; margin: 0.4rem 0 1rem; flex-wrap: wrap; }
+.review-filter .btn { padding: 0.45rem 0.9rem; font-size: 0.82rem; }
+
 /* paginated test navigation */
 .quiz-progress-row {
   display: flex;

@@ -162,6 +162,7 @@ window.COURSE = {
             return {
               q: "A house footprint (including overhangs) measures " + L + "' × " + W + "' — " + plan.toLocaleString() + " sq ft of plan area. The roof is " + p[0] + " (slope factor " + p[1] + "). Actual roof area is about:",
               a: [actual.toLocaleString() + " sq ft", plan.toLocaleString() + " sq ft", Math.round(plan / p[1]).toLocaleString() + " sq ft", Math.round(actual * 1.25).toLocaleString() + " sq ft"],
+              x: "Plan area " + plan.toLocaleString() + " sq ft \u00d7 factor " + p[1] + " = " + actual.toLocaleString() + " sq ft of real roof.",
               correct: 0
             };
           }
@@ -175,6 +176,7 @@ window.COURSE = {
             return {
               q: "Net roof area is " + area.toLocaleString() + " sq ft on a cut-up hip roof. Adding " + waste + "% waste, how many squares of material should you order (round up)?",
               a: [total + " squares", Math.ceil(area / 100) + " squares", (total + 3) + " squares", Math.ceil(area * (1 - waste / 100) / 100) + " squares"],
+              x: area.toLocaleString() + " sq ft \u00d7 " + (1 + waste / 100) + " waste, \u00f7 100 = " + total + " squares, rounded up.",
               correct: 0
             };
           }
@@ -227,6 +229,7 @@ window.COURSE = {
             return {
               q: "You're re-decking " + area.toLocaleString() + " sq ft of roof with 4x8 panels (32 sq ft each) plus " + waste + "% cutting waste. How many sheets do you order (round up)?",
               a: [sheets + " sheets", Math.ceil(area / 32) + " sheets", (sheets + 8) + " sheets", Math.ceil(area / 48) + " sheets"],
+              x: area.toLocaleString() + " sq ft \u00d7 " + (1 + waste / 100) + " \u00f7 32 sq ft per sheet = " + sheets + " sheets, rounded up.",
               correct: 0
             };
           }
@@ -289,6 +292,7 @@ window.COURSE = {
             return {
               q: "Dry-in for " + area.toLocaleString() + " sq ft of roof using " + cov[1] + ". Minimum rolls needed (round up)?",
               a: [rolls + " rolls", (rolls + 4) + " rolls", Math.max(1, rolls - 1) + " rolls", Math.ceil(area / 100) + " rolls"],
+              x: (area / 100) + " squares \u00f7 " + cov[0] + " squares per roll = " + rolls + " rolls, rounded up.",
               correct: 0
             };
           }
@@ -342,6 +346,7 @@ window.COURSE = {
             return {
               q: "A roof measures " + sq + " squares net. With " + waste + "% waste and 3 bundles per square, how many bundles of laminate do you order?",
               a: [bundles + " bundles", (sq * 3) + " bundles", (bundles + 9) + " bundles", Math.ceil(sq * 1.5) * 3 + " bundles"],
+              x: "ceil(" + sq + " \u00d7 " + (1 + waste / 100) + ") squares \u00d7 3 bundles = " + bundles + " bundles.",
               correct: 0
             };
           }
@@ -357,6 +362,7 @@ window.COURSE = {
             return {
               q: "Tear-off: " + sq + " squares, " + layers + " layer" + (layers > 1 ? "s" : "") + " of asphalt at ~" + perSq + " lbs per square-layer. Approximate debris weight?",
               a: [tonsR + " tons", Math.round(tonsR * 2 * 10) / 10 + " tons", Math.round(sq * 10) / 10 + " tons", Math.round(tonsR / 2 * 10) / 10 + " tons"],
+              x: sq + " squares \u00d7 " + layers + " layer(s) \u00d7 " + perSq + " lbs \u00f7 2,000 = " + tonsR + " tons.",
               correct: 0
             };
           }
@@ -390,7 +396,8 @@ window.COURSE = {
         { cat: "Installation methods", q: "Concealed-nail application beats exposed-nail because:", a: ["It's faster", "Nails are protected under cemented laps — cleaner and more weathertight", "It needs no cement", "It uses fewer rolls"], correct: 1 },
         { cat: "Installation methods", q: "End laps in roll roofing should be:", a: ["Aligned in a straight line up the roof", "~6\", staggered between courses, and cemented", "Left dry", "Facing uphill"], correct: 1 },
         { cat: "Estimating roll roofing", q: "Going from single to double coverage does what to the roll count?", a: ["Nothing", "Roughly doubles it", "Halves it", "Adds 10%"], correct: 1 },
-        { cat: "Estimating roll roofing", q: "A roof width that doesn't fit the 36\" roll module causes:", a: ["No effect", "Strip waste on every course — raise the waste factor", "Faster installation", "Fewer laps"], correct: 1 }
+        { cat: "Estimating roll roofing", q: "A roof width that doesn't fit the 36\" roll module causes:", a: ["No effect", "Strip waste on every course — raise the waste factor", "Faster installation", "Fewer laps"], correct: 1 },
+        { cat: "Installation methods", q: "Before laying roll roofing in cold weather you should:", a: ["Work faster", "Store the rolls warm and unroll them to relax first", "Add extra nails", "Skip the cement"], correct: 1 }
       ],
       gens: [
         {
@@ -402,6 +409,7 @@ window.COURSE = {
             return {
               q: "A " + sq + "-square shed roof gets " + mode[0] + " with 10% waste. How many rolls do you order (round up)?",
               a: [rolls + " rolls", (rolls + 4) + " rolls", Math.max(1, rolls - 2) + " rolls", (sq) + " rolls"],
+              x: sq + " squares \u00d7 " + mode[1] + " roll(s) per square \u00d7 1.1 waste = " + rolls + " rolls, rounded up.",
               correct: 0
             };
           }
@@ -453,6 +461,7 @@ window.COURSE = {
             return {
               q: "Shake roof: " + sq + " squares at 5 bundles per square with " + waste + "% waste. Bundles to order (round up)?",
               a: [bundles + " bundles", (sq * 5) + " bundles", (bundles + 12) + " bundles", (sq * 3) + " bundles"],
+              x: "ceil(" + sq + " \u00d7 " + (1 + waste / 100) + ") \u00d7 5 bundles per square = " + bundles + " bundles.",
               correct: 0
             };
           }
@@ -504,6 +513,7 @@ window.COURSE = {
             return {
               q: "A " + sq + "-square tile roof at " + lbs.toLocaleString() + " lbs per square puts how much total load on the structure?",
               a: [tons + " tons", Math.round(tons / 2 * 10) / 10 + " tons", Math.round(tons * 2 * 10) / 10 + " tons", sq + " tons"],
+              x: sq + " squares \u00d7 " + lbs.toLocaleString() + " lbs \u00f7 2,000 = " + tons + " tons of dead load.",
               correct: 0
             };
           }
@@ -542,7 +552,8 @@ window.COURSE = {
         { cat: "Installation & repair", q: "The tool that removes a broken slate's hidden nails is a:", a: ["Slate ripper", "Cat's paw", "Roofing hatchet", "Seamer"], correct: 0 },
         { cat: "Installation & repair", q: "On very old S1 slate roofs, the usual failure is:", a: ["The stone itself", "Fasteners and flashings wearing out before the slate", "The rafters", "The paint"], correct: 1 },
         { cat: "Estimating slate", q: "Slate exposure is calculated as:", a: ["Length ÷ 2", "(Length − headlap) ÷ 2", "Width × 2", "Headlap × 3"], correct: 1 },
-        { cat: "Estimating slate", q: "A reasonable slate breakage allowance is:", a: ["0%", "3–5%", "20%", "40%"], correct: 1 }
+        { cat: "Estimating slate", q: "A reasonable slate breakage allowance is:", a: ["0%", "3–5%", "20%", "40%"], correct: 1 },
+        { cat: "Installation & repair", q: "Moving around on a slate roof, you should walk on:", a: ["The middle of each slate", "Hook ladders, chicken ladders and staging — never the stone", "The valleys", "The ridge caps"], correct: 1 }
       ],
       gens: [
         {
@@ -554,6 +565,7 @@ window.COURSE = {
             return {
               q: "A " + len + "\" slate installed with " + lap + "\" headlap runs what exposure?",
               a: [exp + "\"", (len / 2) + "\"", (exp + 1) + "\"", lap + "\""],
+              x: "(" + len + "\" \u2212 " + lap + "\" headlap) \u00f7 2 = " + exp + "\" exposure.",
               correct: 0
             };
           }
@@ -606,6 +618,7 @@ window.COURSE = {
             return {
               q: "A roof plane has a " + eave + "' eave. Using " + w[1] + "-coverage standing seam panels, how many panels does the plane take (round up)?",
               a: [panels + " panels", (panels - 3) + " panels", (panels + 3) + " panels", (panels + 10) + " panels"],
+              x: eave + "' \u00d7 12 \u00f7 " + w[0] + "\" coverage = " + panels + " panels, rounded up.",
               correct: 0
             };
           }
@@ -657,6 +670,7 @@ window.COURSE = {
             return {
               q: "A two-layer mod-bit system (base + cap, each ~1 square net per roll) over " + sq + " squares with " + waste + "% for laps/waste. Total rolls (round up)?",
               a: [rolls + " rolls", sq * 2 + " rolls", (rolls / 2) + " rolls", (rolls + 15) + " rolls"],
+              x: "ceil(" + sq + " \u00d7 " + (1 + waste / 100) + ") squares \u00d7 2 layers = " + rolls + " rolls.",
               correct: 0
             };
           }
@@ -702,6 +716,7 @@ window.COURSE = {
             return {
               q: "A mechanically attached TPO roof measures " + sq + " squares. Using 10' x 100' rolls (10 squares gross) with 10% for laps and details, how many rolls (round up)?",
               a: [rolls + " rolls", (rolls + 6) + " rolls", Math.max(1, rolls - 3) + " rolls", sq + " rolls"],
+              x: sq + " squares \u00d7 1.1 \u00f7 10 squares per roll = " + rolls + " rolls, rounded up.",
               correct: 0
             };
           }
@@ -754,6 +769,7 @@ window.COURSE = {
             return {
               q: "You're topping an attic up to R-" + target + " using " + m[1] + ". About how many total inches of fill does that take (round up)?",
               a: [inches + " inches", Math.ceil(inches / 2) + " inches", (inches + 8) + " inches", target + " inches"],
+              x: "R-" + target + " \u00f7 " + m[0] + " per inch = " + inches + " inches, rounded up.",
               correct: 0
             };
           }
@@ -800,6 +816,7 @@ window.COURSE = {
             return {
               q: "A silicone spec calls for " + rate + " gallons per square at final dry-film thickness. For a " + sq + "-square roof, how many gallons (round up)?",
               a: [gals + " gallons", Math.ceil(gals / 2) + " gallons", (gals + 15) + " gallons", (gals + 40) + " gallons"],
+              x: sq + " squares \u00d7 " + rate + " gal/sq = " + gals + " gallons, rounded up.",
               correct: 0
             };
           }
@@ -870,6 +887,7 @@ window.COURSE = {
             return {
               q: "Tear-off: " + sq + " squares, " + layers + " layer" + (layers > 1 ? "s" : "") + " at ~300 lbs per square-layer, hauled in " + cap + "-ton dumpsters. How many dumpster loads (round up)?",
               a: [dumpsters + " load" + (dumpsters > 1 ? "s" : ""), (dumpsters + 2) + " loads", Math.max(1, dumpsters - 1) + " load(s)", (dumpsters + 5) + " loads"],
+              x: sq + " \u00d7 " + layers + " \u00d7 300 lbs \u00f7 2,000 = " + (Math.round(tons * 10) / 10) + " tons \u00f7 " + cap + "-ton loads = " + dumpsters + ".",
               correct: 0
             };
           }
@@ -882,6 +900,7 @@ window.COURSE = {
             return {
               q: "An attic floor measures " + attic.toLocaleString() + " sq ft. At the 1/150 baseline, how much net free vent area is required (in square inches)?",
               a: [nfa.toLocaleString() + " sq in", Math.round(nfa / 2).toLocaleString() + " sq in", (attic).toLocaleString() + " sq in", Math.round(nfa * 2).toLocaleString() + " sq in"],
+              x: attic.toLocaleString() + " sq ft \u00f7 150 \u00d7 144 = " + nfa.toLocaleString() + " sq in of NFA.",
               correct: 0
             };
           }
@@ -894,6 +913,7 @@ window.COURSE = {
             return {
               q: "A roof drains " + area.toLocaleString() + " sq ft to its gutters. Using 2\"×3\" downspouts at one per ~600 sq ft, how many downspouts minimum?",
               a: [ds + " downspouts", Math.max(1, ds - 2) + " downspouts", (ds + 4) + " downspouts", "1 downspout"],
+              x: area.toLocaleString() + " sq ft \u00f7 600 per downspout = " + ds + ", rounded up.",
               correct: 0
             };
           }
@@ -954,6 +974,7 @@ window.COURSE = {
             return {
               q: "Direct costs are $" + dc.toLocaleString() + ". Overhead is " + oh + "% and target profit is " + pf + "%. Using Price = DC × (1+OH) × (1+P), the bid price is about:",
               a: ["$" + price.toLocaleString(), "$" + Math.round(dc * (1 + (oh + pf) / 100)).toLocaleString(), "$" + Math.round(dc * (1 + pf / 100)).toLocaleString(), "$" + Math.round(dc * 2).toLocaleString()],
+              x: "$" + dc.toLocaleString() + " \u00d7 " + (1 + oh / 100) + " overhead \u00d7 " + (1 + pf / 100) + " profit = $" + price.toLocaleString() + ".",
               correct: 0
             };
           }
@@ -967,6 +988,7 @@ window.COURSE = {
             return {
               q: "A roofer earns $" + wage + "/hr and your labor burden (taxes, comp, benefits) is " + burden + "%. The loaded rate you must estimate with is:",
               a: ["$" + loaded.toFixed(2) + "/hr", "$" + wage.toFixed(2) + "/hr", "$" + (wage + 5).toFixed(2) + "/hr", "$" + (wage * 2).toFixed(2) + "/hr"],
+              x: "$" + wage + "/hr \u00d7 " + (1 + burden / 100) + " burden = $" + loaded.toFixed(2) + "/hr.",
               correct: 0
             };
           }

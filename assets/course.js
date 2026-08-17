@@ -458,7 +458,7 @@
       q = entry.gen(R);
       q.cat = entry.cat;
     } else {
-      q = { q: entry.q, a: entry.a.slice(), correct: entry.correct, cat: entry.cat };
+      q = { q: entry.q, a: entry.a.slice(), correct: entry.correct, cat: entry.cat, bi: ch.bank.indexOf(entry) };
     }
     q.chapter = ch.id;
     // shuffle answers, track new correct index
@@ -468,10 +468,23 @@
     return q;
   }
 
+  /* Chapter tests are always exactly 10 questions: fill from the bank,
+     topped up with the chapter's generated fresh-numbers problems. */
   function buildChapterTest(ch) {
-    var qs = shuffle(ch.bank).slice(0, 8).map(function (e) { return materialize(e, ch); });
-    ch.gens.forEach(function (g) { qs.push(materialize(g, ch)); });
+    var gensUsed = Math.min(ch.gens.length, 2);
+    var staticCount = Math.min(ch.bank.length, 10 - gensUsed);
+    var qs = shuffle(ch.bank).slice(0, staticCount).map(function (e) { return materialize(e, ch); });
+    shuffle(ch.gens).slice(0, 10 - qs.length).forEach(function (g) { qs.push(materialize(g, ch)); });
     return shuffle(qs);
+  }
+
+  /* Explanation for a graded question: generated questions carry their own;
+     bank questions look up by chapter + bank index. */
+  function explainFor(item) {
+    if (item.x) return item.x;
+    var ex = window.COURSE_EXPLAIN && window.COURSE_EXPLAIN[item.chapter];
+    if (ex && typeof item.bi === "number" && ex[item.bi]) return ex[item.bi];
+    return "";
   }
 
   /* Practice test: exactly 2 questions from every chapter (~half the time
@@ -644,23 +657,40 @@
       submitScore(attempt);
       clearSaved();
 
-      box.innerHTML = "";
-      box.appendChild(el("div", "quiz-head",
-        "<h2>Results</h2>" +
-        '<p class="quiz-result ' + (passed ? "pass" : "fail") + '">' +
-        (passed ? "✅ " : "❌ ") + score + "% — " + right + "/" + qns.length + " correct. " +
-        (passed ? "Passed!" : "You need " + opts.pass + "%. Review below and retake — the numbers will be new.") + "</p>"));
-      qns.forEach(function (item, qi) {
-        var ok = state.answers[qi] === item.correct;
-        var f = el("fieldset", "q " + (ok ? "correct" : "wrong"));
-        f.appendChild(el("legend", "", (qi + 1) + ". " + esc(item.q) + srcLabel(item)));
-        item.a.forEach(function (optTxt, oi) {
-          var lab = el("label", "opt" + (oi === item.correct ? " is-answer" : ""));
-          lab.innerHTML = '<input type="radio" disabled' + (state.answers[qi] === oi ? " checked" : "") + '> <span>' + esc(optTxt) + "</span>";
-          f.appendChild(lab);
+      var wrongIdx = [];
+      qns.forEach(function (item, qi) { if (state.answers[qi] !== item.correct) wrongIdx.push(qi); });
+
+      function renderReview(missesOnly) {
+        box.innerHTML = "";
+        var head = el("div", "quiz-head",
+          "<h2>Results</h2>" +
+          '<p class="quiz-result ' + (passed ? "pass" : "fail") + '">' +
+          (passed ? "✅ " : "❌ ") + score + "% — " + right + "/" + qns.length + " correct. " +
+          (passed ? "Passed!" : "You need " + opts.pass + "%. Review below and retake — the numbers will be new.") + "</p>" +
+          (wrongIdx.length ? '<div class="review-filter">' +
+            '<button type="button" class="btn' + (missesOnly ? " primary" : "") + '" id="rv-miss">Review my misses (' + wrongIdx.length + ")</button>" +
+            '<button type="button" class="btn' + (!missesOnly ? " primary" : "") + '" id="rv-all">All questions</button></div>' : ""));
+        box.appendChild(head);
+        var mb = head.querySelector("#rv-miss"), ab = head.querySelector("#rv-all");
+        if (mb) mb.onclick = function () { renderReview(true); window.scrollTo(0, 0); };
+        if (ab) ab.onclick = function () { renderReview(false); window.scrollTo(0, 0); };
+
+        qns.forEach(function (item, qi) {
+          var ok = state.answers[qi] === item.correct;
+          if (missesOnly && ok) return;
+          var f = el("fieldset", "q " + (ok ? "correct" : "wrong"));
+          f.appendChild(el("legend", "", (qi + 1) + ". " + esc(item.q) + srcLabel(item)));
+          item.a.forEach(function (optTxt, oi) {
+            var lab = el("label", "opt" + (oi === item.correct ? " is-answer" : ""));
+            lab.innerHTML = '<input type="radio" disabled' + (state.answers[qi] === oi ? " checked" : "") + '> <span>' + esc(optTxt) + "</span>";
+            f.appendChild(lab);
+          });
+          var why = explainFor(item);
+          if (why) f.appendChild(el("p", "explain", "💬 " + esc(why)));
+          box.appendChild(f);
         });
-        box.appendChild(f);
-      });
+      }
+      renderReview(wrongIdx.length > 0);
 
       report.innerHTML = "";
       report.appendChild(attemptReport(cats, opts));
@@ -989,7 +1019,7 @@
       kind: "chapter", chapter: id, pass: C.passScore,
       kicker: "Chapter test · pass at " + C.passScore + "%",
       title: ch.title + " — Test",
-      subtitle: "~10 questions. Every attempt is saved and averaged into your chapter score, and math problems get <strong>new numbers each time</strong>.",
+      subtitle: "10 questions. Every attempt is saved and averaged into your chapter score, and math problems get <strong>new numbers each time</strong>.",
       rebuild: function () { return buildChapterTest(ch); }
     });
   }
@@ -1005,16 +1035,46 @@
   }
 
   function viewFinal() {
-    var ready = C.chapters.filter(function (ch) { return chapterPassed(ch.id); }).length;
-    var sub = C.finalSize + " questions across all " + C.chapters.length + " chapters. Pass at <strong>" + C.finalPassScore +
-      "%</strong> to earn your certificate." +
-      (ready < C.chapters.length ? " <em>(You've passed " + ready + "/" + C.chapters.length +
-        " chapter tests — finishing them first is strongly recommended.)</em>" : "");
+    var unpassed = C.chapters.filter(function (ch) { return !chapterPassed(ch.id); });
+    var ready = C.chapters.length - unpassed.length;
+
+    /* The exam is gated: every chapter test must be passed first.
+       Practice tests stay open the whole time. */
+    if (unpassed.length) {
+      var wrap = el("div", "view");
+      wrap.appendChild(el("header", "lesson-head",
+        '<p class="kicker">Certification exam · pass at ' + C.finalPassScore + "%</p>" +
+        "<h1>🔒 Certification Exam</h1>" +
+        '<p class="lede">The exam unlocks once you\'ve passed all ' + C.chapters.length +
+        " chapter tests. You've passed <strong>" + ready + " of " + C.chapters.length + "</strong> so far.</p>"));
+      var lock = el("section", "lesson-section");
+      lock.innerHTML = "<h2>Still to pass</h2><p>Knock these out and the " + C.finalSize + "-question exam opens up:</p>";
+      var list = el("div", "");
+      unpassed.forEach(function (ch) {
+        var idx = chapterIndex(ch.id);
+        var a = el("a", "lesson-row");
+        a.href = "#/chapter/" + ch.id;
+        a.innerHTML = '<span class="check">' + (idx + 1) + "</span><span class='lesson-t'>" + esc(ch.title) + "</span>" +
+          '<span class="lesson-min">' + (chapterAttempts(ch.id).length ? "best " + chapterBest(ch.id) + "%" : "not tested") + "</span>";
+        list.appendChild(a);
+      });
+      lock.appendChild(list);
+      wrap.appendChild(lock);
+      wrap.appendChild(el("aside", "book-note",
+        "🎯 <strong>Practice tests are always open</strong> — <a href='#/practice'>take one now</a> to drill all " +
+        C.chapters.length + " chapters while you work toward the exam."));
+      var pager = el("div", "pager");
+      pager.appendChild(linkBtn("#/chapter/" + unpassed[0].id, "Go to " + unpassed[0].title + " →", "primary"));
+      pager.appendChild(linkBtn("#/practice", "Take a practice test", ""));
+      wrap.appendChild(pager);
+      return wrap;
+    }
+
     var v = testView({
       kind: "final", pass: C.finalPassScore,
       kicker: "Certification exam · pass at " + C.finalPassScore + "%",
       title: "Certification Exam",
-      subtitle: sub,
+      subtitle: C.finalSize + " questions — four from every chapter. Pass at <strong>" + C.finalPassScore + "%</strong> to earn your certificate.",
       rebuild: buildFinal
     });
     if (finalPassed()) {
@@ -1241,6 +1301,72 @@
     return wrap;
   }
 
+  /* Draw the certificate to a canvas and hand it to the phone's share
+     sheet (or download it) so trainees can post/text their achievement. */
+  function certificateCanvas(best) {
+    var W = 1200, H = 850;
+    var cv = document.createElement("canvas");
+    cv.width = W; cv.height = H;
+    var g = cv.getContext("2d");
+    g.fillStyle = "#fdfcfa"; g.fillRect(0, 0, W, H);
+    g.strokeStyle = "#16325c"; g.lineWidth = 10; g.strokeRect(25, 25, W - 50, H - 50);
+    g.lineWidth = 2; g.strokeRect(45, 45, W - 90, H - 90);
+    g.strokeStyle = "#b93d15"; g.lineWidth = 3; g.strokeRect(60, 60, W - 120, H - 120);
+    g.textAlign = "center";
+    g.fillStyle = "#16325c";
+    g.font = "700 30px Arial";
+    g.fillText("R O O F I N G   C O N S T R U C T I O N   &   E S T I M A T I N G", W / 2, 150);
+    g.fillStyle = "#5b6472"; g.font = "20px Arial";
+    g.fillText("Certification E-Course · companion to the book by Daniel Atcheson", W / 2, 190);
+    g.fillStyle = "#b93d15"; g.font = "700 64px Georgia";
+    g.fillText("Certificate of Completion", W / 2, 300);
+    g.fillStyle = "#1b2534"; g.font = "26px Arial";
+    g.fillText("This certifies that", W / 2, 380);
+    g.fillStyle = "#16325c"; g.font = "700 72px Georgia";
+    var nm = (DB.name || "Certified Roofer").slice(0, 40);
+    g.fillText(nm, W / 2, 470);
+    g.strokeStyle = "#16325c"; g.lineWidth = 3;
+    g.beginPath(); g.moveTo(W / 2 - 330, 495); g.lineTo(W / 2 + 330, 495); g.stroke();
+    g.fillStyle = "#1b2534"; g.font = "26px Arial";
+    g.fillText("completed all " + C.chapters.length + " chapters and passed the certification exam", W / 2, 560);
+    g.font = "700 34px Arial";
+    g.fillText("Best score: " + best + "%", W / 2, 620);
+    g.font = "80px Arial";
+    g.fillText("🏆", W / 2, 720);
+    g.fillStyle = "#5b6472"; g.font = "22px Arial";
+    g.textAlign = "left";
+    g.fillText("Earned " + fmtDate(Date.now()), 90, 760);
+    g.textAlign = "right";
+    g.fillText("Pass standard: " + C.finalPassScore + "%", W - 90, 760);
+    return cv;
+  }
+  function shareCertificate(best) {
+    try {
+      var cv = certificateCanvas(best);
+      cv.toBlob(function (blob) {
+        if (!blob) return;
+        var file = new File([blob], "roofing-certificate.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({
+            files: [file],
+            title: "Roofing Certification",
+            text: (DB.firstName || "I") + " just passed the Roofing Construction & Estimating certification! 🏆"
+          }).catch(function () { downloadBlob(blob); });
+        } else {
+          downloadBlob(blob);
+        }
+      }, "image/png");
+    } catch (e) { toast("Couldn't build the image on this browser — use Print / Save as PDF instead."); }
+  }
+  function downloadBlob(blob) {
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "roofing-certificate.png";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  }
+
   function viewCertificate() {
     var wrap = el("div", "view");
     if (!finalPassed()) {
@@ -1264,8 +1390,11 @@
     };
     var print = el("button", "btn primary", "🖨️ Print / Save as PDF");
     print.onclick = function () { window.print(); };
+    var share = el("button", "btn", "📤 Share as image");
+    share.onclick = function () { shareCertificate(best); };
     bar.appendChild(input);
     bar.appendChild(print);
+    bar.appendChild(share);
     wrap.appendChild(bar);
 
     wrap.appendChild(el("section", "certificate-doc",
