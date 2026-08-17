@@ -753,6 +753,37 @@ table.history a { color: var(--navy); font-weight: 600; }
 .badge-card h3 { margin: 0 0 0.3rem; color: var(--navy); font-size: 0.98rem; font-weight: 800; }
 .badge-card p { margin: 0 0 0.6rem; font-size: 0.8rem; color: var(--muted); }
 
+/* ---------- gear page ---------- */
+
+.gear-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.gear-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.35rem;
+  box-shadow: var(--shadow);
+}
+.gear-card h2 {
+  margin: 0 0 0.6rem;
+  color: var(--navy);
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+.gear-card ul { margin: 0; padding: 0; list-style: none; }
+.gear-card li {
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+.gear-card li:last-child { border-bottom: none; }
+.gear-note { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 0.1rem; }
+
 /* ---------- toasts ---------- */
 
 #toasts {

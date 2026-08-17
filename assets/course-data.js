@@ -22,8 +22,8 @@ window.COURSE = {
   leaderboardUrl: "https://script.google.com/macros/s/AKfycbywhBXmua9f96p0tOG-5LkkAyLO323SzfyfH6SfM74YzI0uo1C8Xh2LD69dPl6xUZCz/exec",
   passScore: 70,
   finalPassScore: 80,
-  practiceSize: 20,
-  finalSize: 45,
+  practiceSize: 30, /* 2 questions from each of the 15 chapters */
+  finalSize: 60,    /* 4 questions from each of the 15 chapters */
 
   masteryLevels: [
     { min: 90, label: "Nailed it", icon: "🔨", cls: "m-nailed" },
@@ -43,6 +43,74 @@ window.COURSE = {
     { id: "chapter-boss",     icon: "🏗️", name: "Chapter Boss",      desc: "Pass all 15 chapter tests." },
     { id: "master-estimator", icon: "💰", name: "Master Estimator",  desc: "Score 90%+ on the Estimating & Bidding chapter." },
     { id: "certified",        icon: "🏆", name: "Certified Roofer",  desc: "Pass the certification exam." }
+  ],
+
+  /* Physical gear checklist shown on the Tools & Equipment page */
+  gear: [
+    {
+      icon: "🎒", cat: "For This Course",
+      items: [
+        { name: "The book — Roofing Construction & Estimating (Revised)", note: "Your own copy; every lesson assigns pages from it" },
+        { name: "This app installed on your phone", note: "Add to Home Screen so it works offline" },
+        { name: "Notebook + pencil", note: "Sketch every roof; write your Unique ID inside the cover" },
+        { name: "Calculator", note: "Phone calculator is fine — takeoff math is constant" },
+        { name: "Highlighter & sticky tabs", note: "Mark the book's tables you'll use forever (slope factors, coverage charts)" }
+      ]
+    },
+    {
+      icon: "📏", cat: "Measuring & Layout",
+      items: [
+        { name: "25' tape measure", note: "Daily driver; add a 100' tape or measuring wheel for big roofs" },
+        { name: "Speed square", note: "Pitch readings off the rake, cut lines, and the fastest angle checks" },
+        { name: "Torpedo level / pitch gauge", note: "A phone level app works — verify it against a real level once" },
+        { name: "Chalk line + extra chalk", note: "Blue for most work; red stains — keep it off light shingles" },
+        { name: "Clipboard or tablet", note: "Takeoff sheets, contracts, unit-price forms" },
+        { name: "Phone camera", note: "Before/during/after photos — bids, claims and your own protection" }
+      ]
+    },
+    {
+      icon: "🔨", cat: "Hand Tools",
+      items: [
+        { name: "Roofing hammer or hatchet", note: "Gauge pin sets wood-shingle exposure" },
+        { name: "Utility knife + hook blades", note: "Hook blades cut shingles clean; buy blades by the 100" },
+        { name: "Tin snips (left, right, straight)", note: "Color-coded handles; all three for flashing work" },
+        { name: "Flat bar / pry bar", note: "Shingle removal, nail pulling, gentle persuasion" },
+        { name: "Caulk gun", note: "Quality dripless gun — sealant details deserve it" },
+        { name: "Slate ripper", note: "If slate or tile repair is in your market" }
+      ]
+    },
+    {
+      icon: "⚙️", cat: "Power & Air",
+      items: [
+        { name: "Air compressor + hoses", note: "Sized for 2–3 coil nailers running steady" },
+        { name: "Coil roofing nailer", note: "Keep the depth-of-drive dialed — overdriven nails void warranties" },
+        { name: "Drill / impact driver", note: "Decking screws, ridge vent, metal panels" },
+        { name: "Circular saw", note: "Decking replacement cuts" },
+        { name: "Generator", note: "For sites without power — 'works offline' applies to tools too" }
+      ]
+    },
+    {
+      icon: "🚛", cat: "Tear-Off & Cleanup",
+      items: [
+        { name: "Tear-off shovel / shingle fork", note: "Serrated edge gets under nails" },
+        { name: "Heavy tarps", note: "Protect landscaping, decks, pools and driveways before the first shingle flies" },
+        { name: "Dumpster or dump trailer access", note: "Figure ~300 lbs per square per layer when sizing" },
+        { name: "Magnetic sweeper", note: "Roll the lawn and driveway — one nail in a tire erases a referral" },
+        { name: "Broom & blower", note: "The cleanup IS the final impression" }
+      ]
+    },
+    {
+      icon: "🦺", cat: "Safety & PPE",
+      items: [
+        { name: "Harness, rope & roof anchors", note: "Personal fall arrest — required at 6' in residential construction" },
+        { name: "Ladder (Type IA) + stabilizer", note: "3' above the eave, tied off, on solid ground" },
+        { name: "Roof brackets & toe boards", note: "Staging for anything steep" },
+        { name: "Soft-soled roofing boots", note: "Grip without tearing shingles" },
+        { name: "Gloves, safety glasses, knee pads", note: "Nail guns and grinders demand eye protection" },
+        { name: "Water, sunscreen, first-aid kit", note: "Heat is the most common jobsite injury — plan for it" },
+        { name: "Chicken ladder / hook ladder", note: "For slate, tile and extra-steep pitches you can't walk" }
+      ]
+    }
   ],
 
   chapters: [
