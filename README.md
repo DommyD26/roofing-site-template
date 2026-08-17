@@ -24,7 +24,7 @@ and tracks every test you've ever taken.
 - **Live team leaderboard** — every graded test submits name + score to a Google Sheet
   the owner controls (Apps Script web app); the Leaderboard page ranks everyone.
 - **Cloud progress backup** — each player's full record auto-backs up after every action,
-  keyed by a personal backup code shown in My Stats; entering the code on any device
+  keyed by a personal Unique ID shown in My Stats; entering the ID on any device
   restores everything. Local-first, so the course still works fully offline.
 - **Feedback button** — opens a pre-addressed email to the course owner with page and
   device context filled in.
@@ -44,7 +44,7 @@ No build step. Options:
 To train a team: send them the Pages URL. Once they enter their name, every
 test they take lands on the shared leaderboard and in the owner's Google Sheet,
 and their progress backs up automatically (restorable anywhere with their
-backup code). Backend setup lives in [`LEADERBOARD-SETUP.md`](LEADERBOARD-SETUP.md).
+Unique ID). Backend setup lives in [`LEADERBOARD-SETUP.md`](LEADERBOARD-SETUP.md).
 
 ## Editing course content
 

@@ -191,15 +191,123 @@
 
   /* ---------------- cloud progress sync ---------------- */
 
+  /* Unique ID: first 3 letters of the first name + random digits, always
+     6 characters total (shorter names get extra digits). Legacy 8-char
+     codes from earlier versions stay valid and are never regenerated. */
+  function makeUniqueId() {
+    var letters = (DB.firstName || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3);
+    var id = letters;
+    while (id.length < 6) id += Math.floor(Math.random() * 10);
+    return id;
+  }
   function ensureSyncCode() {
     if (DB.syncCode) return DB.syncCode;
-    var chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
-    var c = "";
-    for (var i = 0; i < 8; i++) c += chars[Math.floor(Math.random() * chars.length)];
-    DB.syncCode = c;
-    return c;
+    DB.syncCode = makeUniqueId();
+    return DB.syncCode;
   }
-  function prettyCode(c) { return c ? c.slice(0, 4) + "-" + c.slice(4) : ""; }
+  /* Allocate a Unique ID, re-rolling the digits if the backend already has
+     a backup under that ID (prevents two same-named players colliding).
+     Backend unreachable or unconfigured -> accept the candidate. */
+  function allocateUniqueId(done) {
+    if (DB.syncCode) { done(DB.syncCode); return; }
+    if (!C.leaderboardUrl || typeof fetch !== "function") { done(ensureSyncCode()); return; }
+    var tries = 0;
+    function attempt() {
+      var candidate = makeUniqueId();
+      tries++;
+      var sep = C.leaderboardUrl.indexOf("?") === -1 ? "?" : "&";
+      fetch(C.leaderboardUrl + sep + "code=" + encodeURIComponent(candidate) + "&t=" + Date.now())
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (j && j.ok && tries < 6) { attempt(); return; } // taken — re-roll digits
+          DB.syncCode = candidate; save(); done(candidate);
+        })
+        .catch(function () { DB.syncCode = candidate; save(); done(candidate); });
+    }
+    attempt();
+  }
+  function prettyCode(c) {
+    if (!c) return "";
+    return c.length === 8 ? c.slice(0, 4) + "-" + c.slice(4) : c;
+  }
+
+  /* ---------------- Unique ID modal ---------------- */
+
+  function showIdModal(id) {
+    var old = document.getElementById("id-modal");
+    if (old) old.remove();
+    var overlay = el("div", "modal-overlay");
+    overlay.id = "id-modal";
+    overlay.innerHTML =
+      '<div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="id-modal-title">' +
+      '<h2 id="id-modal-title">🪪 Your Unique ID</h2>' +
+      '<p class="modal-id">' + esc(prettyCode(id)) + "</p>" +
+      "<p>This ID is how your scores are tracked and how you get your progress back on any device. " +
+      "<strong>Write it down or screenshot this</strong> — you can always find it later in My Stats.</p>" +
+      '<div class="modal-actions">' +
+      '<button class="btn" id="id-copy" type="button">Copy ID</button>' +
+      '<button class="btn primary" id="id-close" type="button">Got it</button>' +
+      "</div></div>";
+    document.body.appendChild(overlay);
+    overlay.querySelector("#id-copy").onclick = function () {
+      var btn = this;
+      function okMark() { btn.textContent = "Copied ✓"; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(id).then(okMark).catch(okMark);
+      } else { okMark(); }
+    };
+    overlay.querySelector("#id-close").onclick = function () { overlay.remove(); };
+    overlay.addEventListener("click", function (e) { if (e.target === overlay) overlay.remove(); });
+    overlay.querySelector("#id-close").focus();
+  }
+
+  /* ---------------- add-to-home-screen prompt ---------------- */
+
+  function isStandalone() {
+    return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+      window.navigator.standalone === true;
+  }
+  function installDismissed() {
+    try {
+      var ts = Number(localStorage.getItem("rce-a2hs-dismissed") || 0);
+      return ts && (Date.now() - ts) < 30 * 24 * 3600 * 1000;
+    } catch (e) { return false; }
+  }
+  function browserInstallInfo() {
+    var ua = navigator.userAgent;
+    var iOS = /iPhone|iPad|iPod/.test(ua) || (/(Macintosh)/.test(ua) && navigator.maxTouchPoints > 1);
+    if (iOS && /CriOS/.test(ua)) return { name: "Chrome", steps: "Tap the <strong>Share</strong> icon (□ with ↑, top right) → scroll down → <strong>Add to Home Screen</strong> → Add." };
+    if (iOS) return { name: "Safari", steps: "Tap the <strong>Share</strong> button (□ with ↑) → scroll down → <strong>Add to Home Screen</strong> → Add." };
+    if (/Android/.test(ua) && /Chrome/.test(ua) && !/EdgA|OPR|SamsungBrowser/.test(ua)) return { name: "Chrome", steps: "Tap the <strong>⋮ menu</strong> (top right) → <strong>Add to Home screen</strong> (or <strong>Install app</strong>) → Install." };
+    if (/Chrome/.test(ua) && !/Edg|OPR/.test(ua)) return { name: "Chrome", steps: "Click the <strong>install icon</strong> at the right end of the address bar (or ⋮ menu → Cast, save and share → Install page as app)." };
+    if (/Safari/.test(ua) && !/Chrome/.test(ua)) return { name: "Safari", steps: "In the menu bar choose <strong>File → Add to Dock</strong>." };
+    return { name: "your browser", steps: "Open your browser menu and choose <strong>Add to Home screen</strong> or <strong>Install app</strong>." };
+  }
+  function installBanner() {
+    if (isStandalone() || installDismissed()) return null;
+    var info = browserInstallInfo();
+    var box = el("div", "install-banner");
+    var canNative = !!window.__deferredInstall;
+    box.innerHTML =
+      "<strong>📲 Put this course on your home screen</strong> — it opens like an app, works offline on the roof, and keeps your place." +
+      '<div class="install-steps">' +
+      (canNative ? '<button class="btn primary" id="a2hs-go" type="button">Install now</button>'
+                 : "<span>In " + info.name + ": " + info.steps + "</span>") +
+      '<button class="install-dismiss" id="a2hs-later" type="button" aria-label="Dismiss">Maybe later</button>' +
+      "</div>";
+    var go = box.querySelector("#a2hs-go");
+    if (go) go.onclick = function () {
+      var p = window.__deferredInstall;
+      window.__deferredInstall = null;
+      if (p) { p.prompt(); }
+      box.remove();
+    };
+    box.querySelector("#a2hs-later").onclick = function () {
+      try { localStorage.setItem("rce-a2hs-dismissed", String(Date.now())); } catch (e) {}
+      box.remove();
+    };
+    return box;
+  }
 
   /* Backend capability check: v2 backends answer ?ping=1 with {progress:true};
      v1 backends answer with the scores array. Cached per session so an old
@@ -241,13 +349,13 @@
 
   function restoreFromCode(rawCode, statusEl) {
     var code = String(rawCode || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-    if (code.length < 6) { statusEl.textContent = "Enter the full code (like ROOF-7K2M)."; return; }
+    if (code.length < 6) { statusEl.textContent = "Enter the full Unique ID (like DOM492)."; return; }
     statusEl.textContent = "Looking up your backup…";
     var sep = C.leaderboardUrl.indexOf("?") === -1 ? "?" : "&";
     fetch(C.leaderboardUrl + sep + "code=" + encodeURIComponent(code) + "&t=" + Date.now())
       .then(function (r) { return r.json(); })
       .then(function (j) {
-        if (!j || !j.ok || !j.data) { statusEl.textContent = "No backup found for that code — double-check it."; return; }
+        if (!j || !j.ok || !j.data) { statusEl.textContent = "No backup found for that Unique ID — double-check it."; return; }
         var parsed;
         try { parsed = JSON.parse(j.data); } catch (e) { parsed = null; }
         if (!parsed || typeof parsed !== "object") { statusEl.textContent = "That backup looks damaged — take a new test to refresh it, then retry."; return; }
@@ -301,15 +409,19 @@
       '<button class="btn primary" id="nb-save" type="button">Save</button></span>' +
       (C.leaderboardUrl ?
         '<div class="restore-row">Already started on another device? ' +
-        '<input id="nb-code" maxlength="12" placeholder="Backup code (ROOF-7K2M)" autocapitalize="characters">' +
+        '<input id="nb-code" maxlength="12" placeholder="Unique ID (DOM492)" autocapitalize="characters">' +
         '<button class="btn" id="nb-restore" type="button">Restore my progress</button>' +
         '<span class="restore-status" id="nb-status"></span></div>' : ""));
     box.querySelector("#nb-save").onclick = function () {
       var f = box.querySelector("#nb-first").value.trim();
       var l = box.querySelector("#nb-last").value.trim();
       if (!f) { box.querySelector("#nb-first").focus(); return; }
+      var isNew = !DB.syncCode;
       saveName(f, l);
-      toast("👋 Welcome, <strong>" + esc(DB.firstName) + "</strong> — your scores now count on the leaderboard, and your progress backs up automatically. Your backup code is in My Stats.");
+      toast("👋 Welcome, <strong>" + esc(DB.firstName) + "</strong> — your scores now count on the leaderboard, and your progress backs up automatically.");
+      if (isNew) {
+        allocateUniqueId(function (id) { showIdModal(id); });
+      }
       route();
     };
     var rBtn = box.querySelector("#nb-restore");
@@ -583,6 +695,8 @@
     var wrap = el("div", "view");
     var passedCount = C.chapters.filter(function (ch) { return chapterPassed(ch.id); }).length;
     var totalMin = C.chapters.reduce(function (s, ch) { return s + chapterMinutes(ch); }, 0);
+    var a2hs = installBanner();
+    if (a2hs) wrap.appendChild(a2hs);
     var banner = nameBanner();
     if (banner) wrap.appendChild(banner);
 
@@ -849,13 +963,15 @@
       ensureSyncCode();
       save();
       var sync = el("section", "who-box sync-box");
-      sync.innerHTML = "<strong>☁️ Backup &amp; transfer:</strong> your progress backs up automatically after every test. " +
-        "To pick up on another device (or after clearing this one), open the course there and enter your backup code: " +
-        '<span class="sync-code">' + esc(prettyCode(DB.syncCode)) + "</span>" +
+      sync.innerHTML = "<strong>🪪 Your Unique ID:</strong> " +
+        '<span class="sync-code">' + esc(prettyCode(DB.syncCode)) + "</span> " +
+        '<button class="btn" id="st-show-id" type="button">Show full screen</button>' +
+        "<br><span class='muted'>Your progress backs up automatically after every action. To pick up on another device, open the course there and enter this ID.</span>" +
         '<div class="restore-row">Restore a backup onto THIS device: ' +
-        '<input id="st-code" maxlength="12" placeholder="Backup code" autocapitalize="characters">' +
+        '<input id="st-code" maxlength="12" placeholder="Unique ID" autocapitalize="characters">' +
         '<button class="btn" id="st-restore" type="button">Restore</button>' +
         '<span class="restore-status" id="st-status"></span></div>';
+      sync.querySelector("#st-show-id").onclick = function () { showIdModal(DB.syncCode); };
       sync.querySelector("#st-restore").onclick = function () {
         restoreFromCode(sync.querySelector("#st-code").value, sync.querySelector("#st-status"));
       };
@@ -913,7 +1029,7 @@
     var danger = el("section", "danger-zone");
     var reset = el("button", "btn danger", "Reset ALL progress, history and badges");
     reset.onclick = function () {
-      if (confirm("This clears every test score, badge and lesson-read mark on THIS device. Your last cloud backup stays untouched until your next test, so it can still be restored with your backup code. Continue?")) {
+      if (confirm("This clears every test score, badge and lesson-read mark on THIS device. Your last cloud backup stays untouched until your next test, so it can still be restored with your Unique ID. Continue?")) {
         DB = { attempts: [], badges: {}, read: {}, name: DB.name, firstName: DB.firstName, lastName: DB.lastName, playerId: DB.playerId, syncCode: DB.syncCode };
         skipNextCloud = true; // keep the cloud copy as a recovery point
         save();

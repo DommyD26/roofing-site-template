@@ -31,10 +31,17 @@
     <div class="footer-bar">
       <p>&copy; <span id="year"></span> — Companion certification e-course to <em>Roofing Construction &amp; Estimating, Revised</em> by Daniel Atcheson
         (<a href="https://craftsman-book.com/" target="_blank" rel="noopener">Craftsman Book Company</a>).
-        Lessons are original summaries; refer to the book for complete chapters. Progress saves on this device and backs up automatically once you enter your name — your backup code in My Stats restores it anywhere.</p>
+        Lessons are original summaries; refer to the book for complete chapters. Progress saves on this device and backs up automatically once you enter your name — your Unique ID in My Stats restores it anywhere.</p>
     </div>
   </footer>
 
+  <script>
+    // Captured early so the install banner can offer one-tap install on Chrome.
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      window.__deferredInstall = e;
+    });
+  </script>
   <script src="assets/course-data.js"></script>
   <script src="assets/course-extras.js"></script>
   <script src="assets/course.js"></script>
