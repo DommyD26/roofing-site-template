@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>T^Rock CRM — Job Command Center</title>
+  <meta name="theme-color" content="#141414">
+  <link rel="icon" href="../assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
+  <style>
+    :root {
+      --red: #c8102e;
+      --red-dark: #9c0c23;
+      --red-bg: #fdecef;
+      --black: #141414;
+      --black-soft: #1f1f1f;
+      --page: #f5f5f6;
+      --surface: #ffffff;
+      --ink: #1d2126;
+      --muted: #626a74;
+      --line: #e5e7ea;
+      --line-strong: #d3d6db;
+      --green: #2e7d4f;
+      --green-text: #1d5c38;
+      --green-bg: #e8f4ec;
+      --amber-text: #775217;
+      --amber-bg: #fdf4e3;
+      --blue-text: #1c4374;
+      --blue-bg: #e7f0fb;
+      --purple-text: #5b2b82;
+      --purple-bg: #f2eafb;
+      --gray-bg: #eef0f2;
+      --radius: 14px;
+      --radius-sm: 10px;
+      --shadow: 0 1px 2px rgba(20, 20, 20, 0.05), 0 4px 16px rgba(20, 20, 20, 0.07);
+      --shadow-lift: 0 4px 8px rgba(20, 20, 20, 0.09), 0 12px 32px rgba(20, 20, 20, 0.14);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; font-family: var(--font); color: var(--ink); background: var(--page);
+      line-height: 1.55; -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { letter-spacing: -0.015em; }
+    :focus-visible { outline: 3px solid var(--red); outline-offset: 2px; border-radius: 4px; }
+    a { color: var(--red); }
+
+    /* ---------- header ---------- */
+    .site-header {
+      background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      color: #fff; position: sticky; top: 0; z-index: 40; border-bottom: 3px solid var(--red);
+    }
+    .header-bar {
+      max-width: 1360px; margin: 0 auto; padding: 0.65rem 1.25rem;
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .logo { font-weight: 900; font-size: 1.05rem; letter-spacing: 0.02em; color: #fff; text-decoration: none; white-space: nowrap; }
+    .logo b { color: var(--red); }
+    .logo span { color: #bdbdbd; font-weight: 600; font-size: 0.85rem; }
+    nav.tabs { display: flex; gap: 0.15rem; flex-wrap: wrap; margin-left: auto; }
+    nav.tabs a {
+      color: #cfcfcf; text-decoration: none; font-size: 0.84rem; font-weight: 700;
+      padding: 0.42rem 0.8rem; border-radius: 999px; white-space: nowrap;
+    }
+    nav.tabs a:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+    nav.tabs a.active { color: #fff; background: var(--red); }
+    #new-job-btn {
+      background: var(--red); color: #fff; border: 0; border-radius: 999px; cursor: pointer;
+      font: 700 0.84rem var(--font); padding: 0.45rem 1rem; white-space: nowrap;
+    }
+    #new-job-btn:hover { background: var(--red-dark); }
+
+    /* ---------- layout ---------- */
+    main#view { max-width: 1360px; margin: 0 auto; padding: 1.25rem 1.25rem 5rem; }
+    .page-head { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin: 0.25rem 0 1rem; }
+    .page-head h1 { font-size: 1.35rem; margin: 0; }
+    .page-head .spacer { flex: 1; }
+    .sub { color: var(--muted); font-size: 0.85rem; margin: -0.6rem 0 1rem; }
+
+    /* ---------- cards / stats ---------- */
+    .card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 1.1rem 1.25rem; margin-bottom: 1rem;
+    }
+    .card h2 { font-size: 1rem; margin: 0 0 0.6rem; color: var(--black); }
+    .stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.7rem; margin-bottom: 1rem; }
+    .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0.85rem; box-shadow: var(--shadow); }
+    .stat strong { display: block; font-size: 1.45rem; color: var(--black); line-height: 1.2; }
+    .stat span { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .stat.hot strong { color: var(--red); }
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; align-items: start; }
+
+    /* ---------- buttons / inputs ---------- */
+    .btn {
+      padding: 0.5rem 1rem; border-radius: 9px; border: 1px solid var(--line-strong); background: #fff;
+      color: var(--black); font: 700 0.84rem var(--font); cursor: pointer;
+    }
+    .btn:hover { border-color: var(--black); }
+    .btn.primary { background: var(--red); border-color: var(--red); color: #fff; }
+    .btn.primary:hover { background: var(--red-dark); }
+    .btn.dark { background: var(--black); border-color: var(--black); color: #fff; }
+    .btn.small { padding: 0.3rem 0.65rem; font-size: 0.76rem; }
+    .btn.danger { color: var(--red); border-color: var(--red-bg); }
+    .btn.danger:hover { background: var(--red-bg); border-color: var(--red); }
+    input, select, textarea {
+      padding: 0.55rem 0.75rem; border: 1px solid var(--line-strong); border-radius: 9px;
+      font: 400 0.92rem var(--font); color: var(--ink); background: #fff; width: 100%;
+    }
+    textarea { resize: vertical; min-height: 70px; }
+    label { font-size: 0.74rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 0.2rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.75rem; }
+    .form-grid .wide { grid-column: 1 / -1; }
+    .form-actions { display: flex; gap: 0.5rem; margin-top: 0.9rem; flex-wrap: wrap; }
+    .search-row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.9rem; }
+    .search-row input, .search-row select { width: auto; flex: 0 1 auto; }
+    .search-row input[type=search] { flex: 1 1 220px; }
+
+    /* ---------- chips ---------- */
+    .chip { display: inline-block; padding: 0.13rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 800; white-space: nowrap; }
+    .chip.stage-lead { background: var(--gray-bg); color: #454d57; }
+    .chip.stage-inspection { background: var(--blue-bg); color: var(--blue-text); }
+    .chip.stage-proposal { background: var(--purple-bg); color: var(--purple-text); }
+    .chip.stage-insurance { background: var(--amber-bg); color: var(--amber-text); }
+    .chip.stage-approved { background: #e2f0e8; color: #1c5e3a; }
+    .chip.stage-production { background: #fdeee3; color: #8a4a12; }
+    .chip.stage-complete { background: var(--green-bg); color: var(--green-text); }
+    .chip.stage-paid { background: var(--black); color: #fff; }
+    .chip.stage-lost { background: var(--red-bg); color: var(--red-dark); }
+    .chip.type { background: var(--gray-bg); color: #454d57; }
+    .chip.overdue { background: var(--red-bg); color: var(--red-dark); }
+    .chip.today { background: var(--amber-bg); color: var(--amber-text); }
+
+    /* ---------- tables ---------- */
+    .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { padding: 0.55rem 0.75rem; text-align: left; border-bottom: 1px solid var(--line); vertical-align: middle; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--black); color: #fff; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+    tr.clickable { cursor: pointer; }
+    tr.clickable:hover td { background: #fbf6f7; }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+    /* ---------- kanban board ---------- */
+    .board { display: flex; gap: 0.75rem; overflow-x: auto; padding-bottom: 1rem; align-items: flex-start; }
+    .col {
+      flex: 0 0 265px; background: #ececee; border-radius: 12px; padding: 0.55rem;
+      border-top: 4px solid var(--black);
+    }
+    .col.drop-hover { outline: 3px dashed var(--red); outline-offset: -3px; }
+    .col h3 { font-size: 0.78rem; margin: 0.15rem 0.3rem 0.55rem; text-transform: uppercase; letter-spacing: 0.05em; display: flex; justify-content: space-between; }
+    .col h3 .count { color: var(--muted); }
+    .col h3 .colsum { color: var(--muted); font-weight: 600; }
+    .kcard {
+      background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 0.6rem 0.7rem;
+      margin-bottom: 0.5rem; cursor: grab; box-shadow: var(--shadow); font-size: 0.82rem;
+    }
+    .kcard:hover { box-shadow: var(--shadow-lift); }
+    .kcard.dragging { opacity: 0.45; }
+    .kcard strong { display: block; font-size: 0.88rem; }
+    .kcard .kmeta { color: var(--muted); font-size: 0.75rem; display: block; }
+    .kcard .kmoney { font-weight: 800; color: var(--black); font-size: 0.8rem; }
+    .kcard .kflags { margin-top: 0.25rem; display: flex; gap: 0.3rem; flex-wrap: wrap; }
+
+    /* ---------- job detail ---------- */
+    .job-head { display: flex; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .job-head h1 { margin: 0 0 0.15rem; font-size: 1.45rem; }
+    .job-head .meta { color: var(--muted); font-size: 0.88rem; }
+    .stage-stepper { display: flex; gap: 0.3rem; flex-wrap: wrap; margin: 0.75rem 0 1rem; }
+    .stage-stepper button {
+      border: 1px solid var(--line-strong); background: #fff; border-radius: 999px; cursor: pointer;
+      font: 700 0.73rem var(--font); padding: 0.3rem 0.7rem; color: var(--muted);
+    }
+    .stage-stepper button.done { background: var(--gray-bg); color: var(--ink); border-color: var(--line); }
+    .stage-stepper button.current { background: var(--black); color: #fff; border-color: var(--black); }
+    .stage-stepper button:hover { border-color: var(--red); color: var(--red); }
+    .stage-stepper button.current:hover { color: #fff; }
+    .kv { display: grid; grid-template-columns: minmax(120px, 38%) 1fr; gap: 0.25rem 0.75rem; font-size: 0.88rem; }
+    .kv dt { color: var(--muted); font-weight: 600; }
+    .kv dd { margin: 0; overflow-wrap: anywhere; }
+    .linkrow { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .linkrow a {
+      text-decoration: none; border: 1px solid var(--line-strong); border-radius: 999px;
+      padding: 0.3rem 0.8rem; font-size: 0.78rem; font-weight: 700; color: var(--black); background: #fff;
+    }
+    .linkrow a:hover { border-color: var(--red); color: var(--red); }
+
+    /* checklist / tasks */
+    ul.checklist { list-style: none; margin: 0; padding: 0; }
+    ul.checklist li { display: flex; align-items: flex-start; gap: 0.55rem; padding: 0.4rem 0; border-bottom: 1px dashed var(--line); font-size: 0.88rem; }
+    ul.checklist li:last-child { border-bottom: 0; }
+    ul.checklist input[type=checkbox] { width: 1.05rem; height: 1.05rem; margin-top: 0.2rem; accent-color: var(--red); flex: none; cursor: pointer; }
+    ul.checklist .t-due { font-size: 0.73rem; color: var(--muted); display: block; }
+    ul.checklist li.done .t-title { text-decoration: line-through; color: var(--muted); }
+    ul.checklist .t-job { font-size: 0.73rem; color: var(--red); font-weight: 700; text-decoration: none; display: block; }
+
+    /* timeline */
+    .timeline { max-height: 420px; overflow-y: auto; font-size: 0.84rem; }
+    .timeline > div { padding: 0.45rem 0; border-bottom: 1px dashed var(--line); }
+    .timeline time { color: var(--muted); font-size: 0.72rem; margin-right: 0.5rem; white-space: nowrap; }
+    .note-body { white-space: pre-wrap; }
+
+    /* money helper */
+    .calc { background: var(--gray-bg); border-radius: 10px; padding: 0.7rem 0.85rem; font-size: 0.84rem; margin-top: 0.6rem; }
+    .calc strong.good { color: var(--green-text); }
+    .calc strong.bad { color: var(--red-dark); }
+
+    /* ---------- modal ---------- */
+    .modal-back { position: fixed; inset: 0; background: rgba(20, 20, 20, 0.55); z-index: 60; display: flex; align-items: flex-start; justify-content: center; padding: 4vh 1rem; overflow-y: auto; }
+    .modal { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow-lift); width: 100%; max-width: 720px; padding: 1.25rem 1.4rem; }
+    .modal h2 { margin-top: 0; }
+
+    /* ---------- toasts ---------- */
+    #toasts { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); z-index: 80; display: flex; flex-direction: column; gap: 0.4rem; align-items: center; }
+    .toast { background: var(--black); color: #fff; border-left: 4px solid var(--red); padding: 0.55rem 1rem; border-radius: 9px; font-size: 0.84rem; box-shadow: var(--shadow-lift); animation: pop 0.18s ease-out; }
+    @keyframes pop { from { transform: translateY(8px); opacity: 0; } }
+
+    .empty { color: var(--muted); font-size: 0.88rem; padding: 0.5rem 0.2rem; }
+    .danger-zone { border-color: #f2c8cf; }
+
+    @media (max-width: 720px) {
+      .header-bar { padding: 0.55rem 0.8rem; }
+      nav.tabs { order: 3; width: 100%; margin-left: 0; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 0.2rem; }
+      main#view { padding: 0.9rem 0.8rem 5rem; }
+      .kv { grid-template-columns: 1fr; }
+      .kv dt { margin-top: 0.35rem; }
+    }
+    @media print {
+      .site-header, #toasts, .btn, .stage-stepper, nav.tabs { display: none !important; }
+      body { background: #fff; }
+      .card { box-shadow: none; border-color: #bbb; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-bar">
+      <a class="logo" href="#/dashboard">T<b>^</b>ROCK <span>· CRM</span></a>
+      <nav class="tabs" id="tabs">
+        <a href="#/dashboard" data-tab="dashboard">Dashboard</a>
+        <a href="#/board" data-tab="board">Pipeline</a>
+        <a href="#/jobs" data-tab="jobs">Jobs</a>
+        <a href="#/tasks" data-tab="tasks">Tasks</a>
+        <a href="#/contacts" data-tab="contacts">Contacts</a>
+        <a href="#/crews" data-tab="crews">Crews</a>
+        <a href="#/settings" data-tab="settings">Settings</a>
+      </nav>
+      <button id="new-job-btn">+ New Job</button>
+    </div>
+  </header>
+
+  <main id="view" aria-live="polite"><p class="empty">Loading…</p></main>
+  <div id="toasts" aria-live="polite"></div>
+
+  <script src="crm.js"></script>
+</body>
+</html>
