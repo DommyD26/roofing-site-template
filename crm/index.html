@@ -327,6 +327,46 @@
     .empty { color: var(--faint); font-size: 0.88rem; padding: 0.5rem 0.2rem; }
     .danger-zone { border-color: var(--red-line); }
 
+    /* ---------- first-run tour ---------- */
+    .tour-invite {
+      position: fixed; right: 16px; bottom: 16px; z-index: 70;
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+      box-shadow: var(--shadow-2); padding: 1rem 1.1rem;
+      width: min(310px, calc(100vw - 24px)); animation: pop 0.25s ease-out;
+    }
+    .tour-invite b { font-size: 0.95rem; }
+    .tour-invite p { margin: 0.3rem 0 0.75rem; font-size: 0.84rem; color: var(--ink-2); }
+    .tour-invite .row { display: flex; gap: 0.5rem; }
+    .tour-backdrop { position: fixed; inset: 0; background: rgba(15, 15, 18, 0.45); z-index: 61; }
+    .tour-glow {
+      position: relative !important; z-index: 62 !important; border-radius: 12px;
+      box-shadow: 0 0 0 3px var(--red), 0 0 0 7px rgba(200, 16, 46, 0.25),
+        0 0 0 9999px rgba(15, 15, 18, 0.45) !important;
+    }
+    .tour-card {
+      position: fixed; z-index: 70; width: min(330px, calc(100vw - 24px));
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+      box-shadow: var(--shadow-2); padding: 1rem 1.15rem 0.9rem; animation: rise 0.2s ease-out;
+    }
+    .tour-card.center { left: 50%; top: 16vh; transform: translateX(-50%); }
+    .tour-card h3 { margin: 0.35rem 0 0.25rem; font-size: 0.98rem; letter-spacing: -0.01em; }
+    .tour-card p { margin: 0 0 0.85rem; font-size: 0.85rem; color: var(--ink-2); line-height: 1.5; }
+    .tour-track { height: 6px; background: var(--gray-bg); border-radius: 999px; overflow: hidden; margin-top: 0.15rem; }
+    .tour-track i { display: block; height: 100%; background: var(--red); border-radius: 999px; transition: width 0.25s; }
+    .tour-count { font-size: 0.69rem; color: var(--muted); font-weight: 600; display: block; margin-top: 0.3rem; }
+    .tour-x {
+      position: absolute; top: 0.5rem; right: 0.55rem; background: none; border: 0;
+      color: var(--faint); cursor: pointer; font-size: 1rem; padding: 0.2rem 0.4rem; border-radius: 6px;
+    }
+    .tour-x:hover { color: var(--red); background: var(--red-soft); }
+    .tour-btns { display: flex; gap: 0.5rem; justify-content: flex-end; }
+    @media (max-width: 720px) {
+      .tour-invite, .tour-card:not(.center), .tour-card.center {
+        left: 12px; right: 12px; width: auto; top: auto; transform: none;
+        bottom: calc(4.8rem + env(safe-area-inset-bottom));
+      }
+    }
+
     /* ---------- mobile: app-style bottom navigation ---------- */
     @media (max-width: 720px) {
       /* backdrop-filter would trap the fixed bottom nav inside the header */
