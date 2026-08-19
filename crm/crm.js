@@ -903,7 +903,10 @@
       return true;
     }).sort(function (a, b) { return b.updatedAt - a.updatedAt; });
 
-    view.innerHTML = '<div class="page-head"><h1>Jobs</h1><div class="spacer"></div>' +
+    view.innerHTML = '<div class="page-head"><h1>Jobs</h1>' +
+      '<button class="btn" id="import-claim">📄 Import claim PDF</button>' +
+      '<input type="file" id="claim-file" accept="application/pdf,.pdf" style="display:none">' +
+      '<div class="spacer"></div>' +
       '<span class="sub" style="margin:0">' + rows.length + " of " + state.jobs.length + "</span></div>" +
       '<div class="search-row">' +
       '<input type="search" id="jf-q" placeholder="Search name, address, phone, claim #…" value="' + esc(jobFilters.q) + '">' +
@@ -927,6 +930,12 @@
         }).join("") + "</tbody></table></div>"
         : '<div class="card"><p class="empty">No jobs match. Hit <b>+ New Job</b> up top to add one.</p></div>');
 
+    document.getElementById("import-claim").addEventListener("click", function () {
+      document.getElementById("claim-file").click();
+    });
+    document.getElementById("claim-file").addEventListener("change", function (e) {
+      if (e.target.files[0]) importClaimFile(e.target.files[0]);
+    });
     document.getElementById("jf-q").addEventListener("input", function (e) { jobFilters.q = e.target.value; renderJobs(); });
     document.getElementById("jf-stage").addEventListener("change", function (e) { jobFilters.stage = e.target.value; renderJobs(); });
     document.getElementById("jf-type").addEventListener("change", function (e) { jobFilters.type = e.target.value; renderJobs(); });
@@ -1035,7 +1044,7 @@
       (j.jobType === "Insurance" ? (function () {
         var suppA = suppApproved(ins);
         var totalClaim = numVal(ins.rcv) + suppA;
-        var expectedFromCarrier = totalClaim - ded;
+        var expectedFromCarrier = Math.max(totalClaim - ded, 0);
         var received = insReceived(j);
         var carrierOwes = Math.max(expectedFromCarrier - received, 0);
         var suppRows = ins.supplementItems.map(function (it, i) {
@@ -1327,11 +1336,15 @@
      Job create/edit modal
      ====================================================================== */
 
-  function openJobModal(job) {
+  function openJobModal(job, prefill) {
     var isNew = !job;
     var j = job || { name: "", phone: "", email: "", address: "", city: "", jobType: "Insurance", source: "Referral", roofType: "", squares: "",
-      insurance: { carrier: "", claimNumber: "", adjusterName: "", adjusterPhone: "", rcv: "", deductible: "", acvOffset: "", supplementsAmount: "", supplements: "" },
+      insurance: { carrier: "", claimNumber: "", adjusterName: "", adjusterPhone: "", rcv: "", deductible: "", acvOffset: "", supplementsAmount: "", supplements: "", claimStatus: "", supplementItems: [] },
       links: { roofr: "", companycam: "", dropbox: "", other: "" }, scheduledDate: "", crewId: "" };
+    if (isNew && prefill) {
+      Object.keys(prefill.fields || {}).forEach(function (k) { if (prefill.fields[k]) j[k] = prefill.fields[k]; });
+      Object.keys(prefill.ins || {}).forEach(function (k) { if (prefill.ins[k]) j.insurance[k] = prefill.ins[k]; });
+    }
 
     var back = document.createElement("div");
     back.className = "modal-back";
@@ -1410,6 +1423,21 @@
       target.links.dropbox = g("links.dropbox");
       target.links.other = g("links.other");
       target.updatedAt = Date.now();
+      if (isNew && prefill) {
+        if (prefill.note) {
+          target.notes = target.notes || [];
+          target.notes.unshift({ ts: Date.now(), text: prefill.note });
+        }
+        if (prefill.adjuster && prefill.adjuster.name) {
+          var exists = state.contacts.some(function (c) { return c.name.toLowerCase() === prefill.adjuster.name.toLowerCase(); });
+          if (!exists) state.contacts.push({
+            id: uid(), name: prefill.adjuster.name, type: "Adjuster",
+            company: prefill.adjuster.company || "", phone: prefill.adjuster.phone || "",
+            email: prefill.adjuster.email || "", notes: "Auto-created from claim PDF"
+          });
+        }
+        logActivity(target.id, "Job created from claim PDF — " + target.name);
+      }
       save();
       back.remove();
       toast(isNew ? "Job created — playbook tasks added ✅" : "Saved");
@@ -1765,6 +1793,249 @@
       try { localStorage.removeItem(DB_KEY); } catch (e) {}
       save(); render();
       toast("Wiped clean");
+    });
+  }
+
+  /* ======================================================================
+     Claim-PDF import — drop in a carrier estimate (Xactimate-style) or a
+     settlement letter and it builds the job + adjuster contact. Reads the
+     PDF entirely in the browser (vendored pdf.js); nothing is uploaded.
+     ====================================================================== */
+
+  var pdfjsPromise = null;
+  function loadPdfJs() {
+    if (window.pdfjsLib) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = "vendor/pdf.worker.min.js";
+      return Promise.resolve(window.pdfjsLib);
+    }
+    if (!pdfjsPromise) pdfjsPromise = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = "vendor/pdf.min.js";
+      s.onload = function () {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = "vendor/pdf.worker.min.js";
+        resolve(window.pdfjsLib);
+      };
+      s.onerror = function () { reject(new Error("couldn't load the PDF reader")); };
+      document.head.appendChild(s);
+    });
+    return pdfjsPromise;
+  }
+
+  /* Rebuild reading-order lines from pdf.js positioned text runs. */
+  function pageLinesFromContent(tc) {
+    var rows = [];
+    tc.items.forEach(function (it) {
+      if (!it.str || !it.str.trim()) return;
+      var y = it.transform[5], x = it.transform[4], row = null;
+      for (var i = 0; i < rows.length; i++) if (Math.abs(rows[i].y - y) <= 2.5) { row = rows[i]; break; }
+      if (!row) { row = { y: y, items: [] }; rows.push(row); }
+      row.items.push({ x: x, str: it.str });
+    });
+    rows.sort(function (a, b) { return b.y - a.y; });
+    return rows.map(function (r) {
+      return r.items.sort(function (a, b) { return a.x - b.x; })
+        .map(function (i) { return i.str; }).join(" ").replace(/\s+/g, " ").trim();
+    });
+  }
+
+  function pdfToLines(file) {
+    return loadPdfJs().then(function (pdfjsLib) {
+      return file.arrayBuffer().then(function (buf) {
+        return pdfjsLib.getDocument({ data: buf }).promise;
+      });
+    }).then(function (doc) {
+      var chain = Promise.resolve([]);
+      var pn;
+      var add = function (n) {
+        chain = chain.then(function (lines) {
+          return doc.getPage(n).then(function (page) { return page.getTextContent(); })
+            .then(function (tc) { return lines.concat(pageLinesFromContent(tc)); });
+        });
+      };
+      for (pn = 1; pn <= doc.numPages; pn++) add(pn);
+      return chain;
+    });
+  }
+
+  function titleCase(s) {
+    return String(s || "").toLowerCase().replace(/\b[a-z]/g, function (c) { return c.toUpperCase(); }).trim();
+  }
+  var LABEL_STOP = /\s(?:Home|Business|Cellular|Cell|Phone|Fax|E-?mail|Position|Company|Policy Number|Type of Loss|Claim Number|Property|Insured|Claim Rep\.?|Estimator|Contractor|Date\s+[A-Za-z]+):.*$/;
+  function grabAfter(line, labelRe) {
+    var m = line.match(new RegExp(labelRe + ":\\s*(.*)$"));
+    if (!m) return "";
+    return m[1].replace(LABEL_STOP, "").trim();
+  }
+  function moneyIn(s) { return parseFloat(String(s).replace(/,/g, "")) || 0; }
+
+  function parseClaim(lines) {
+    var out = { name: "", phone: "", email: "", address: "", city: "", carrier: "", claimNumber: "",
+      policyNumber: "", typeOfLoss: "", dateOfLoss: "", priceList: "",
+      adjusterName: "", adjusterPhone: "", adjusterEmail: "",
+      rcv: 0, acv: 0, deductible: 0, netClaim: 0, recovDep: 0 };
+    var PHONE = /\(\d{3}\)\s*\d{3}-\d{4}/;
+    var CITYSTZIP = /([A-Za-z .'-]{2,}),\s*([A-Z]{2})\s+(\d{5}(?:-\d{4})?)/;
+
+    for (var i = 0; i < lines.length; i++) {
+      var L = lines[i];
+
+      if (!out.name && /Insured:/.test(L)) {
+        out.name = grabAfter(L, "Insured");
+        var pm = L.match(/(?:Home|Cellular|Cell|Phone):\s*(\(\d{3}\)\s*\d{3}-\d{4})/);
+        if (pm) out.phone = pm[1];
+        for (var k = i; k <= i + 3 && k < lines.length; k++) {
+          if (out.email) break;
+          if (/Claim Rep|Estimator|Contractor/.test(lines[k])) break;
+          var em = lines[k].match(/E-?mail:\s*(\S+)/i);
+          if (em) {
+            out.email = em[1];
+            /* e-mails wrap mid-address in these layouts — stitch the next line back on */
+            if (!/\.[A-Za-z]{2,}$/.test(out.email) && k + 1 < lines.length && /^[A-Za-z0-9._-]{1,20}$/.test(lines[k + 1])) out.email += lines[k + 1];
+          }
+        }
+      }
+
+      if (!out.address && /Property:/.test(L)) {
+        out.address = grabAfter(L, "Property");
+        for (var k2 = i + 1; k2 <= i + 2 && k2 < lines.length; k2++) {
+          var cm = lines[k2].match(CITYSTZIP);
+          if (cm) { out.city = titleCase(cm[1]); break; }
+        }
+        var sameLine = out.address.match(CITYSTZIP);
+        if (sameLine) { out.city = out.city || titleCase(sameLine[1]); out.address = out.address.replace(CITYSTZIP, "").trim(); }
+      }
+
+      if (!out.adjusterName && /Claim Rep\.?:/.test(L)) {
+        out.adjusterName = grabAfter(L, "Claim Rep\\.?");
+        for (var k3 = i; k3 <= i + 4 && k3 < lines.length; k3++) {
+          if (/Estimator:|Claim Number:/.test(lines[k3]) && k3 > i) break;
+          if (!out.adjusterPhone) {
+            var apm = lines[k3].match(/(?:Business|Cellular|Cell|Phone):\s*(\(\d{3}\)\s*\d{3}-\d{4})/);
+            if (apm) out.adjusterPhone = apm[1];
+          }
+          if (!out.adjusterEmail) {
+            var aem = lines[k3].match(/E-?mail:\s*(\S+@\S+)/i);
+            if (aem) out.adjusterEmail = aem[1];
+          }
+        }
+      }
+
+      if (!out.claimNumber) { var cn = L.match(/Claim Number:\s*([A-Za-z0-9-]+)/); if (cn) out.claimNumber = cn[1]; }
+      if (!out.policyNumber) { var pn2 = L.match(/Policy Number:\s*([A-Za-z0-9-]+)/); if (pn2) out.policyNumber = pn2[1]; }
+      if (!out.typeOfLoss && /Type of Loss:/.test(L)) out.typeOfLoss = titleCase(grabAfter(L, "Type of Loss"));
+      if (!out.carrier) { var ic = L.match(/Insurance Company:\s*(.+)$/); if (ic) out.carrier = ic[1].trim(); }
+      if (!out.dateOfLoss) { var dl = L.match(/Date of Loss:\s*([0-9/]+)/); if (dl) out.dateOfLoss = dl[1]; }
+      if (!out.priceList) { var pl = L.match(/Price List:\s*([A-Z0-9_]+)/); if (pl) out.priceList = pl[1]; }
+
+      /* money summary lines (may repeat once per coverage — sum them) */
+      var rcvm = L.match(/^Replacement Cost Value\s+\$([\d,]+\.\d{2})/);
+      if (rcvm) out.rcv += moneyIn(rcvm[1]);
+      var acvm = L.match(/^Actual Cash Value\s+\$([\d,]+\.\d{2})/);
+      if (acvm) out.acv += moneyIn(acvm[1]);
+      if (!/^Net Claim if/.test(L)) {
+        var ncm = L.match(/^Net Claim\s+\$?\(?\$?([\d,]+\.\d{2})/);
+        if (ncm) out.netClaim += moneyIn(ncm[1]);
+      }
+      var rdm = L.match(/^Total Recoverable Depreciation\s+\$?([\d,]+\.\d{2})/);
+      if (rdm) out.recovDep += moneyIn(rdm[1]);
+      var dm = L.match(/Less Deductible\s*(?:\[\s*Full Deductible\s*=\s*\$?([\d,]+(?:\.\d{2})?)\s*\])?\s*\(\$?([\d,]+(?:\.\d{2})?)\)/);
+      if (dm) out.deductible = Math.max(out.deductible, moneyIn(dm[1] || dm[2]));
+    }
+
+    /* settlement-letter fallback: the name / street / city-state-zip block at
+       the top of the letter. The right-hand claim column can merge into the
+       same lines ("133 Abbeydell Date of Loss: 3/7/2025"), so strip labels. */
+    if (!out.address) {
+      var STRIP = /\s+(?:Claim Number|Policy Number|Date of Loss|Type of Loss|Phone|Home|Business)\b.*$/i;
+      for (var i2 = 1; i2 < Math.min(lines.length, 16); i2++) {
+        var cm2 = lines[i2].match(CITYSTZIP);
+        if (!cm2) continue;
+        if (/P\.?O\.? Box/i.test(lines[i2 - 1])) continue; /* carrier letterhead, not the insured */
+        var addr = lines[i2 - 1].replace(STRIP, "").trim();
+        if (!addr || addr.length < 4 || /Summary|Coverage|Deductible|Team/i.test(addr)) continue;
+        out.address = addr;
+        out.city = out.city || titleCase(cm2[1]);
+        if (!out.name && i2 >= 2) {
+          var nm = lines[i2 - 2].replace(STRIP, "").trim();
+          if (/^[A-Z][A-Z .,'&-]+$/.test(nm)) out.name = nm;
+        }
+        break;
+      }
+    }
+
+    /* our own contractor estimates list T^Rock staff as "Claim Rep." — that's
+       not the carrier's adjuster, so drop it */
+    if (/trock/i.test(out.adjusterEmail) || /t[- ]?rock/i.test(out.adjusterName)) {
+      out.adjusterName = ""; out.adjusterPhone = ""; out.adjusterEmail = "";
+    }
+    out.name = titleCase(out.name);
+    out.adjusterName = titleCase(out.adjusterName);
+    out.rcv = Math.round(out.rcv * 100) / 100;
+    out.acv = Math.round(out.acv * 100) / 100;
+    out.netClaim = Math.round(out.netClaim * 100) / 100;
+    out.recovDep = Math.round(out.recovDep * 100) / 100;
+    return out;
+  }
+
+  function importClaimFile(file) {
+    toast("📄 Reading " + file.name + "…");
+    pdfToLines(file).then(function (lines) {
+      var p = parseClaim(lines);
+      if (!p.name && !p.claimNumber) { toast("Couldn't find claim info in that PDF — is it a carrier estimate?"); return; }
+
+      var bits = [];
+      if (p.typeOfLoss) bits.push("Type of loss: " + p.typeOfLoss);
+      if (p.dateOfLoss) bits.push("Date of loss: " + p.dateOfLoss);
+      if (p.policyNumber) bits.push("Policy #: " + p.policyNumber);
+      if (p.priceList) bits.push("Price list: " + p.priceList);
+      if (p.rcv) bits.push("RCV: " + money(p.rcv));
+      if (p.acv) bits.push("ACV: " + money(p.acv));
+      if (p.deductible) bits.push("Deductible: " + money(p.deductible));
+      if (p.netClaim) bits.push("Net claim: " + money(p.netClaim));
+      if (p.recovDep) bits.push("Recoverable depreciation: " + money(p.recovDep));
+      var note = "📄 Imported from " + file.name + " — " + (bits.join(" · ") || "no dollar summary found");
+
+      var existing = p.claimNumber ? state.jobs.filter(function (jx) {
+        return (jx.insurance.claimNumber || "").replace(/^0+/, "") === p.claimNumber.replace(/^0+/, "");
+      })[0] : null;
+
+      if (existing && confirm("Claim #" + p.claimNumber + " matches " + existing.name + ".\n\nOK = attach this paperwork to that job.\nCancel = create a brand-new job anyway.")) {
+        var ins = existing.insurance;
+        if (!numVal(ins.rcv) && p.rcv) ins.rcv = String(p.rcv);
+        if (!numVal(ins.deductible) && p.deductible) ins.deductible = String(p.deductible);
+        if (!ins.carrier && p.carrier) ins.carrier = p.carrier;
+        /* fill adjuster name+phone together so numbers never mix across docs */
+        if (!ins.adjusterName && p.adjusterName) {
+          ins.adjusterName = p.adjusterName;
+          if (p.adjusterPhone) ins.adjusterPhone = p.adjusterPhone;
+        } else if (!ins.adjusterPhone && p.adjusterPhone && ins.adjusterName &&
+          ins.adjusterName.toLowerCase() === (p.adjusterName || "").toLowerCase()) {
+          ins.adjusterPhone = p.adjusterPhone;
+        }
+        existing.notes = existing.notes || [];
+        existing.notes.unshift({ ts: Date.now(), text: note });
+        existing.updatedAt = Date.now();
+        logActivity(existing.id, "Claim PDF attached — " + existing.name);
+        save();
+        location.hash = "#/job/" + existing.id;
+        render();
+        toast("Attached to " + existing.name);
+        return;
+      }
+
+      openJobModal(null, {
+        fields: { name: p.name, phone: p.phone, email: p.email, address: p.address, city: p.city, jobType: "Insurance" },
+        ins: {
+          carrier: p.carrier, claimNumber: p.claimNumber,
+          adjusterName: p.adjusterName, adjusterPhone: p.adjusterPhone,
+          rcv: p.rcv ? String(p.rcv) : "", deductible: p.deductible ? String(p.deductible) : ""
+        },
+        note: note,
+        adjuster: p.adjusterName ? { name: p.adjusterName, phone: p.adjusterPhone, email: p.adjusterEmail, company: p.carrier } : null
+      });
+      toast("Check the details, then hit Create ✅");
+    }).catch(function (e) {
+      toast("Couldn't read that PDF: " + (e && e.message ? e.message : "unknown error"));
     });
   }
 
