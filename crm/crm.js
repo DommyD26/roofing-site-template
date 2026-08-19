@@ -90,7 +90,10 @@
      State & persistence
      ====================================================================== */
 
-  var DB_KEY = "trock-crm-v1";
+  /* Demo mode (/crm/demo/ or ?demo=1): the full app on realistic sample
+     data — its own storage key, sync disabled, resets on every open. */
+  var DEMO = location.pathname.indexOf("/demo") >= 0 || /[?&]demo=1/.test(location.search);
+  var DB_KEY = DEMO ? "trock-crm-demo-v1" : "trock-crm-v1";
 
   function freshState() {
     return {
@@ -116,6 +119,10 @@
   }
 
   var state = loadState();
+  if (DEMO) {
+    state = seedDemo(); /* pristine sample book on every open */
+    try { localStorage.setItem(DB_KEY, JSON.stringify(state)); } catch (e) {}
+  }
 
   function loadState() {
     try {
@@ -330,6 +337,7 @@
      ====================================================================== */
 
   function pushCloud(quiet) {
+    if (DEMO) { if (!quiet) toast("Sync is turned off in the demo"); return; }
     var s = state.settings;
     if (!s.syncUrl || !s.syncKey) { if (!quiet) toast("Set the sync URL + key in Settings first."); return; }
     fetch(s.syncUrl, {
@@ -413,6 +421,7 @@
   }
 
   function autoPull(reason) {
+    if (DEMO) { if (reason === "manual") toast("Sync is turned off in the demo"); return; }
     var s = state.settings;
     if (!s.syncUrl || !s.syncKey) {
       if (reason === "manual") toast("Set the sync URL + key first.");
@@ -1985,6 +1994,9 @@
 
       "</div><div>" +
 
+      (DEMO ?
+        '<div class="card"><h2>☁️ Cloud sync</h2><p class="sub" style="margin:0">Turned off in this demo. In the live app, every phone and computer shares one book — changes sync themselves within seconds, merge safely, and live in the company\'s own Google Drive.</p></div>'
+        :
       '<div class="card"><h2>☁️ Cloud sync <span class="sub" style="margin:0;font-weight:400">(optional)</span></h2>' +
       "<p class=\"sub\" style=\"margin:0 0 .6rem\">Point every device at the same free Google Apps Script backend and the whole company shares one book. Setup guide: <b>CRM-SETUP.md</b> in the repo.</p>" +
       '<form id="sync-form"><div class="form-grid">' +
@@ -1995,7 +2007,7 @@
       '<button class="btn" id="push-btn">☁️ Push to cloud now</button>' +
       '<button class="btn" id="pull-btn">↺ Check cloud now</button></div>' +
       '<p class="sub" style="margin:.6rem 0 0">Last synced: ' + (s.lastSync ? fmtDT(s.lastSync) : "never") +
-      ". Sync is automatic: your changes upload a few seconds after you make them, and this device checks for everyone else's changes when you open the app, when you come back to it, and every 90 seconds. Updates from other devices merge in — the most recently edited version of each job wins, and deletions carry across. The buttons just force it.</p></div>" +
+      ". Sync is automatic: your changes upload a few seconds after you make them, and this device checks for everyone else's changes when you open the app, when you come back to it, and every 90 seconds. Updates from other devices merge in — the most recently edited version of each job wins, and deletions carry across. The buttons just force it.</p></div>") +
 
       '<div class="card"><h2>📈 Book at a glance</h2><dl class="kv">' +
       "<dt>Jobs</dt><dd>" + state.jobs.length + "</dd>" +
@@ -2017,16 +2029,17 @@
       save(); toast("Saved"); render();
     });
 
-    document.getElementById("sync-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      var fd = new FormData(e.target);
-      s.syncUrl = String(fd.get("syncUrl") || "").trim();
-      s.syncKey = String(fd.get("syncKey") || "").trim();
-      save(); toast("Sync settings saved"); render();
-    });
-
-    document.getElementById("push-btn").addEventListener("click", function () { pushCloud(false); });
-    document.getElementById("pull-btn").addEventListener("click", function () { autoPull("manual"); });
+    if (!DEMO) {
+      document.getElementById("sync-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var fd = new FormData(e.target);
+        s.syncUrl = String(fd.get("syncUrl") || "").trim();
+        s.syncKey = String(fd.get("syncKey") || "").trim();
+        save(); toast("Sync settings saved"); render();
+      });
+      document.getElementById("push-btn").addEventListener("click", function () { pushCloud(false); });
+      document.getElementById("pull-btn").addEventListener("click", function () { autoPull("manual"); });
+    }
     document.getElementById("tour-replay").addEventListener("click", function () { window.__startTour(); });
 
     document.getElementById("export-btn").addEventListener("click", function () {
@@ -2085,11 +2098,12 @@
       window.pdfjsLib.GlobalWorkerOptions.workerSrc = "vendor/pdf.worker.min.js";
       return Promise.resolve(window.pdfjsLib);
     }
+    var vendorBase = location.pathname.indexOf("/demo") >= 0 ? "../vendor/" : "vendor/";
     if (!pdfjsPromise) pdfjsPromise = new Promise(function (resolve, reject) {
       var s = document.createElement("script");
-      s.src = "vendor/pdf.min.js";
+      s.src = vendorBase + "pdf.min.js";
       s.onload = function () {
-        window.pdfjsLib.GlobalWorkerOptions.workerSrc = "vendor/pdf.worker.min.js";
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = vendorBase + "pdf.worker.min.js";
         resolve(window.pdfjsLib);
       };
       s.onerror = function () { reject(new Error("couldn't load the PDF reader")); };
@@ -2361,7 +2375,7 @@
     if (tourCard) tourCard.remove();
     tourCard = null;
     tourIdx = -1;
-    try { localStorage.setItem(TOUR_KEY, finished ? "done" : "exited"); } catch (e) {}
+    try { if (!DEMO) localStorage.setItem(TOUR_KEY, finished ? "done" : "exited"); } catch (e) {}
     document.removeEventListener("keydown", tourEsc);
     if (finished) toast("Tour complete — go get 'em 💪");
   }
@@ -2437,7 +2451,7 @@
 
   function maybeInviteTour() {
     var seen = "";
-    try { seen = localStorage.getItem(TOUR_KEY) || ""; } catch (e) {}
+    try { seen = DEMO ? "" : (localStorage.getItem(TOUR_KEY) || ""); } catch (e) {}
     if (seen) return;
     setTimeout(function () {
       if (document.getElementById("tour-invite") || tourIdx >= 0) return;
@@ -2451,7 +2465,7 @@
       document.body.appendChild(inv);
       inv.querySelector("#tour-start").addEventListener("click", startTour);
       inv.querySelector("#tour-no").addEventListener("click", function () {
-        try { localStorage.setItem(TOUR_KEY, "declined"); } catch (e) {}
+        try { if (!DEMO) localStorage.setItem(TOUR_KEY, "declined"); } catch (e) {}
         inv.remove();
       });
     }, 900);
@@ -2460,9 +2474,139 @@
   window.__startTour = startTour; /* used by the Settings replay button */
 
   /* ======================================================================
+     Demo data — a believable book, dated relative to "now" so the demo
+     always looks live. Only ever touches the demo storage key.
+     ====================================================================== */
+
+  function seedDemo() {
+    function dI(off) { var d = new Date(); d.setDate(d.getDate() + off); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+    function tt(offDays, hour) { var d = new Date(); d.setDate(d.getDate() + offDays); d.setHours(hour == null ? 10 : hour, 15, 0, 0); return d.getTime(); }
+    function J(o) {
+      var base = {
+        phone: "", email: "", roofType: "Asphalt shingle", squares: "", source: "Referral", jobType: "Insurance",
+        stageAt: tt(-2), createdAt: tt(-14), updatedAt: tt(0, 9), scheduledDate: "", completedDate: "", crewId: "", lostReason: "",
+        insurance: { carrier: "", claimNumber: "", adjusterName: "", adjusterPhone: "", adjusterMeeting: "", rcv: "", deductible: "", acvOffset: "", supplementsAmount: "", supplements: "", claimStatus: "", supplementItems: [] },
+        money: { estimate: "", cost: "", contractPrice: "", payments: [] },
+        expenses: [], production: { workOrder: "", subContract: "" },
+        links: { roofr: "", companycam: "", dropbox: "", other: "" }, notes: []
+      };
+      for (var k in o) {
+        if (k === "insurance" || k === "money" || k === "production" || k === "links") {
+          for (var k2 in o[k]) base[k][k2] = o[k][k2];
+        } else base[k] = o[k];
+      }
+      return base;
+    }
+    var jobs = [
+      J({ id: "d01", name: "Sarah & Mike Bennett", phone: "(469) 555-0114", email: "sbennett@example.com", address: "4187 Kestrel Ln", city: "Frisco", source: "Door knock", stage: "production", stageAt: tt(-3), updatedAt: tt(0, 7), scheduledDate: dI(1), crewId: "c1",
+        insurance: { carrier: "State Farm", claimNumber: "55-77G4-201", adjusterName: "Jeff Moline", adjusterPhone: "(800) 555-0182", rcv: "31240", deductible: "2500", acvOffset: "1850", claimStatus: "Supplements pending",
+          supplementItems: [{ id: "s1", item: "Drip edge + I&W shield", submitted: "1480", approved: "1180", status: "Approved" }, { id: "s2", item: "Steep / 2-story charge", submitted: "640", approved: "", status: "Submitted" }] },
+        money: { contractPrice: "31240", payments: [{ date: dI(-6), amount: 2500, method: "Check", note: "deductible" }, { date: dI(-2), amount: 17400, method: "Insurance check", note: "ACV" }] },
+        expenses: [{ id: "e1", date: dI(-1), category: "Materials", vendor: "ABC Supply — Plano", amount: 9870, note: "Duration Storm, Onyx Black" }, { id: "e2", date: dI(0), category: "Subcontractor", vendor: "Rodriguez Roofing", amount: 6500, note: "first draw" }],
+        production: { workOrder: "Tear off 1 layer. Duration Storm — Onyx Black. New drip edge + I&W at eaves/valleys. Don't touch the new gutters.", subContract: "8200" },
+        links: { companycam: "https://app.companycam.com/projects/demo-bennett", roofr: "https://app.roofr.com/proposal/demo-bennett" },
+        notes: [{ ts: tt(-1, 16), text: "Crew started tear-off 7am. Decking solid, two sheets replaced on the north slope." }, { ts: tt(-6, 11), text: "Contract signed at the kitchen table. Karen wants the satellite dish reset after install." }] }),
+      J({ id: "d02", name: "Marcus Rivera", phone: "(972) 555-0147", address: "2205 Bluffview Dr", city: "McKinney", jobType: "Retail", source: "Google", stage: "proposal", stageAt: tt(-4), updatedAt: tt(-1, 15),
+        money: { estimate: "14800", cost: "7200" } }),
+      J({ id: "d03", name: "Linda Okafor", phone: "(214) 555-0168", address: "911 Sagebrush Ct", city: "Plano", stage: "insurance", stageAt: tt(-16), updatedAt: tt(-8, 13),
+        insurance: { carrier: "Allstate", claimNumber: "0731198822", adjusterName: "Dana Whitfield", adjusterPhone: "(800) 555-0136", adjusterMeeting: dI(2) + "T09:30", rcv: "27600", deductible: "5000", acvOffset: "3100", claimStatus: "Adjuster scheduled" },
+        notes: [{ ts: tt(-8, 13), text: "Carrier slow to schedule. Meeting finally set — bring the drone shots and the hail map." }] }),
+      J({ id: "d04", name: "Tom & Grace Halverson", phone: "(469) 555-0179", address: "77 Cedar Elm Trl", city: "Allen", stage: "approved", stageAt: tt(-5), updatedAt: tt(0, 6), scheduledDate: dI(3), crewId: "c2",
+        insurance: { carrier: "USAA", claimNumber: "01447290315", rcv: "22940", deductible: "2000", claimStatus: "Approved" },
+        money: { contractPrice: "22940", payments: [{ date: dI(-4), amount: 2000, method: "Check", note: "deductible" }] } }),
+      J({ id: "d05", name: "Dana Whitmore", phone: "(945) 555-0121", address: "1409 Chisholm Ridge", city: "Rowlett", jobType: "Retail", source: "Repeat customer", stage: "lead", stageAt: tt(-1), createdAt: tt(-1), updatedAt: tt(-1, 18) }),
+      J({ id: "d06", name: "Priya Natarajan", phone: "(972) 555-0155", address: "3316 Long Prairie Ct", city: "Flower Mound", source: "Referral", stage: "inspection", stageAt: tt(-1), updatedAt: tt(0, 8),
+        insurance: { carrier: "Farmers" } }),
+      J({ id: "d07", name: "Bill Castellanos", phone: "(214) 555-0139", address: "508 Kreymer Ln", city: "Wylie", stage: "complete", stageAt: tt(-6), updatedAt: tt(-1, 12), completedDate: dI(-6), crewId: "c1",
+        insurance: { carrier: "Allstate", claimNumber: "0698324410", adjusterName: "Dana Whitfield", rcv: "26480", deductible: "2500", claimStatus: "Depreciation pending" },
+        money: { contractPrice: "26480", payments: [{ date: dI(-20), amount: 2500, method: "Check", note: "deductible" }, { date: dI(-12), amount: 17080, method: "Insurance check", note: "ACV" }] },
+        expenses: [{ id: "e3", date: dI(-8), category: "Materials", vendor: "ABC Supply — Plano", amount: 8400, note: "" }, { id: "e4", date: dI(-6), category: "Subcontractor", vendor: "Rodriguez Roofing", amount: 5900, note: "paid in full" }],
+        links: { companycam: "https://app.companycam.com/projects/demo-castellanos" },
+        notes: [{ ts: tt(-6, 17), text: "Final walkthrough clean. Waiting on the depreciation release from Allstate — invoice sent to the desk adjuster." }] }),
+      J({ id: "d08", name: "Jocelyn Meyer", phone: "(469) 555-0193", address: "1220 Windmill Hill", city: "Prosper", jobType: "Retail", source: "Facebook", stage: "complete", stageAt: tt(-2), updatedAt: tt(0, 8), completedDate: dI(-2), crewId: "c2",
+        money: { estimate: "9400", cost: "4300", contractPrice: "9400", payments: [{ date: dI(-9), amount: 4700, method: "Card", note: "50% deposit" }] } }),
+      J({ id: "d09", name: "Hector Alvarez", address: "3702 Rowlett Rd", city: "Garland", stage: "paid", stageAt: tt(-18), updatedAt: tt(-18), completedDate: dI(-18),
+        insurance: { carrier: "State Farm", claimNumber: "55-2231-887", rcv: "24150", deductible: "2500", claimStatus: "Claim closed" },
+        money: { cost: "11900", contractPrice: "24150", payments: [{ date: dI(-18), amount: 24150, method: "Insurance check", note: "paid in full" }] } }),
+      J({ id: "d10", name: "An & Tuyet Nguyen", address: "1524 Custer Pkwy", city: "Richardson", jobType: "Retail", source: "Google", stage: "paid", stageAt: tt(-55), updatedAt: tt(-55), completedDate: dI(-55),
+        money: { cost: "4100", contractPrice: "8750", payments: [{ date: dI(-55), amount: 8750, method: "Financing", note: "paid in full" }] } }),
+      J({ id: "d11", name: "Walt & Renee Sorenson", address: "6001 Ben Davis Rd", city: "Sachse", stage: "paid", stageAt: tt(-85), updatedAt: tt(-85), completedDate: dI(-85),
+        insurance: { carrier: "USAA", claimNumber: "01390228846", rcv: "29600", deductible: "2000", claimStatus: "Claim closed" },
+        money: { cost: "14200", contractPrice: "29600", payments: [{ date: dI(-85), amount: 29600, method: "Insurance check", note: "paid in full" }] } }),
+      J({ id: "d12", name: "Kim Delgado", address: "212 McCreary Rd", city: "Murphy", stage: "paid", stageAt: tt(-120), updatedAt: tt(-120), completedDate: dI(-120),
+        insurance: { carrier: "Allstate", claimNumber: "0644101276", rcv: "21300", deductible: "1500", claimStatus: "Claim closed" },
+        money: { cost: "10400", contractPrice: "21300", payments: [{ date: dI(-120), amount: 21300, method: "Insurance check", note: "paid in full" }] } }),
+      J({ id: "d13", name: "Gary Pittman", address: "410 W Lucas Rd", city: "Lucas", jobType: "Retail", source: "Yard sign", stage: "lost", stageAt: tt(-10), updatedAt: tt(-10), lostReason: "Went with a cheaper out-of-town crew",
+        money: { estimate: "11200" } }),
+      J({ id: "d14", name: "Ray & Martha Ellison", phone: "(903) 555-0117", address: "89 Monte Carlo Blvd", city: "Princeton", stage: "proposal", stageAt: tt(-2), updatedAt: tt(-2, 10), source: "Adjuster",
+        insurance: { carrier: "State Farm", claimNumber: "55-9902-114", rcv: "18900", deductible: "2000", claimStatus: "Estimate received" },
+        money: { estimate: "18900" } })
+    ];
+    function T(id, jobId, title, due, done, doneOff) {
+      return { id: id, jobId: jobId, title: title, due: due || "", done: !!done, doneAt: done ? tt(doneOff || -1) : 0, createdAt: tt(-3) };
+    }
+    var tasks = [
+      T("t01", "d01", "Daily photos into CompanyCam", ""),
+      T("t02", "d01", "Final walkthrough & punch list", dI(2)),
+      T("t03", "d01", "Punch: Reset satellite dish", dI(1)),
+      T("t04", "d01", "Job-start walkthrough with the crew lead", dI(-1), true, -1),
+      T("t05", "d02", "Follow up on the proposal", dI(0)),
+      T("t06", "d02", "Send the proposal", dI(-2), true, -2),
+      T("t07", "d03", "Meet the adjuster on site", dI(2)),
+      T("t08", "d03", "Confirm the claim is filed & get the claim #", dI(-2)),
+      T("t09", "d04", "Order materials", dI(-1)),
+      T("t10", "d04", "Collect the deductible / first payment", dI(-4), true, -4),
+      T("t11", "d05", "Call the lead back", dI(0)),
+      T("t12", "d05", "Schedule the inspection on the work calendar", dI(1)),
+      T("t13", "d06", "Full inspection — roof, attic & interior", dI(1)),
+      T("t14", "d06", "Photos into CompanyCam", dI(1)),
+      T("t15", "d07", "Send the final email — photo report + invoice + Google review ask", dI(-5), true, -5),
+      T("t16", "d07", "Register the warranty", dI(1)),
+      T("t17", "d08", "Send the final invoice", dI(-1), true, -1),
+      T("t18", "d08", "Send the final email — photo report + invoice + Google review ask", dI(0))
+    ];
+    var activity = [
+      { ts: tt(0, 7), jobId: "d01", text: "Expense: $6,500 Subcontractor — Sarah & Mike Bennett" },
+      { ts: tt(0, 6), jobId: "d04", text: "Moved Tom & Grace Halverson: Insurance → Approved" },
+      { ts: tt(-1, 16), jobId: "d01", text: "📝 Crew started tear-off 7am." },
+      { ts: tt(-1, 12), jobId: "d07", text: "Claim status: Depreciation pending — Bill Castellanos" },
+      { ts: tt(-2, 9), jobId: "d01", text: "Payment logged: $17,400 — Sarah & Mike Bennett" },
+      { ts: tt(-2, 8), jobId: "d14", text: "Job created from claim PDF — Ray & Martha Ellison" },
+      { ts: tt(-4, 15), jobId: "d04", text: "Payment logged: $2,000 — Tom & Grace Halverson" },
+      { ts: tt(-6, 10), jobId: "d01", text: "Contract price set to $31,240 — Sarah & Mike Bennett" },
+      { ts: tt(-8, 13), jobId: "d03", text: "📝 Carrier slow to schedule — meeting finally set." },
+      { ts: tt(-10, 9), jobId: "d13", text: "Moved Gary Pittman: Proposal → Lost" }
+    ];
+    var base = freshState();
+    base.jobs = jobs;
+    base.tasks = tasks;
+    base.activity = activity;
+    base.contacts = [
+      { id: "c101", name: "Dana Whitfield", type: "Adjuster", company: "Allstate", phone: "(800) 555-0136", email: "dwhitfield@example.com", notes: "Fair, fast on supplements", updatedAt: tt(-9) },
+      { id: "c102", name: "Jeff Moline", type: "Adjuster", company: "State Farm", phone: "(800) 555-0182", email: "", notes: "", updatedAt: tt(-20) },
+      { id: "c103", name: "ABC Supply — Plano", type: "Supplier", company: "ABC Supply", phone: "(972) 555-0100", email: "", notes: "Deliveries before 8am", updatedAt: tt(-30) },
+      { id: "c104", name: "Kelli Tran", type: "Realtor", company: "Compass", phone: "(214) 555-0177", email: "kelli@example.com", notes: "Sends 2-3 listings a year", updatedAt: tt(-40) }
+    ];
+    base.crews = [
+      { id: "c1", name: "Rodriguez Roofing", lead: "Luis", phone: "(214) 555-0192", rate: "$85/sq tear-off + install", coiExpiry: dI(240), notes: "A-team for steep", onboard: { w9: true, coi: true, agreement: true, companycam: true, trained: true }, updatedAt: tt(-5) },
+      { id: "c2", name: "Santos Exteriors", lead: "Beto", phone: "(469) 555-0233", rate: "$78/sq", coiExpiry: dI(21), notes: "", onboard: { w9: true, coi: true, agreement: true }, updatedAt: tt(-5) }
+    ];
+    return base;
+  }
+
+  /* ======================================================================
      Boot
      ====================================================================== */
 
+  if (DEMO) {
+    var lg = document.querySelector(".logo");
+    if (lg) {
+      var badge = document.createElement("span");
+      badge.className = "demo-badge";
+      badge.textContent = "DEMO";
+      lg.appendChild(badge);
+    }
+  }
   render();
   maybeInviteTour();
   autoPull("boot");
