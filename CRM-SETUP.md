@@ -45,14 +45,30 @@ Each job also carries:
   project, Dropbox folder, and Google Maps.
 - **Checklist, notes, and a full activity history** per job.
 
+- **Claims workspace** (insurance jobs) — claim status tracker, a claim
+  ledger (RCV + approved supplements − deductible = expected from carrier,
+  vs. what's actually been received as insurance checks, and what the
+  carrier still owes), and an itemized supplement tracker
+  (item / submitted $ / approved $ / status).
+- **Expenses & job costing** — log materials, sub pay, dump fees, permits per
+  job; profit switches from estimated cost to real logged expenses
+  automatically.
+- **Production & subs** — a work order for the crew, the sub's contract
+  amount vs. what they've been paid (from Subcontractor expenses), and a
+  one-tap punch list that lands on the job checklist with due dates.
+
 Plus: a **Dashboard** (pipeline value, outstanding balances, overdue tasks,
-this week's installs, jobs going quiet), a **Pipeline board** (drag cards on
-desktop, tap **Move ▾** on phones), an **Install Schedule** (week-by-week: who's
-roofing where, jobs whose start date slipped, sold jobs with no date yet),
-**Reports** (close rate, lead-source performance, lost reasons, month-by-month
-revenue and profit), a global **Tasks** view (overdue / today / upcoming, with
-delete), **Contacts** (adjusters, suppliers, subs), and **Crews** with live
-job assignments.
+this week's installs, jobs going quiet, and **alerts** for expired sub
+insurance certs and carrier money still outstanding), a **Pipeline board**
+(drag cards on desktop, tap **Move ▾** on phones), an **Install Schedule**
+(week-by-week: who's roofing where, jobs whose start date slipped, sold jobs
+with no date yet), **Reports** (close rate, lead-source performance, lost
+reasons, month-by-month revenue and profit, expenses by category), a global
+**Tasks** view (overdue / today / upcoming, with delete), **Contacts**
+(adjusters, suppliers, subs), and **Team & Subs** — job assignments plus
+**onboarding**: a per-sub checklist (W-9, COI with expiry date, signed
+agreement, CompanyCam, training course) with COI-expiry warnings on the
+dashboard.
 
 ## Backups (do this)
 

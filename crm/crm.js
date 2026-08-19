@@ -67,6 +67,15 @@
   var JOB_TYPES = ["Insurance", "Retail", "Repair", "Warranty"];
   var SOURCES = ["Referral", "Door knock", "Google", "Facebook", "Yard sign", "Repeat customer", "Adjuster", "Other"];
   var CONTACT_TYPES = ["Customer", "Adjuster", "Supplier", "Sub / Crew", "Realtor", "Other"];
+  var CLAIM_STATUSES = ["Not filed", "Filed", "Adjuster scheduled", "Estimate received", "Approved", "Supplements pending", "Depreciation pending", "Claim closed"];
+  var EXPENSE_CATS = ["Materials", "Subcontractor", "Dump / disposal", "Permits", "Equipment rental", "Fuel", "Other"];
+  var ONBOARD_DOCS = [
+    { k: "w9", label: "W-9 on file" },
+    { k: "coi", label: "COI (insurance cert) on file" },
+    { k: "agreement", label: "Subcontractor agreement signed" },
+    { k: "companycam", label: "Added to CompanyCam" },
+    { k: "trained", label: "Completed the training course" }
+  ];
 
   function stageById(id) {
     for (var i = 0; i < STAGES.length; i++) if (STAGES[i].id === id) return STAGES[i];
@@ -191,6 +200,35 @@
     return sum;
   }
   function jobBalance(j) { return numVal(j.money.contractPrice) - jobPaid(j); }
+  function jobExpenses(j) {
+    var sum = 0;
+    (j.expenses || []).forEach(function (e) { sum += numVal(e.amount); });
+    return sum;
+  }
+  /* True job cost: logged expenses when there are any, else the manual estimate. */
+  function jobCost(j) {
+    var exp = jobExpenses(j);
+    return exp > 0 ? exp : numVal(j.money.cost);
+  }
+  function suppApproved(ins) {
+    if (ins.supplementItems && ins.supplementItems.length) {
+      var s = 0;
+      ins.supplementItems.forEach(function (it) { s += numVal(it.approved); });
+      return s;
+    }
+    return numVal(ins.supplementsAmount);
+  }
+  /* What the carrier has actually sent = payments logged as insurance checks. */
+  function insReceived(j) {
+    var s = 0;
+    (j.money.payments || []).forEach(function (p) { if (p.method === "Insurance check") s += numVal(p.amount); });
+    return s;
+  }
+  function subPaid(j) {
+    var s = 0;
+    (j.expenses || []).forEach(function (e) { if (e.category === "Subcontractor") s += numVal(e.amount); });
+    return s;
+  }
   function jobTasks(j) { return state.tasks.filter(function (t) { return t.jobId === j.id; }); }
   function jobOverdue(j) {
     return jobTasks(j).some(function (t) { return !t.done && dueBucket(t.due) === "overdue"; });
@@ -221,8 +259,10 @@
       completedDate: "",
       crewId: "",
       lostReason: "",
-      insurance: { carrier: "", claimNumber: "", adjusterName: "", adjusterPhone: "", rcv: "", deductible: "", acvOffset: "", supplementsAmount: "", supplements: "" },
+      insurance: { carrier: "", claimNumber: "", adjusterName: "", adjusterPhone: "", rcv: "", deductible: "", acvOffset: "", supplementsAmount: "", supplements: "", claimStatus: "", supplementItems: [] },
       money: { estimate: "", cost: "", contractPrice: "", payments: [] },
+      expenses: [],
+      production: { workOrder: "", subContract: "" },
       links: { roofr: "", companycam: "", dropbox: "", other: "" },
       notes: []
     };
@@ -476,6 +516,31 @@
         (j.stage === "approved" || j.stage === "production");
     }).sort(function (a, b) { return a.scheduledDate < b.scheduledDate ? -1 : 1; });
 
+    /* alerts: sub compliance + carrier money still out on finished work */
+    var coiProblems = state.crews.filter(function (c) { return coiState(c) === "expired" || coiState(c) === "expiring"; });
+    var carrierOut = state.jobs.filter(function (j) {
+      if (j.jobType !== "Insurance" || !numVal(j.insurance.rcv)) return false;
+      if (j.stage !== "production" && j.stage !== "complete" && j.stage !== "paid") return false;
+      var expected = numVal(j.insurance.rcv) + suppApproved(j.insurance) - numVal(j.insurance.deductible);
+      return expected - insReceived(j) > 0.5;
+    });
+    var alertsHtml = "";
+    if (coiProblems.length || carrierOut.length) {
+      alertsHtml = '<div class="card danger-zone"><h2>🚨 Alerts</h2><ul class="checklist">' +
+        coiProblems.map(function (c) {
+          var expired = coiState(c) === "expired";
+          return "<li><div><span class=\"t-title\"><b>" + esc(c.name) + "</b> — insurance cert " +
+            (expired ? '<span class="chip overdue">EXPIRED ' + esc(c.coiExpiry) + "</span>" : '<span class="chip today">expires ' + esc(c.coiExpiry) + "</span>") +
+            ' · <a href="#/crews">Team page</a></span></div></li>';
+        }).join("") +
+        carrierOut.map(function (j) {
+          var expected = numVal(j.insurance.rcv) + suppApproved(j.insurance) - numVal(j.insurance.deductible);
+          return "<li><div><span class=\"t-title\">Carrier still owes <b>" + money(expected - insReceived(j)) + "</b> on " +
+            jobLink(j.id, j.name) + " (" + esc(j.insurance.claimStatus || "check the claim") + ")</span></div></li>";
+        }).join("") +
+        "</ul></div>";
+    }
+
     var feed = state.activity.slice(0, 25).map(function (a) {
       var j = a.jobId ? jobById(a.jobId) : null;
       return "<div><time>" + fmtDT(a.ts) + "</time>" + esc(a.text) + (j ? " · " + jobLink(j.id, "open") : "") + "</div>";
@@ -492,6 +557,7 @@
       '<div class="stat' + (overdue.length ? " hot" : "") + '"><strong>' + overdue.length + "</strong><span>Overdue tasks</span></div>" +
       '<div class="stat"><strong>' + today.length + "</strong><span>Due today</span></div>" +
       "</div>" +
+      alertsHtml +
       '<div class="grid2">' +
       '<div>' +
       '<div class="card"><h2>📋 Up next</h2>' + taskListHTML(dueSoon, true) +
@@ -719,7 +785,7 @@
     builtJobs.forEach(function (j) {
       var p = numVal(j.money.contractPrice);
       revenue += p;
-      if (p && numVal(j.money.cost)) { profit += p - numVal(j.money.cost); profitKnown += p; }
+      if (p && jobCost(j)) { profit += p - jobCost(j); profitKnown += p; }
     });
     var marginPct = profitKnown ? Math.round((profit / profitKnown) * 100) : 0;
     var avgJob = builtJobs.length ? revenue / builtJobs.length : 0;
@@ -769,12 +835,24 @@
       var m = months[k] || (months[k] = { n: 0, rev: 0, profit: 0 });
       m.n++;
       m.rev += numVal(j.money.contractPrice);
-      if (numVal(j.money.contractPrice) && numVal(j.money.cost)) m.profit += numVal(j.money.contractPrice) - numVal(j.money.cost);
+      if (numVal(j.money.contractPrice) && jobCost(j)) m.profit += numVal(j.money.contractPrice) - jobCost(j);
     });
     var monthRows = Object.keys(months).sort().reverse().slice(0, 12).map(function (k) {
       var m = months[k];
       var label = new Date(k + "-01T00:00:00").toLocaleDateString(undefined, { month: "long", year: "numeric" });
       return "<tr><td><b>" + esc(label) + '</b></td><td class="num">' + m.n + '</td><td class="num">' + money(m.rev) + '</td><td class="num">' + money(m.profit) + "</td></tr>";
+    }).join("");
+
+    /* expenses by category across every job */
+    var expMap = {}, expTotal = 0;
+    jobs.forEach(function (j) {
+      (j.expenses || []).forEach(function (e) {
+        var c = expMap[e.category] || (expMap[e.category] = { n: 0, sum: 0 });
+        c.n++; c.sum += numVal(e.amount); expTotal += numVal(e.amount);
+      });
+    });
+    var expRows = Object.keys(expMap).sort(function (a, b) { return expMap[b].sum - expMap[a].sum; }).map(function (k) {
+      return "<tr><td><b>" + esc(k) + '</b></td><td class="num">' + expMap[k].n + '</td><td class="num">' + money(expMap[k].sum) + "</td></tr>";
     }).join("");
 
     view.innerHTML = '<div class="page-head"><h1>Reports</h1></div>' +
@@ -800,7 +878,10 @@
       "</div>" +
       '<div class="card"><h2>📆 Month by month (built work)</h2>' +
       (monthRows ? '<div class="table-scroll"><table><thead><tr><th>Month</th><th class="num">Jobs</th><th class="num">Revenue</th><th class="num">Profit</th></tr></thead><tbody>' + monthRows + "</tbody></table></div>" : '<p class="empty">Nothing completed yet.</p>') +
-      '<p class="sub" style="margin:.5rem 0 0">Profit only counts jobs where “Our cost” was filled in on the Money card.</p>' +
+      '<p class="sub" style="margin:.5rem 0 0">Profit uses logged expenses when a job has them, otherwise the Money card\'s estimated cost.</p>' +
+      "</div>" +
+      '<div class="card"><h2>🧾 Where the money goes <span class="sub" style="margin:0;font-weight:400">(' + (expTotal ? money(expTotal) + " in expenses" : "no expenses logged") + ")</span></h2>" +
+      (expRows ? '<div class="table-scroll"><table><thead><tr><th>Category</th><th class="num">Entries</th><th class="num">Total</th></tr></thead><tbody>' + expRows + "</tbody></table></div>" : '<p class="empty">Log expenses on jobs and the breakdown shows up here.</p>') +
       "</div></div>";
   }
 
@@ -866,6 +947,12 @@
       view.innerHTML = '<div class="card"><p class="empty">Job not found. <a href="#/jobs">Back to jobs</a></p></div>';
       return;
     }
+    /* backfill fields for jobs created before the claims/expenses upgrade */
+    j.expenses = j.expenses || [];
+    j.production = j.production || { workOrder: "", subContract: "" };
+    j.insurance.supplementItems = j.insurance.supplementItems || [];
+    if (j.insurance.claimStatus === undefined) j.insurance.claimStatus = "";
+
     var ins = j.insurance, m = j.money, links = j.links, s = state.settings;
 
     /* deductible offset math (same idea as the client-deck analysis):
@@ -878,6 +965,8 @@
     /* pricing helper: 2.0x markup on cost, floored at the minimum sale */
     var cost = numVal(m.cost);
     var suggested = cost > 0 ? Math.max(cost * (Number(s.markup) || 2), Number(s.minSale) || 500) : 0;
+    var actualCost = jobCost(j);
+    var hasExpenses = jobExpenses(j) > 0;
 
     var paid = jobPaid(j), balance = jobBalance(j);
     var crew = crewById(j.crewId);
@@ -943,20 +1032,51 @@
       (links.other ? '<a target="_blank" rel="noopener" href="' + esc(links.other) + '">🔗 Link</a>' : "") +
       "</div></div>" +
 
-      (j.jobType === "Insurance" ?
-        '<div class="card"><h2>🛡️ Insurance</h2><dl class="kv">' +
-        "<dt>Carrier</dt><dd>" + esc(ins.carrier || "—") + "</dd>" +
-        "<dt>Claim #</dt><dd>" + esc(ins.claimNumber || "—") + "</dd>" +
-        "<dt>Adjuster</dt><dd>" + esc(ins.adjusterName || "—") + (ins.adjusterPhone ? ' · <a href="tel:' + esc(ins.adjusterPhone) + '">' + esc(ins.adjusterPhone) + "</a>" : "") + "</dd>" +
-        "<dt>RCV</dt><dd>" + (numVal(ins.rcv) ? money(ins.rcv) : "—") + "</dd>" +
-        "<dt>Deductible</dt><dd>" + (ded ? money(ded) : "—") + "</dd>" +
-        "<dt>ACV not in scope</dt><dd>" + (acv ? money(acv) : "—") + "</dd>" +
-        "<dt>Supplements approved</dt><dd>" + (numVal(ins.supplementsAmount) ? money(ins.supplementsAmount) : "—") + "</dd>" +
-        (numVal(ins.rcv) && numVal(ins.supplementsAmount) ? "<dt>Total claim value</dt><dd><b>" + money(numVal(ins.rcv) + numVal(ins.supplementsAmount)) + "</b> (RCV + supplements)</dd>" : "") +
-        "<dt>Supplement notes</dt><dd>" + esc(ins.supplements || "—") + "</dd>" +
-        "</dl>" +
-        (ded ? '<div class="calc">💡 <b>Deductible offset:</b> ACV on items not in scope covers <strong class="' + (offsetPct >= 100 ? "good" : "bad") + '">' + money(offsetCovered) + " (" + offsetPct + "%)</strong> of the " + money(ded) + " deductible → customer's true out-of-pocket ≈ <b>" + money(outOfPocket) + "</b>.</div>" : "") +
-        "</div>" : "") +
+      (j.jobType === "Insurance" ? (function () {
+        var suppA = suppApproved(ins);
+        var totalClaim = numVal(ins.rcv) + suppA;
+        var expectedFromCarrier = totalClaim - ded;
+        var received = insReceived(j);
+        var carrierOwes = Math.max(expectedFromCarrier - received, 0);
+        var suppRows = ins.supplementItems.map(function (it, i) {
+          return "<tr><td>" + esc(it.item) + '</td><td class="num">' + (numVal(it.submitted) ? money(it.submitted) : "—") +
+            '</td><td class="num">' + (numVal(it.approved) ? money(it.approved) : "—") +
+            '</td><td><span class="chip ' + (it.status === "Approved" ? "stage-complete" : it.status === "Denied" ? "stage-lost" : "type") + '">' + esc(it.status) + "</span></td>" +
+            '<td><button class="btn small danger" data-delsupp="' + i + '">✕</button></td></tr>';
+        }).join("");
+        return '<div class="card"><h2>🛡️ Claim</h2>' +
+          '<div class="form-grid" style="margin-bottom:.7rem"><div><label>Claim status</label><select id="claim-status">' +
+          CLAIM_STATUSES.map(function (cs) { return "<option" + (ins.claimStatus === cs ? " selected" : "") + ">" + esc(cs) + "</option>"; }).join("") +
+          "</select></div></div>" +
+          '<dl class="kv">' +
+          "<dt>Carrier</dt><dd>" + esc(ins.carrier || "—") + "</dd>" +
+          "<dt>Claim #</dt><dd>" + esc(ins.claimNumber || "—") + "</dd>" +
+          "<dt>Adjuster</dt><dd>" + esc(ins.adjusterName || "—") + (ins.adjusterPhone ? ' · <a href="tel:' + esc(ins.adjusterPhone) + '">' + esc(ins.adjusterPhone) + "</a>" : "") + "</dd>" +
+          "</dl>" +
+          (numVal(ins.rcv) ?
+            '<h2 style="margin-top:.9rem">Claim ledger</h2><dl class="kv">' +
+            "<dt>RCV</dt><dd>" + money(ins.rcv) + "</dd>" +
+            "<dt>Supplements approved</dt><dd>" + (suppA ? "+ " + money(suppA) : "—") + "</dd>" +
+            "<dt>Total claim value</dt><dd><b>" + money(totalClaim) + "</b></dd>" +
+            "<dt>Deductible (customer)</dt><dd>− " + money(ded) + "</dd>" +
+            "<dt>Expected from carrier</dt><dd><b>" + money(expectedFromCarrier) + "</b></dd>" +
+            "<dt>Received from carrier</dt><dd>" + money(received) + " <span class=\"sub\" style=\"margin:0\">(payments logged as “Insurance check”)</span></dd>" +
+            "<dt>Carrier still owes</dt><dd><b style=\"color:" + (carrierOwes > 0 ? "var(--red-dark)" : "var(--green-text)") + "\">" + money(carrierOwes) + "</b></dd>" +
+            "</dl>" : "") +
+          '<h2 style="margin-top:.9rem">Supplements</h2>' +
+          (suppRows ? '<div class="table-scroll"><table><thead><tr><th>Item</th><th class="num">Submitted</th><th class="num">Approved</th><th>Status</th><th></th></tr></thead><tbody>' + suppRows + "</tbody></table></div>"
+            : '<p class="empty">No supplements yet — add anything the carrier\'s estimate missed.</p>') +
+          '<form id="supp-form" class="form-grid" style="margin-top:.6rem">' +
+          '<div class="wide"><label>Item</label><input id="sp-item" placeholder="e.g. Drip edge, I&W shield, steep charge" required></div>' +
+          '<div><label>Submitted $</label><input id="sp-sub" inputmode="decimal"></div>' +
+          '<div><label>Approved $</label><input id="sp-app" inputmode="decimal"></div>' +
+          '<div><label>Status</label><select id="sp-status"><option>Submitted</option><option>Approved</option><option>Denied</option></select></div>' +
+          '<div class="form-actions" style="margin:0;align-self:end"><button class="btn small primary">+ Add</button></div>' +
+          "</form>" +
+          (ins.supplements ? '<p class="sub" style="margin:.5rem 0 0">Notes: ' + esc(ins.supplements) + "</p>" : "") +
+          (ded ? '<div class="calc" style="margin-top:.7rem">💡 <b>Deductible offset:</b> ACV on items not in scope covers <strong class="' + (offsetPct >= 100 ? "good" : "bad") + '">' + money(offsetCovered) + " (" + offsetPct + "%)</strong> of the " + money(ded) + " deductible → customer's true out-of-pocket ≈ <b>" + money(outOfPocket) + "</b>.</div>" : "") +
+          "</div>";
+      })() : "") +
 
       '<div class="card"><h2>💰 Money</h2>' +
       '<div class="form-grid">' +
@@ -973,9 +1093,10 @@
       (payRows ? '<div class="table-scroll"><table><thead><tr><th>Date</th><th>Method</th><th class="num">Amount</th><th>Note</th><th></th></tr></thead><tbody>' + payRows + "</tbody></table></div>" : '<p class="empty">No payments logged.</p>') +
       '<dl class="kv" style="margin-top:.6rem"><dt>Collected</dt><dd><b>' + money(paid) + "</b></dd>" +
       "<dt>Balance</dt><dd><b" + (balance > 0 && numVal(m.contractPrice) ? ' style="color:var(--red-dark)"' : "") + ">" + (numVal(m.contractPrice) ? money(balance) : "—") + "</b></dd>" +
-      (cost > 0 && numVal(m.contractPrice) > 0 ?
-        "<dt>Profit</dt><dd><b style=\"color:" + (numVal(m.contractPrice) - cost > 0 ? "var(--green-text)" : "var(--red-dark)") + "\">" +
-        money(numVal(m.contractPrice) - cost) + "</b> (" + Math.round(((numVal(m.contractPrice) - cost) / numVal(m.contractPrice)) * 100) + "% margin)</dd>" : "") +
+      (actualCost > 0 && numVal(m.contractPrice) > 0 ?
+        "<dt>Profit</dt><dd><b style=\"color:" + (numVal(m.contractPrice) - actualCost > 0 ? "var(--green-text)" : "var(--red-dark)") + "\">" +
+        money(numVal(m.contractPrice) - actualCost) + "</b> (" + Math.round(((numVal(m.contractPrice) - actualCost) / numVal(m.contractPrice)) * 100) + "% margin" +
+        (hasExpenses ? ", from logged expenses" : ", from estimated cost") + ")</dd>" : "") +
       "</dl>" +
       '<form id="pay-form" class="form-grid" style="margin-top:.6rem">' +
       '<div><label>Date</label><input type="date" id="p-date" value="' + isoToday() + '"></div>' +
@@ -983,6 +1104,22 @@
       '<div><label>Method</label><select id="p-method"><option>Check</option><option>Insurance check</option><option>Cash</option><option>Card</option><option>Financing</option><option>Other</option></select></div>' +
       '<div><label>Note</label><input id="p-note" placeholder="e.g. deductible, final"></div>' +
       '<div class="form-actions" style="margin:0;align-self:end"><button class="btn small primary">+ Log payment</button></div>' +
+      "</form></div>" +
+
+      '<div class="card"><h2>🧾 Expenses <span class="sub" style="margin:0;font-weight:400">(' + (hasExpenses ? money(jobExpenses(j)) + " logged" : "none yet") + ")</span></h2>" +
+      (j.expenses.length ? '<div class="table-scroll"><table><thead><tr><th>Date</th><th>Category</th><th>Vendor</th><th class="num">Amount</th><th>Note</th><th></th></tr></thead><tbody>' +
+        j.expenses.map(function (ex, i) {
+          return "<tr><td>" + esc(ex.date || "—") + '</td><td><span class="chip type">' + esc(ex.category) + "</span></td><td>" + esc(ex.vendor || "") +
+            '</td><td class="num">' + money(ex.amount) + "</td><td>" + esc(ex.note || "") +
+            '</td><td><button class="btn small danger" data-delexp="' + i + '">✕</button></td></tr>';
+        }).join("") + "</tbody></table></div>" : '<p class="empty">Log materials, sub pay, dump fees, permits — profit updates automatically.</p>') +
+      '<form id="exp-form" class="form-grid" style="margin-top:.6rem">' +
+      '<div><label>Date</label><input type="date" id="ex-date" value="' + isoToday() + '"></div>' +
+      '<div><label>Category</label><select id="ex-cat">' + EXPENSE_CATS.map(function (c) { return "<option>" + esc(c) + "</option>"; }).join("") + "</select></div>" +
+      '<div><label>Vendor</label><input id="ex-vendor" placeholder="e.g. ABC Supply"></div>' +
+      '<div><label>Amount</label><input id="ex-amount" inputmode="decimal" required></div>' +
+      '<div><label>Note</label><input id="ex-note"></div>' +
+      '<div class="form-actions" style="margin:0;align-self:end"><button class="btn small primary">+ Log expense</button></div>' +
       "</form></div>" +
       "</div>" +
 
@@ -996,6 +1133,28 @@
       "</form>" +
       (doneTasks.length ? "<details style=\"margin-top:.6rem\"><summary class=\"sub\" style=\"cursor:pointer;margin:0\">Done (" + doneTasks.length + ")</summary>" + taskListHTML(doneTasks, false) + "</details>" : "") +
       "</div>" +
+
+      (function () {
+        var sPaid = subPaid(j);
+        var sContract = numVal(j.production.subContract);
+        var punchOpen = jobTasks(j).filter(function (t) { return !t.done && t.title.indexOf("Punch:") === 0; }).length;
+        return '<div class="card"><h2>👷 Production & subs</h2>' +
+          '<div class="form-grid">' +
+          '<div class="wide"><label>Work order for the crew / sub</label><textarea id="wo-text" placeholder="Exact scope for the sub: tear-off, layers, materials, colors, extras, what NOT to touch…">' + esc(j.production.workOrder) + "</textarea></div>" +
+          '<div><label>Sub contract ($ we pay them)</label><input id="sub-contract" inputmode="decimal" value="' + esc(j.production.subContract) + '"></div>' +
+          "</div>" +
+          '<div class="form-actions"><button class="btn small" id="prod-save">Save production info</button></div>' +
+          '<dl class="kv" style="margin-top:.6rem">' +
+          "<dt>Paid to subs so far</dt><dd>" + money(sPaid) + " <span class=\"sub\" style=\"margin:0\">(expenses logged as “Subcontractor”)</span></dd>" +
+          (sContract ? "<dt>Still owed to sub</dt><dd><b" + (sContract - sPaid > 0 ? ' style="color:var(--red-dark)"' : "") + ">" + money(Math.max(sContract - sPaid, 0)) + "</b></dd>" : "") +
+          (punchOpen ? "<dt>Open punch items</dt><dd><b>" + punchOpen + "</b> (on the checklist)</dd>" : "") +
+          "</dl>" +
+          '<form id="punch-form" class="form-grid" style="margin-top:.5rem">' +
+          '<div class="wide"><label>Add a punch-list item</label><input id="punch-text" placeholder="e.g. Reset satellite dish, touch up drip edge paint" required></div>' +
+          '<div class="form-actions" style="margin:0;align-self:end"><button class="btn small primary">+ Punch</button></div>' +
+          "</form></div>";
+      })() +
+
       '<div class="card"><h2>📝 Notes & history</h2>' +
       '<form id="note-form"><textarea id="note-text" placeholder="What happened? Call notes, adjuster talk, change orders…"></textarea>' +
       '<div class="form-actions"><button class="btn small primary">+ Add note</button></div></form>' +
@@ -1084,6 +1243,81 @@
       if (!text) return;
       j.notes = j.notes || [];
       j.notes.unshift({ ts: Date.now(), text: text });
+      j.updatedAt = Date.now();
+      save(); render();
+    });
+
+    /* --- claim workspace --- */
+    var claimSel = document.getElementById("claim-status");
+    if (claimSel) claimSel.addEventListener("change", function () {
+      ins.claimStatus = claimSel.value;
+      j.updatedAt = Date.now();
+      logActivity(j.id, "Claim status: " + claimSel.value + " — " + j.name);
+      save(); render();
+    });
+    var suppForm = document.getElementById("supp-form");
+    if (suppForm) suppForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var item = document.getElementById("sp-item").value.trim();
+      if (!item) return;
+      ins.supplementItems.push({
+        id: uid(), item: item,
+        submitted: document.getElementById("sp-sub").value.trim(),
+        approved: document.getElementById("sp-app").value.trim(),
+        status: document.getElementById("sp-status").value
+      });
+      j.updatedAt = Date.now();
+      logActivity(j.id, "Supplement added: " + item + " — " + j.name);
+      save(); render();
+    });
+    view.querySelectorAll("button[data-delsupp]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (!confirm("Remove this supplement line?")) return;
+        ins.supplementItems.splice(Number(b.getAttribute("data-delsupp")), 1);
+        j.updatedAt = Date.now();
+        save(); render();
+      });
+    });
+
+    /* --- expenses --- */
+    document.getElementById("exp-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var amt = numVal(document.getElementById("ex-amount").value);
+      if (!amt) return;
+      j.expenses.push({
+        id: uid(),
+        date: document.getElementById("ex-date").value || isoToday(),
+        category: document.getElementById("ex-cat").value,
+        vendor: document.getElementById("ex-vendor").value.trim(),
+        amount: amt,
+        note: document.getElementById("ex-note").value.trim()
+      });
+      j.updatedAt = Date.now();
+      logActivity(j.id, "Expense: " + money(amt) + " " + document.getElementById("ex-cat").value + " — " + j.name);
+      save(); render();
+    });
+    view.querySelectorAll("button[data-delexp]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (!confirm("Remove this expense?")) return;
+        j.expenses.splice(Number(b.getAttribute("data-delexp")), 1);
+        j.updatedAt = Date.now();
+        save(); render();
+      });
+    });
+
+    /* --- production & subs --- */
+    document.getElementById("prod-save").addEventListener("click", function () {
+      j.production.workOrder = document.getElementById("wo-text").value;
+      j.production.subContract = document.getElementById("sub-contract").value.trim();
+      j.updatedAt = Date.now();
+      save(); render();
+      toast("Production info saved");
+    });
+    document.getElementById("punch-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var txt = document.getElementById("punch-text").value.trim();
+      if (!txt) return;
+      state.tasks.push({ id: uid(), jobId: j.id, title: "Punch: " + txt, due: isoPlus(2), done: false, doneAt: 0, createdAt: Date.now() });
       j.updatedAt = Date.now();
       save(); render();
     });
@@ -1316,24 +1550,63 @@
      Crews
      ====================================================================== */
 
+  function coiState(c) {
+    /* "" = no date on file; "ok" | "expiring" (≤30d) | "expired" */
+    if (!c.coiExpiry) return "";
+    var today = isoToday();
+    if (c.coiExpiry < today) return "expired";
+    if (c.coiExpiry <= isoPlus(30)) return "expiring";
+    return "ok";
+  }
+  function onboardDone(c) {
+    var ob = c.onboard || {};
+    var n = 0;
+    ONBOARD_DOCS.forEach(function (d) { if (ob[d.k]) n++; });
+    return n;
+  }
+
   function renderCrews() {
-    view.innerHTML = '<div class="page-head"><h1>Crews</h1><div class="spacer"></div>' +
-      '<button class="btn primary" id="add-crew">+ Add crew</button></div>' +
+    view.innerHTML = '<div class="page-head"><h1>Team & Subs</h1><div class="spacer"></div>' +
+      '<button class="btn primary" id="add-crew">+ Add crew / sub</button></div>' +
+      '<p class="sub">Onboarding lives here: W-9, insurance cert (with expiry), agreement, CompanyCam, training. Expired COIs get flagged on the dashboard.</p>' +
       '<div class="grid2">' +
       (state.crews.length ? state.crews.map(function (c) {
         var assigned = state.jobs.filter(function (j) { return j.crewId === c.id && ACTIVE_STAGES.indexOf(j.stage) >= 0; });
-        return '<div class="card"><h2>👷 ' + esc(c.name) + "</h2><dl class=\"kv\">" +
+        var cs = coiState(c);
+        var obDone = onboardDone(c);
+        var ob = c.onboard || {};
+        return '<div class="card"><h2>👷 ' + esc(c.name) +
+          (cs === "expired" ? ' <span class="chip overdue">COI EXPIRED</span>' : "") +
+          (cs === "expiring" ? ' <span class="chip today">COI expiring</span>' : "") +
+          "</h2><dl class=\"kv\">" +
           "<dt>Lead</dt><dd>" + esc(c.lead || "—") + "</dd>" +
           "<dt>Phone</dt><dd>" + (c.phone ? '<a href="tel:' + esc(c.phone) + '">' + esc(c.phone) + "</a>" : "—") + "</dd>" +
+          "<dt>Rate</dt><dd>" + esc(c.rate || "—") + "</dd>" +
+          "<dt>COI expires</dt><dd>" + esc(c.coiExpiry || "—") + "</dd>" +
           "<dt>Notes</dt><dd>" + esc(c.notes || "—") + "</dd></dl>" +
+          "<h2 style=\"margin-top:.8rem\">Onboarding (" + obDone + "/" + ONBOARD_DOCS.length + ")</h2>" +
+          '<ul class="checklist">' + ONBOARD_DOCS.map(function (d) {
+            return '<li class="' + (ob[d.k] ? "done" : "") + '"><input type="checkbox" data-ob="' + esc(c.id) + ":" + d.k + '"' + (ob[d.k] ? " checked" : "") + '><div><span class="t-title">' + esc(d.label) + "</span></div></li>";
+          }).join("") + "</ul>" +
           "<h2 style=\"margin-top:.8rem\">Active jobs (" + assigned.length + ")</h2>" +
           (assigned.length ? "<ul class=\"checklist\">" + assigned.map(function (j) {
             return "<li><div>" + jobLink(j.id, j.name) + " — " + stageChip(j.stage) + (j.scheduledDate ? ' <span class="t-due">starts ' + esc(j.scheduledDate) + "</span>" : "") + "</div></li>";
           }).join("") + "</ul>" : '<p class="empty">Nothing assigned.</p>') +
           '<div class="form-actions"><button class="btn small" data-edit="' + esc(c.id) + '">Edit</button>' +
           '<button class="btn small danger" data-del="' + esc(c.id) + '">Delete</button></div></div>';
-      }).join("") : '<div class="card"><p class="empty">No crews yet — add your install crews so you can assign jobs and see who\'s where.</p></div>') +
+      }).join("") : '<div class="card"><p class="empty">No crews or subs yet — add them here to assign jobs, track onboarding docs, and get COI expiry warnings.</p></div>') +
       "</div>";
+
+    view.querySelectorAll("input[data-ob]").forEach(function (cb) {
+      cb.addEventListener("change", function () {
+        var parts = cb.getAttribute("data-ob").split(":");
+        var c = crewById(parts[0]);
+        if (!c) return;
+        c.onboard = c.onboard || {};
+        c.onboard[parts[1]] = cb.checked;
+        save(); render();
+      });
+    });
 
     document.getElementById("add-crew").addEventListener("click", function () { openCrewModal(null); });
     view.querySelectorAll("button[data-edit]").forEach(function (b) {
@@ -1353,17 +1626,21 @@
 
   function openCrewModal(crew) {
     var isNew = !crew;
-    var c = crew || { name: "", lead: "", phone: "", notes: "" };
+    var c = crew || { name: "", lead: "", phone: "", notes: "", rate: "", coiExpiry: "", onboard: {} };
     var back = document.createElement("div");
     back.className = "modal-back";
-    back.innerHTML = '<div class="modal"><h2>' + (isNew ? "New crew" : "Edit crew") + "</h2>" +
+    back.innerHTML = '<div class="modal"><h2>' + (isNew ? "New crew / sub" : "Edit crew / sub") + "</h2>" +
       '<form id="crew-form"><div class="form-grid">' +
-      '<div><label>Crew name *</label><input name="name" required value="' + esc(c.name) + '"></div>' +
+      '<div><label>Crew / sub name *</label><input name="name" required value="' + esc(c.name) + '"></div>' +
       '<div><label>Crew lead</label><input name="lead" value="' + esc(c.lead) + '"></div>' +
       '<div><label>Phone</label><input name="phone" type="tel" value="' + esc(c.phone) + '"></div>' +
-      '<div class="wide"><label>Notes</label><input name="notes" value="' + esc(c.notes) + '" placeholder="specialties, rates, language…"></div>' +
-      '</div><div class="form-actions"><button class="btn primary">' + (isNew ? "Add" : "Save") + "</button>" +
-      '<button class="btn" type="button" id="crew-cancel">Cancel</button></div></form></div>';
+      '<div><label>Rate</label><input name="rate" value="' + esc(c.rate || "") + '" placeholder="e.g. $85/sq tear-off + install"></div>' +
+      '<div><label>COI expires</label><input name="coiExpiry" type="date" value="' + esc(c.coiExpiry || "") + '"></div>' +
+      '<div class="wide"><label>Notes</label><input name="notes" value="' + esc(c.notes) + '" placeholder="specialties, language, size…"></div>' +
+      "</div>" +
+      '<div class="form-actions"><button class="btn primary">' + (isNew ? "Add" : "Save") + "</button>" +
+      '<button class="btn" type="button" id="crew-cancel">Cancel</button></div></form>' +
+      '<p class="sub" style="margin:.6rem 0 0">Onboarding checkboxes (W-9, COI, agreement…) live on the crew\'s card on the Team page.</p></div>';
     document.body.appendChild(back);
     back.addEventListener("click", function (e) { if (e.target === back) back.remove(); });
     back.querySelector("#crew-cancel").addEventListener("click", function () { back.remove(); });
@@ -1374,6 +1651,8 @@
       function g(n) { return String(fd.get(n) || "").trim(); }
       if (isNew) { c.id = uid(); state.crews.push(c); }
       c.name = g("name"); c.lead = g("lead"); c.phone = g("phone"); c.notes = g("notes");
+      c.rate = g("rate"); c.coiExpiry = g("coiExpiry");
+      c.onboard = c.onboard || {};
       save(); back.remove(); render();
     });
   }
