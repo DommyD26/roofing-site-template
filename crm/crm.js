@@ -267,7 +267,7 @@
       completedDate: "",
       crewId: "",
       lostReason: "",
-      insurance: { carrier: "", claimNumber: "", adjusterName: "", adjusterPhone: "", rcv: "", deductible: "", acvOffset: "", supplementsAmount: "", supplements: "", claimStatus: "", supplementItems: [] },
+      insurance: { carrier: "", claimNumber: "", adjusterName: "", adjusterPhone: "", adjusterMeeting: "", rcv: "", deductible: "", acvOffset: "", supplementsAmount: "", supplements: "", claimStatus: "", supplementItems: [] },
       money: { estimate: "", cost: "", contractPrice: "", payments: [] },
       expenses: [],
       production: { workOrder: "", subContract: "" },
@@ -468,6 +468,10 @@
 
   function render() {
     var r = route();
+    /* overdue badge in the tab title so unfinished business shows even
+       when the CRM is a background tab */
+    var overdueN = state.tasks.filter(function (t) { return !t.done && dueBucket(t.due) === "overdue"; }).length;
+    document.title = (overdueN ? "(" + overdueN + ") " : "") + "T^Rock CRM — Job Command Center";
     document.querySelectorAll("#tabs a").forEach(function (a) {
       a.classList.toggle("active", a.getAttribute("data-tab") === r || (r === "job" && a.getAttribute("data-tab") === "jobs"));
     });
@@ -946,6 +950,17 @@
       return "<tr><td><b>" + esc(k) + '</b></td><td class="num">' + expMap[k].n + '</td><td class="num">' + money(expMap[k].sum) + "</td></tr>";
     }).join("");
 
+    /* aging: active jobs by how long they've sat in their current stage */
+    var aging = jobs.filter(function (j) { return ACTIVE_STAGES.indexOf(j.stage) >= 0; })
+      .sort(function (a, b) { return (a.stageAt || 0) - (b.stageAt || 0); }).slice(0, 15);
+    var agingRows = aging.map(function (j) {
+      var d = daysAgo(j.stageAt);
+      return '<tr class="clickable" data-job="' + esc(j.id) + '"><td><b>' + esc(j.name) + "</b></td>" +
+        "<td>" + stageChip(j.stage) + "</td>" +
+        '<td class="num">' + (d >= 14 ? '<span class="chip overdue">' + d + " days</span>" : d + " days") + "</td>" +
+        '<td class="num">' + (jobValue(j) ? money(jobValue(j)) : "—") + "</td></tr>";
+    }).join("");
+
     view.innerHTML = '<div class="page-head"><h1>Reports</h1></div>' +
       '<div class="stat-strip">' +
       '<div class="stat"><strong>' + jobs.length + "</strong><span>Total jobs</span></div>" +
@@ -956,6 +971,9 @@
       '<div class="stat"><strong>' + money(revenue) + "</strong><span>Revenue built</span></div>" +
       '<div class="stat"><strong>' + money(profit) + "</strong><span>Profit (" + marginPct + "%)</span></div>" +
       '<div class="stat"><strong>' + money(avgJob) + "</strong><span>Avg job size</span></div>" +
+      "</div>" +
+      '<div class="card"><h2>⏳ Sitting the longest <span class="sub" style="margin:0;font-weight:400">(active jobs by time in their current stage — chase from the top)</span></h2>' +
+      (agingRows ? '<div class="table-scroll"><table><thead><tr><th>Customer</th><th>Stage</th><th class="num">In stage</th><th class="num">Value</th></tr></thead><tbody>' + agingRows + "</tbody></table></div>" : '<p class="empty">No active jobs.</p>') +
       "</div>" +
       '<div class="grid2">' +
       '<div class="card"><h2>📣 Lead sources</h2>' +
@@ -974,6 +992,10 @@
       '<div class="card"><h2>🧾 Where the money goes <span class="sub" style="margin:0;font-weight:400">(' + (expTotal ? money(expTotal) + " in expenses" : "no expenses logged") + ")</span></h2>" +
       (expRows ? '<div class="table-scroll"><table><thead><tr><th>Category</th><th class="num">Entries</th><th class="num">Total</th></tr></thead><tbody>' + expRows + "</tbody></table></div>" : '<p class="empty">Log expenses on jobs and the breakdown shows up here.</p>') +
       "</div></div>";
+
+    view.querySelectorAll("tr[data-job]").forEach(function (tr) {
+      tr.addEventListener("click", function () { location.hash = "#/job/" + tr.getAttribute("data-job"); });
+    });
   }
 
   /* ======================================================================
@@ -1043,6 +1065,107 @@
   }
 
   /* ======================================================================
+     Calendar links & copy-ready customer messages
+     ====================================================================== */
+
+  var REVIEW_URL = "https://g.page/r/CVE7qcq7x995EAo/review";
+
+  function pad2(n) { return String(n).padStart(2, "0"); }
+  function gcalAllDay(title, dateISO, location, details) {
+    var d = new Date(dateISO + "T00:00:00");
+    var d1 = new Date(d); d1.setDate(d1.getDate() + 1);
+    var a = dateISO.replace(/-/g, "");
+    var b = d1.getFullYear() + pad2(d1.getMonth() + 1) + pad2(d1.getDate());
+    return "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(title) +
+      "&dates=" + a + "/" + b + "&location=" + encodeURIComponent(location || "") +
+      "&details=" + encodeURIComponent(details || "");
+  }
+  function gcalTimed(title, dtLocal, hours, location, details) {
+    var s = new Date(dtLocal);
+    if (isNaN(s)) return "";
+    var e = new Date(s.getTime() + hours * 3600000);
+    function f(x) {
+      return x.getFullYear() + pad2(x.getMonth() + 1) + pad2(x.getDate()) + "T" +
+        pad2(x.getHours()) + pad2(x.getMinutes()) + "00";
+    }
+    return "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(title) +
+      "&dates=" + f(s) + "/" + f(e) + "&location=" + encodeURIComponent(location || "") +
+      "&details=" + encodeURIComponent(details || "");
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function () { toast("📋 Copied — paste it into your email or texts"); })
+        .catch(function () { fallbackCopy(text); });
+    }
+    fallbackCopy(text);
+    return Promise.resolve();
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); toast("📋 Copied — paste it into your email or texts"); }
+    catch (e) { toast("Couldn't copy automatically — select the text and copy it"); }
+    ta.remove();
+  }
+
+  function openMessageModal(title, text) {
+    var back = document.createElement("div");
+    back.className = "modal-back";
+    back.innerHTML = '<div class="modal"><h2>' + esc(title) + "</h2>" +
+      '<p class="sub" style="margin:0 0 .6rem">Check it over, tweak anything, then copy it into your email or texts.</p>' +
+      '<textarea id="msg-text" style="min-height:320px;font-size:.9rem">' + esc(text) + "</textarea>" +
+      '<div class="form-actions"><button class="btn primary" id="msg-copy">📋 Copy</button>' +
+      '<button class="btn" id="msg-close">Close</button></div></div>';
+    document.body.appendChild(back);
+    back.addEventListener("click", function (e) { if (e.target === back) back.remove(); });
+    back.querySelector("#msg-close").addEventListener("click", function () { back.remove(); });
+    back.querySelector("#msg-copy").addEventListener("click", function () {
+      copyText(back.querySelector("#msg-text").value);
+    });
+  }
+
+  function firstName(j) { return (j.name || "").trim().split(/\s+/)[0] || "there"; }
+  function lastName(j) { var w = (j.name || "").trim().split(/\s+/); return w[w.length - 1] || ""; }
+  var SIGNATURE = "Best,\n\nDominic Kiani\nT-Rock Roofing\nTRI Alliance Manual Certified\nCell: 469-968-6936\nwww.DallasRoofer.com";
+
+  function msgFollowUp(j) {
+    return "Hi " + firstName(j) + ",\n\n" +
+      "Just following up on the proposal we sent over for " + (j.address || "your home") + ". " +
+      "Happy to walk through any questions about the scope, pricing, or timeline — whatever's easiest for you.\n\n" +
+      (isInsuranceJob(j) ? "And if anything on the insurance side is unclear — the deductible, supplements, what the carrier covers — I'm glad to walk you through that too.\n\n" : "") +
+      SIGNATURE;
+  }
+  function msgCrewArrival(j) {
+    var crew = crewById(j.crewId);
+    var when = j.scheduledDate ? new Date(j.scheduledDate + "T00:00:00").toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" }) : "[DATE]";
+    return "Hi " + firstName(j) + ", quick heads-up from T-Rock: " + (crew ? "our crew" : "our crew") +
+      " is scheduled to start at " + (j.address || "your home") + " on " + when + ". " +
+      "They'll arrive early morning — please have vehicles out of the driveway and we'll take it from there. " +
+      "Materials may be delivered the day before. Any questions, call me directly: 469-968-6936. — Dominic";
+  }
+  function msgFinalEmail(j) {
+    var paid = numVal(j.money.contractPrice) > 0 && jobBalance(j) <= 0;
+    var subject = "T-Rock — " + (lastName(j) ? lastName(j) + " residence" : (j.address || "job")) +
+      " completion photos" + (paid ? " + paid-in-full invoice" : "");
+    var review = state.settings.reviewLink || REVIEW_URL;
+    return "Subject: " + subject + "\n\n" +
+      j.name + ",\n\n" +
+      "Thank you for choosing T-Rock for the recent work at " + (j.address || "your home") + ". " +
+      "Everything is finished up and squared away.\n\n" +
+      "Here is the full photo report of the completed work:\n" +
+      (j.links.companycam || "[PASTE THE COMPANYCAM REPORT LINK HERE]") + "\n\n" +
+      (paid ? "Your paid-in-full invoice (" + money(j.money.contractPrice) + ") is attached for your records.\n\n" : "") +
+      "If you ever notice anything that needs a second look — a shingle out of place, a new leak, a question about the warranty — do not hesitate to reach out. Happy to take care of whatever comes up.\n\n" +
+      "One small ask — if you felt good about the service today, I'd truly appreciate it if you'd take 30 seconds to leave a quick 5-star review on Google. If you're able to mention the work we did and my name (Dominic Kiani), it makes a huge difference for our team.\n" +
+      review + "\n\n" +
+      "Thanks again for trusting us with your home.\n\n" + SIGNATURE;
+  }
+
+  /* ======================================================================
      Job detail
      ====================================================================== */
 
@@ -1057,6 +1180,7 @@
     j.production = j.production || { workOrder: "", subContract: "" };
     j.insurance.supplementItems = j.insurance.supplementItems || [];
     if (j.insurance.claimStatus === undefined) j.insurance.claimStatus = "";
+    if (j.insurance.adjusterMeeting === undefined) j.insurance.adjusterMeeting = "";
 
     var ins = j.insurance, m = j.money, links = j.links, s = state.settings;
 
@@ -1130,6 +1254,11 @@
       "<dt>Created</dt><dd>" + fmtDate(j.createdAt) + "</dd>" +
       "</dl>" +
       '<div class="linkrow" style="margin-top:.7rem">' +
+      (j.scheduledDate ? '<a target="_blank" rel="noopener" href="' +
+        esc(gcalAllDay("Install — " + j.name + (crew ? " (" + crew.name + ")" : ""), j.scheduledDate,
+          [j.address, j.city].filter(Boolean).join(", "),
+          "T^Rock job: " + j.name + (j.phone ? " · " + j.phone : "") + (jobValue(j) ? " · " + money(jobValue(j)) : ""))) +
+        '">🗓 Install → Calendar</a>' : "") +
       (j.address ? '<a target="_blank" rel="noopener" href="' + esc(mapsUrl(j)) + '">📍 Map</a>' : "") +
       (links.roofr ? '<a target="_blank" rel="noopener" href="' + esc(links.roofr) + '">📐 Roofr</a>' : "") +
       (links.companycam ? '<a target="_blank" rel="noopener" href="' + esc(links.companycam) + '">📷 CompanyCam</a>' : "") +
@@ -1157,6 +1286,13 @@
           "<dt>Carrier</dt><dd>" + esc(ins.carrier || "—") + "</dd>" +
           "<dt>Claim #</dt><dd>" + esc(ins.claimNumber || "—") + "</dd>" +
           "<dt>Adjuster</dt><dd>" + esc(ins.adjusterName || "—") + (ins.adjusterPhone ? ' · <a href="tel:' + esc(ins.adjusterPhone) + '">' + esc(ins.adjusterPhone) + "</a>" : "") + "</dd>" +
+          (ins.adjusterMeeting ? "<dt>Adjuster meeting</dt><dd>" +
+            esc(new Date(ins.adjusterMeeting).toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })) +
+            ' · <a target="_blank" rel="noopener" href="' +
+            esc(gcalTimed("Adjuster meeting — " + j.name + (ins.adjusterName ? " (" + ins.adjusterName + ")" : ""), ins.adjusterMeeting, 1,
+              [j.address, j.city].filter(Boolean).join(", "),
+              "Claim #" + (ins.claimNumber || "?") + (ins.carrier ? " · " + ins.carrier : "") + (ins.adjusterPhone ? " · Adjuster: " + ins.adjusterPhone : ""))) +
+            '">🗓 Add to Calendar</a></dd>' : "") +
           "</dl>" +
           (numVal(ins.rcv) ?
             '<h2 style="margin-top:.9rem">Claim ledger</h2><dl class="kv">' +
@@ -1259,6 +1395,13 @@
           '<div class="form-actions" style="margin:0;align-self:end"><button class="btn small primary">+ Punch</button></div>' +
           "</form></div>";
       })() +
+
+      '<div class="card"><h2>✉️ Messages <span class="sub" style="margin:0;font-weight:400">(written from this job\'s details — tap, check, copy)</span></h2>' +
+      '<div class="form-actions" style="margin:0">' +
+      '<button class="btn small" id="msg-followup">Proposal follow-up</button>' +
+      '<button class="btn small" id="msg-crew">Crew arrival heads-up</button>' +
+      '<button class="btn small" id="msg-final">Final email (photos + review ask)</button>' +
+      "</div></div>" +
 
       '<div class="card"><h2>📝 Notes & history</h2>' +
       '<form id="note-form"><textarea id="note-text" placeholder="What happened? Call notes, adjuster talk, change orders…"></textarea>' +
@@ -1420,6 +1563,16 @@
       save(); render();
       toast("Production info saved");
     });
+    document.getElementById("msg-followup").addEventListener("click", function () {
+      openMessageModal("Proposal follow-up — " + j.name, msgFollowUp(j));
+    });
+    document.getElementById("msg-crew").addEventListener("click", function () {
+      openMessageModal("Crew arrival heads-up — " + j.name, msgCrewArrival(j));
+    });
+    document.getElementById("msg-final").addEventListener("click", function () {
+      openMessageModal("Final email — " + j.name, msgFinalEmail(j));
+    });
+
     document.getElementById("punch-form").addEventListener("submit", function (e) {
       e.preventDefault();
       var txt = document.getElementById("punch-text").value.trim();
@@ -1466,6 +1619,7 @@
       f("Claim #", "ins.claimNumber", j.insurance.claimNumber) +
       f("Adjuster name", "ins.adjusterName", j.insurance.adjusterName) +
       f("Adjuster phone", "ins.adjusterPhone", j.insurance.adjusterPhone, "tel") +
+      f("Adjuster meeting", "ins.adjusterMeeting", j.insurance.adjusterMeeting || "", "datetime-local") +
       f("RCV total", "ins.rcv", j.insurance.rcv, "text", false, "$") +
       f("Deductible", "ins.deductible", j.insurance.deductible, "text", false, "$") +
       f("ACV not in scope", "ins.acvOffset", j.insurance.acvOffset, "text", false, "$ — offsets the deductible") +
@@ -1521,6 +1675,7 @@
       target.insurance.claimNumber = g("ins.claimNumber");
       target.insurance.adjusterName = g("ins.adjusterName");
       target.insurance.adjusterPhone = g("ins.adjusterPhone");
+      target.insurance.adjusterMeeting = g("ins.adjusterMeeting");
       target.insurance.rcv = g("ins.rcv");
       target.insurance.deductible = g("ins.deductible");
       target.insurance.acvOffset = g("ins.acvOffset");
