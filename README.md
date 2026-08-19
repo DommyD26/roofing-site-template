@@ -32,6 +32,17 @@ and tracks every test you've ever taken.
   "Install app"), offline-capable via a service worker.
 - No accounts and no hosting costs: static site + the owner's own Google Sheet.
 
+## Company CRM
+
+The repo also ships a full **job CRM** at [`/crm/`](crm/) — a local-first,
+zero-cost command center that mirrors the company process end-to-end:
+lead → inspection (summary sent) → Roofr proposal (2.0× markup / $500 min
+price check) → insurance (live deductible-offset math from out-of-scope ACV) →
+production → CompanyCam closeout + review ask → paid. Drag-and-drop pipeline
+board, auto-generated stage playbooks, tasks, payments/balances, contacts,
+crews, JSON backups, and optional whole-company cloud sync via your own
+Google Apps Script. Setup and workflow details: [`CRM-SETUP.md`](CRM-SETUP.md).
+
 ## Running / deploying
 
 No build step. Options:
