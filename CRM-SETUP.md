@@ -50,6 +50,14 @@ Each job also carries:
   vs. what's actually been received as insurance checks, and what the
   carrier still owes), and an itemized supplement tracker
   (item / submitted $ / approved $ / status).
+- **📄 Import claim PDF** (Jobs page) — drop in a carrier estimate
+  (Xactimate-style) or settlement letter and the CRM reads it right in the
+  browser (nothing is uploaded anywhere): customer name, phone, address,
+  carrier, claim #, adjuster, RCV, and the full deductible pre-fill a new
+  job for review, the money summary lands as a note, and the adjuster is
+  added to Contacts. If the claim # matches an existing job (a second
+  scope-of-work, a revised estimate), it attaches to that job instead of
+  creating a duplicate.
 - **Expenses & job costing** — log materials, sub pay, dump fees, permits per
   job; profit switches from estimated cost to real logged expenses
   automatically.
