@@ -13,15 +13,19 @@ The pipeline **is** the company process. Every job moves through:
 Job Complete → Paid & Closed** (or **Lost**).
 
 Moving a job into a stage automatically drops that stage's playbook onto its
-checklist — the same procedure every time:
+checklist — the same procedure every time, **with due dates filled in
+automatically** (call back = next day, follow up = 5 days after entering
+Proposal, and so on). **Retail/repair/warranty jobs skip the Insurance stage
+entirely** and get retail wording (deposit instead of deductible, client deck
+without the offset analysis):
 
 | Stage | Playbook |
 | --- | --- |
 | New Lead | Call back · schedule the inspection on the work calendar |
 | Inspection | Full roof + attic/interior inspection · photos into CompanyCam · write & send the inspection summary |
-| Proposal | Order the Roofr report · write the scope (summary + detailed + Roofr paste block) · price at 2.0× markup / $500 minimum · build the client deck (deductible offset analysis) · send & follow up |
-| Insurance | Confirm claim + claim # · meet the adjuster · review RCV/ACV/deductible · submit supplements |
-| Approved | Sign the contract · collect deductible/first payment · order materials · assign crew & schedule |
+| Proposal | Order the Roofr report · write the scope (summary + detailed + Roofr paste block) · price at 2.0× markup / $500 minimum · build the client deck (deductible offset analysis on insurance jobs) · send the proposal · follow up |
+| Insurance *(insurance jobs only)* | Confirm claim + claim # · meet the adjuster · review RCV/ACV/deductible · submit supplements |
+| Approved | Sign the contract · collect deductible (deposit on retail)/first payment · order materials · assign crew & schedule |
 | In Production | Job-start walkthrough · daily CompanyCam photos · daily field summary · final walkthrough & punch list |
 | Job Complete | Build the CompanyCam photo report · send the final invoice · send the final email (photos + invoice + Google review ask) |
 | Paid & Closed | Confirm paid in full · register the warranty · ask for referrals |
@@ -33,16 +37,22 @@ Each job also carries:
   deductible the out-of-scope ACV covers, in $ and %, and the customer's true
   out-of-pocket).
 - **Money card** — cost, estimate, contract price, with the **2.0× markup /
-  $500 minimum sale-price check** flagged right on the card, plus a payment
-  log and running balance.
+  $500 minimum sale-price check** flagged right on the card, a payment log,
+  running balance, and **profit + margin %** once cost and contract are in.
+- **Supplements as real money** — approved supplement dollars roll into a
+  Total Claim Value line (RCV + supplements) on the insurance card.
 - **Links** — one-tap buttons for the job's Roofr proposal, CompanyCam
   project, Dropbox folder, and Google Maps.
 - **Checklist, notes, and a full activity history** per job.
 
 Plus: a **Dashboard** (pipeline value, outstanding balances, overdue tasks,
-jobs going quiet), a drag-and-drop **Pipeline board**, a global **Tasks** view
-(overdue / today / upcoming), **Contacts** (adjusters, suppliers, subs), and
-**Crews** with live job assignments.
+this week's installs, jobs going quiet), a **Pipeline board** (drag cards on
+desktop, tap **Move ▾** on phones), an **Install Schedule** (week-by-week: who's
+roofing where, jobs whose start date slipped, sold jobs with no date yet),
+**Reports** (close rate, lead-source performance, lost reasons, month-by-month
+revenue and profit), a global **Tasks** view (overdue / today / upcoming, with
+delete), **Contacts** (adjusters, suppliers, subs), and **Crews** with live
+job assignments.
 
 ## Backups (do this)
 
