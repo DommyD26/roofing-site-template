@@ -1709,6 +1709,7 @@
       '<div class="form-actions">' +
       '<button class="btn" id="export-btn">⬇ Export backup (.json)</button>' +
       '<label class="btn" style="display:inline-block">⬆ Import backup<input type="file" id="import-file" accept=".json,application/json" style="display:none"></label>' +
+      '<button class="btn" id="tour-replay">🎓 Replay the app tour</button>' +
       "</div></div>" +
 
       '<div class="card danger-zone"><h2>⚠️ Danger zone</h2>' +
@@ -1757,6 +1758,7 @@
 
     document.getElementById("push-btn").addEventListener("click", function () { pushCloud(false); });
     document.getElementById("pull-btn").addEventListener("click", pullCloud);
+    document.getElementById("tour-replay").addEventListener("click", function () { window.__startTour(); });
 
     document.getElementById("export-btn").addEventListener("click", function () {
       var blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
@@ -2040,8 +2042,152 @@
   }
 
   /* ======================================================================
+     First-run tour — a gentle walkthrough of every feature. Never blocks:
+     decline it, exit any time (✕ or Esc), replay it from Settings.
+     ====================================================================== */
+
+  var TOUR_KEY = "trock-crm-tour-v1";
+  var TOUR_STEPS = [
+    { route: "#/dashboard", target: ".stat-strip", title: "Welcome to your CRM 👋",
+      body: "This is the dashboard — jobs in play, money in the pipeline, what's owed, and what's due today, all in one glance." },
+    { route: "#/dashboard", target: "#view .card", title: "Up next",
+      body: "Every task due soon, across every job, lands here — and you can check things off without leaving the page. Alerts (like an expired sub insurance cert) show up here too." },
+    { route: "#/dashboard", target: "#new-job-btn", title: "Add a job from anywhere",
+      body: "One tap starts a new job. It begins as a lead with its first to-dos (call back, book the inspection) already on its checklist." },
+    { route: "#/jobs", target: "#import-claim", title: "Insurance paperwork does the typing",
+      body: "Got a carrier estimate PDF? Import it and the customer, claim number, adjuster, RCV and deductible fill themselves in — you just review and hit Create." },
+    { route: "#/board", target: ".board", title: "The pipeline",
+      body: "Every job moves left to right: Lead → Inspection → Proposal → Insurance → Approved → Production → Complete → Paid. Drag a card (or tap Move ▾ on your phone) and that stage's playbook drops onto the job's checklist automatically." },
+    { route: "#/board", target: null, title: "Inside every job",
+      body: "Open any job card and you'll find: the claim ledger (what the carrier owes), supplements, the price check (2× markup / $500 minimum), payments and balance, expenses with live profit, work orders and sub pay, a punch list, and the full history." },
+    { route: "#/tasks", target: "#quick-task", title: "Tasks",
+      body: "Everything to do across all jobs, sorted into Overdue / Today / Upcoming. Add one-off reminders here — with or without a job attached." },
+    { route: "#/schedule", target: "#view .card", title: "Install schedule",
+      body: "Week by week: who's roofing where, with crew and job value. It also flags jobs whose start date slipped and sold jobs that never got a date." },
+    { route: "#/reports", target: ".stat-strip", title: "Reports",
+      body: "Your close rate, which lead sources actually make money, why jobs get lost, and month-by-month revenue and profit. It fills in as you work." },
+    { route: "#/contacts", target: "#add-contact", title: "Contacts",
+      body: "Adjusters, suppliers, subs, realtors — the people around the jobs. Adjusters from imported claim PDFs land here on their own." },
+    { route: "#/crews", target: "#add-crew", title: "Team & subs",
+      body: "Add your crews to assign jobs and see who's where. Each one has an onboarding checklist (W-9, insurance cert, agreement…) and you'll get warned before a cert expires." },
+    { route: "#/settings", target: "#export-btn", title: "You're all set 🎉",
+      body: "Settings holds your pricing rules, backups (export one now and then!), and cloud sync to share one book across devices. You can replay this tour from here anytime. Now go add your first job!" }
+  ];
+  var tourIdx = -1, tourCard = null, tourBackdrop = null, tourGlowEl = null;
+
+  function tourCleanupStep() {
+    if (tourGlowEl) tourGlowEl.classList.remove("tour-glow");
+    tourGlowEl = null;
+    if (tourBackdrop) tourBackdrop.remove();
+    tourBackdrop = null;
+  }
+  function endTour(finished) {
+    tourCleanupStep();
+    if (tourCard) tourCard.remove();
+    tourCard = null;
+    tourIdx = -1;
+    try { localStorage.setItem(TOUR_KEY, finished ? "done" : "exited"); } catch (e) {}
+    document.removeEventListener("keydown", tourEsc);
+    if (finished) toast("Tour complete — go get 'em 💪");
+  }
+  function tourEsc(e) { if (e.key === "Escape" && tourIdx >= 0) endTour(false); }
+
+  function startTour() {
+    var inv = document.getElementById("tour-invite");
+    if (inv) inv.remove();
+    tourIdx = 0;
+    document.addEventListener("keydown", tourEsc);
+    showTourStep();
+  }
+
+  function showTourStep() {
+    tourCleanupStep();
+    var st = TOUR_STEPS[tourIdx];
+    if (location.hash !== st.route) { location.hash = st.route; }
+    setTimeout(function () {
+      if (tourIdx < 0) return;
+      if (!tourCard) {
+        tourCard = document.createElement("div");
+        document.body.appendChild(tourCard);
+      }
+      var n = TOUR_STEPS.length;
+      tourCard.innerHTML =
+        '<button class="tour-x" id="tour-exit" aria-label="Exit tour">✕</button>' +
+        "<h3>" + esc(st.title) + "</h3>" +
+        "<p>" + esc(st.body) + "</p>" +
+        '<div class="tour-btns">' +
+        (tourIdx > 0 ? '<button class="btn small" id="tour-back">← Back</button>' : "") +
+        '<button class="btn small primary" id="tour-next">' + (tourIdx === n - 1 ? "Finish" : "Next →") + "</button></div>" +
+        '<div class="tour-track"><i style="width:' + Math.round(((tourIdx + 1) / n) * 100) + '%"></i></div>' +
+        '<span class="tour-count">Step ' + (tourIdx + 1) + " of " + n + "</span>";
+
+      var target = st.target ? document.querySelector(st.target) : null;
+      if (target) {
+        target.classList.add("tour-glow");
+        tourGlowEl = target;
+        try { target.scrollIntoView({ block: "center", behavior: "auto" }); } catch (e) { target.scrollIntoView(); }
+      } else {
+        tourBackdrop = document.createElement("div");
+        tourBackdrop.className = "tour-backdrop";
+        document.body.appendChild(tourBackdrop);
+      }
+
+      /* place the card: bottom sheet on phones, next to the target on desktop */
+      tourCard.style.top = ""; tourCard.style.left = "";
+      if (window.innerWidth <= 720) {
+        tourCard.className = "tour-card";
+      } else if (target) {
+        tourCard.className = "tour-card";
+        var r = target.getBoundingClientRect();
+        var ch = tourCard.offsetHeight || 240;
+        var top = r.bottom + 14;
+        if (top + ch > window.innerHeight - 12) top = Math.max(r.top - ch - 14, 12);
+        var left = Math.min(Math.max(r.left, 12), window.innerWidth - 350);
+        tourCard.style.top = top + "px";
+        tourCard.style.left = left + "px";
+      } else {
+        tourCard.className = "tour-card center";
+      }
+
+      tourCard.querySelector("#tour-exit").addEventListener("click", function () { endTour(false); });
+      tourCard.querySelector("#tour-next").addEventListener("click", function () {
+        if (tourIdx >= TOUR_STEPS.length - 1) { endTour(true); return; }
+        tourIdx++;
+        showTourStep();
+      });
+      var backBtn = tourCard.querySelector("#tour-back");
+      if (backBtn) backBtn.addEventListener("click", function () { tourIdx = Math.max(tourIdx - 1, 0); showTourStep(); });
+    }, 140);
+  }
+
+  function maybeInviteTour() {
+    var seen = "";
+    try { seen = localStorage.getItem(TOUR_KEY) || ""; } catch (e) {}
+    if (seen) return;
+    setTimeout(function () {
+      if (document.getElementById("tour-invite") || tourIdx >= 0) return;
+      var inv = document.createElement("div");
+      inv.className = "tour-invite";
+      inv.id = "tour-invite";
+      inv.innerHTML = "<b>👋 First time here?</b>" +
+        "<p>Take a quick tour — we'll walk through everything the CRM can do, one step at a time.</p>" +
+        '<div class="row"><button class="btn small primary" id="tour-start">Show me around</button>' +
+        '<button class="btn small" id="tour-no">No thanks</button></div>';
+      document.body.appendChild(inv);
+      inv.querySelector("#tour-start").addEventListener("click", startTour);
+      inv.querySelector("#tour-no").addEventListener("click", function () {
+        try { localStorage.setItem(TOUR_KEY, "declined"); } catch (e) {}
+        inv.remove();
+      });
+    }, 900);
+  }
+
+  window.__startTour = startTour; /* used by the Settings replay button */
+
+  /* ======================================================================
      Boot
      ====================================================================== */
 
   render();
+  maybeInviteTour();
 })();
