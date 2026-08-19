@@ -936,11 +936,16 @@
     document.getElementById("claim-file").addEventListener("change", function (e) {
       if (e.target.files[0]) importClaimFile(e.target.files[0]);
     });
-    document.getElementById("jf-q").addEventListener("input", function (e) { jobFilters.q = e.target.value; renderJobs(); });
+    document.getElementById("jf-q").addEventListener("input", function (e) { jobFilters.q = e.target.value; jobFilters.typing = true; renderJobs(); });
     document.getElementById("jf-stage").addEventListener("change", function (e) { jobFilters.stage = e.target.value; renderJobs(); });
     document.getElementById("jf-type").addEventListener("change", function (e) { jobFilters.type = e.target.value; renderJobs(); });
-    var qEl = document.getElementById("jf-q");
-    qEl.focus(); qEl.setSelectionRange(qEl.value.length, qEl.value.length);
+    /* refocus only while actively typing — force-focusing on every visit pops
+       the keyboard on phones */
+    if (jobFilters.typing) {
+      var qEl = document.getElementById("jf-q");
+      qEl.focus(); qEl.setSelectionRange(qEl.value.length, qEl.value.length);
+      jobFilters.typing = false;
+    }
     view.querySelectorAll("tr[data-job]").forEach(function (tr) {
       tr.addEventListener("click", function () { location.hash = "#/job/" + tr.getAttribute("data-job"); });
     });
@@ -1405,6 +1410,16 @@
         name: g("name"), phone: g("phone"), email: g("email"), address: g("address"), city: g("city"),
         jobType: g("jobType"), source: g("source"), roofType: g("roofType"), squares: g("squares")
       };
+      if (isNew) {
+        var normPhone = fields.phone.replace(/\D/g, "");
+        var dupe = state.jobs.filter(function (x) {
+          if (normPhone && (x.phone || "").replace(/\D/g, "") === normPhone) return true;
+          return x.name.toLowerCase() === fields.name.toLowerCase() &&
+            fields.address && (x.address || "").toLowerCase() === fields.address.toLowerCase();
+        })[0];
+        if (dupe && !confirm("Heads up — " + dupe.name + " already exists (" + stageById(dupe.stage).label +
+          ", " + (dupe.address || "no address") + ").\n\nCreate a second job for them anyway?")) return;
+      }
       var target = isNew ? newJob(fields) : job;
       if (!isNew) for (var k in fields) target[k] = fields[k];
       target.scheduledDate = g("scheduledDate");
@@ -1791,10 +1806,16 @@
     document.getElementById("wipe-btn").addEventListener("click", function () {
       if (!confirm("Erase ALL CRM data on this device? Export a backup first if you're not sure.")) return;
       if (!confirm("Last chance — this deletes every job, task, contact and note stored here.")) return;
+      var keepSync = { syncUrl: state.settings.syncUrl, syncKey: state.settings.syncKey };
       state = freshState();
-      try { localStorage.removeItem(DB_KEY); } catch (e) {}
-      save(); render();
-      toast("Wiped clean");
+      state.settings.syncUrl = keepSync.syncUrl;
+      state.settings.syncKey = keepSync.syncKey;
+      try { localStorage.setItem(DB_KEY, JSON.stringify(state)); } catch (e) {}
+      /* never auto-push a wipe — an accidental erase must not clear the
+         cloud copy every other device depends on */
+      clearTimeout(syncTimer);
+      render();
+      toast(keepSync.syncUrl ? "Wiped this device only — the cloud copy is untouched (Pull to restore it)" : "Wiped clean");
     });
   }
 
