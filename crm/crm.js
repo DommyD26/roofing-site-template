@@ -9,52 +9,57 @@
   /* ======================================================================
      Pipeline definition — the stages ARE the company process. Moving a job
      into a stage auto-creates that stage's playbook as tasks on the job.
+     Each playbook item: t = title, d = due N days after entering the stage
+     (null = no due date), insOnly = insurance jobs only, retailT = wording
+     used instead of t on non-insurance jobs. The Insurance stage itself is
+     hidden entirely for non-insurance jobs.
      ====================================================================== */
 
   var STAGES = [
     { id: "lead", label: "New Lead", playbook: [
-      "Call the lead back",
-      "Schedule the inspection on the work calendar"
+      { t: "Call the lead back", d: 1 },
+      { t: "Schedule the inspection on the work calendar", d: 2 }
     ]},
     { id: "inspection", label: "Inspection", playbook: [
-      "Full inspection — roof, attic & interior",
-      "Photos into CompanyCam",
-      "Write & send the inspection summary"
+      { t: "Full inspection — roof, attic & interior", d: 2 },
+      { t: "Photos into CompanyCam", d: 2 },
+      { t: "Write & send the inspection summary", d: 3 }
     ]},
     { id: "proposal", label: "Proposal", playbook: [
-      "Order the Roofr measurement report",
-      "Write the scope of work (summary + detailed + Roofr paste block)",
-      "Price it — 2.0x markup, $500 minimum",
-      "Build the client deck (deductible offset analysis)",
-      "Send the proposal & follow up in 2 days"
+      { t: "Order the Roofr measurement report", d: 1 },
+      { t: "Write the scope of work (summary + detailed + Roofr paste block)", d: 2 },
+      { t: "Price it — 2.0x markup, $500 minimum", d: 2 },
+      { t: "Build the client deck (deductible offset analysis)", d: 3, retailT: "Build the client deck" },
+      { t: "Send the proposal", d: 3 },
+      { t: "Follow up on the proposal", d: 5 }
     ]},
-    { id: "insurance", label: "Insurance", playbook: [
-      "Confirm the claim is filed & get the claim #",
-      "Meet the adjuster on site",
-      "Review the loss statement — RCV / ACV / deductible",
-      "Submit supplements if the scope is short"
+    { id: "insurance", label: "Insurance", insOnly: true, playbook: [
+      { t: "Confirm the claim is filed & get the claim #", d: 2 },
+      { t: "Meet the adjuster on site", d: 7 },
+      { t: "Review the loss statement — RCV / ACV / deductible", d: 8 },
+      { t: "Submit supplements if the scope is short", d: 10 }
     ]},
     { id: "approved", label: "Approved", playbook: [
-      "Get the contract signed",
-      "Collect the deductible / first payment",
-      "Order materials",
-      "Assign a crew & put the start date on the calendar"
+      { t: "Get the contract signed", d: 2 },
+      { t: "Collect the deductible / first payment", d: 3, retailT: "Collect the deposit / first payment" },
+      { t: "Order materials", d: 5 },
+      { t: "Assign a crew & put the start date on the calendar", d: 5 }
     ]},
     { id: "production", label: "In Production", playbook: [
-      "Job-start walkthrough with the crew lead",
-      "Daily photos into CompanyCam",
-      "Daily field summary",
-      "Final walkthrough & punch list"
+      { t: "Job-start walkthrough with the crew lead", d: 1 },
+      { t: "Daily photos into CompanyCam", d: null },
+      { t: "Daily field summary", d: null },
+      { t: "Final walkthrough & punch list", d: 7 }
     ]},
     { id: "complete", label: "Job Complete", playbook: [
-      "Build the CompanyCam photo report",
-      "Send the final invoice",
-      "Send the final email — photo report + invoice + Google review ask"
+      { t: "Build the CompanyCam photo report", d: 1 },
+      { t: "Send the final invoice", d: 1 },
+      { t: "Send the final email — photo report + invoice + Google review ask", d: 2 }
     ]},
     { id: "paid", label: "Paid & Closed", playbook: [
-      "Confirm paid in full",
-      "Register the warranty",
-      "Ask for referrals"
+      { t: "Confirm paid in full", d: 1 },
+      { t: "Register the warranty", d: 7 },
+      { t: "Ask for referrals", d: 7 }
     ]},
     { id: "lost", label: "Lost", playbook: [] }
   ];
@@ -216,7 +221,7 @@
       completedDate: "",
       crewId: "",
       lostReason: "",
-      insurance: { carrier: "", claimNumber: "", adjusterName: "", adjusterPhone: "", rcv: "", deductible: "", acvOffset: "", supplements: "" },
+      insurance: { carrier: "", claimNumber: "", adjusterName: "", adjusterPhone: "", rcv: "", deductible: "", acvOffset: "", supplementsAmount: "", supplements: "" },
       money: { estimate: "", cost: "", contractPrice: "", payments: [] },
       links: { roofr: "", companycam: "", dropbox: "", other: "" },
       notes: []
@@ -227,16 +232,40 @@
     return j;
   }
 
+  function isInsuranceJob(job) { return job.jobType === "Insurance"; }
+
+  /* Stages this job actually passes through (retail/repair skip Insurance). */
+  function stagesForJob(job) {
+    return STAGES.filter(function (st) { return !st.insOnly || isInsuranceJob(job); });
+  }
+
+  function isoPlus(n) {
+    var d = new Date(); d.setDate(d.getDate() + n);
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
   function addPlaybookTasks(job, stageId) {
     var st = stageById(stageId);
-    st.playbook.forEach(function (title) {
-      var exists = state.tasks.some(function (t) { return t.jobId === job.id && t.title === title; });
-      if (!exists) state.tasks.push({ id: uid(), jobId: job.id, title: title, due: "", done: false, doneAt: 0, createdAt: Date.now() });
+    st.playbook.forEach(function (item) {
+      if (item.insOnly && !isInsuranceJob(job)) return;
+      var title = (!isInsuranceJob(job) && item.retailT) ? item.retailT : item.t;
+      var exists = state.tasks.some(function (t) {
+        return t.jobId === job.id && (t.title === item.t || (item.retailT && t.title === item.retailT));
+      });
+      if (!exists) state.tasks.push({
+        id: uid(), jobId: job.id, title: title,
+        due: item.d == null ? "" : isoPlus(item.d),
+        done: false, doneAt: 0, createdAt: Date.now()
+      });
     });
   }
 
   function setStage(job, stageId) {
     if (job.stage === stageId) return;
+    if (stageId === "insurance" && !isInsuranceJob(job)) {
+      toast(job.jobType + " jobs skip the Insurance stage");
+      return;
+    }
     var from = stageById(job.stage).label, to = stageById(stageId).label;
     job.stage = stageId;
     job.stageAt = Date.now();
@@ -318,6 +347,8 @@
     else if (r === "jobs") renderJobs();
     else if (r === "job") renderJob(routeArg());
     else if (r === "tasks") renderTasks();
+    else if (r === "schedule") renderSchedule();
+    else if (r === "reports") renderReports();
     else if (r === "contacts") renderContacts();
     else if (r === "crews") renderCrews();
     else if (r === "settings") renderSettings();
@@ -354,7 +385,9 @@
           (!t.done && bucket === "overdue" ? ' <span class="chip overdue">overdue</span>' : "") +
           (!t.done && bucket === "today" ? ' <span class="chip today">today</span>' : "") + "</span>" : "") +
         (showJob && j ? '<a class="t-job" href="#/job/' + esc(j.id) + '">' + esc(j.name) + "</a>" : "") +
-        "</div></li>";
+        "</div>" +
+        '<button class="t-del" data-deltask="' + esc(t.id) + '" title="Delete task" aria-label="Delete task">✕</button>' +
+        "</li>";
     });
     return out + "</ul>";
   }
@@ -369,6 +402,17 @@
           var j = jobById(t.jobId);
           if (j) { j.updatedAt = Date.now(); if (cb.checked) logActivity(j.id, "✔ " + t.title + " — " + j.name); }
         }
+        save();
+        render();
+      });
+    });
+    rootEl.querySelectorAll("button[data-deltask]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-deltask");
+        var t = state.tasks.filter(function (x) { return x.id === id; })[0];
+        if (!t) return;
+        if (!confirm("Delete task “" + t.title + "”?")) return;
+        state.tasks = state.tasks.filter(function (x) { return x.id !== id; });
         save();
         render();
       });
@@ -427,6 +471,11 @@
       return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
     }
 
+    var installs = state.jobs.filter(function (j) {
+      return j.scheduledDate && j.scheduledDate >= isoToday() && j.scheduledDate <= addDays(7) &&
+        (j.stage === "approved" || j.stage === "production");
+    }).sort(function (a, b) { return a.scheduledDate < b.scheduledDate ? -1 : 1; });
+
     var feed = state.activity.slice(0, 25).map(function (a) {
       var j = a.jobId ? jobById(a.jobId) : null;
       return "<div><time>" + fmtDT(a.ts) + "</time>" + esc(a.text) + (j ? " · " + jobLink(j.id, "open") : "") + "</div>";
@@ -447,6 +496,15 @@
       '<div>' +
       '<div class="card"><h2>📋 Up next</h2>' + taskListHTML(dueSoon, true) +
       '<div class="form-actions"><a class="btn small" href="#/tasks">All tasks →</a></div></div>' +
+      '<div class="card"><h2>🏠 Installs this week</h2>' +
+      (installs.length ? '<div class="table-scroll"><table><thead><tr><th>Date</th><th>Customer</th><th>Crew</th><th class="num">Value</th></tr></thead><tbody>' +
+        installs.map(function (j) {
+          var crew = crewById(j.crewId);
+          var d = new Date(j.scheduledDate + "T00:00:00");
+          return '<tr class="clickable" data-job="' + esc(j.id) + '"><td><b>' + (isNaN(d) ? esc(j.scheduledDate) : d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })) +
+            "</b></td><td>" + esc(j.name) + "</td><td>" + (crew ? esc(crew.name) : "—") + '</td><td class="num">' + (jobValue(j) ? money(jobValue(j)) : "—") + "</td></tr>";
+        }).join("") + "</tbody></table></div>" : '<p class="empty">No installs on the books for the next 7 days.</p>') +
+      '<div class="form-actions"><a class="btn small" href="#/schedule">Full schedule →</a></div></div>' +
       '<div class="card"><h2>🔥 Needs attention <span class="sub" style="margin:0;font-weight:400">(active, quiet 7+ days)</span></h2>' +
       (stale.length ? '<div class="table-scroll"><table><thead><tr><th>Customer</th><th>Stage</th><th class="num">Quiet</th></tr></thead><tbody>' +
         stale.map(function (j) {
@@ -487,6 +545,7 @@
           '<span class="kflags"><span class="chip type">' + esc(j.jobType) + "</span>" +
           (jobOverdue(j) ? '<span class="chip overdue">task overdue</span>' : "") +
           (daysAgo(j.stageAt) >= 14 && ACTIVE_STAGES.indexOf(st.id) >= 0 ? '<span class="chip today">' + daysAgo(j.stageAt) + "d in stage</span>" : "") +
+          '<button class="kmove" data-move="' + esc(j.id) + '" title="Move to another stage">Move ▾</button>' +
           "</span></div>";
       }).join("");
       return '<div class="col" data-stage="' + esc(st.id) + '"><h3><span>' + esc(st.label) +
@@ -497,6 +556,13 @@
     view.innerHTML = '<div class="page-head"><h1>Pipeline</h1><div class="spacer"></div>' +
       '<span class="sub" style="margin:0">Drag a job card to move it — the stage playbook lands on its checklist automatically.</span></div>' +
       '<div class="board">' + cols + "</div>";
+
+    view.querySelectorAll("button[data-move]").forEach(function (b) {
+      b.addEventListener("click", function (e) {
+        e.stopPropagation();
+        openMoveModal(jobById(b.getAttribute("data-move")));
+      });
+    });
 
     var dragId = null;
     view.querySelectorAll(".kcard").forEach(function (card) {
@@ -520,6 +586,222 @@
         if (j) { setStage(j, col.getAttribute("data-stage")); render(); }
       });
     });
+  }
+
+  /* Tap-friendly stage mover — drag-and-drop doesn't exist on touch screens. */
+  function openMoveModal(j) {
+    if (!j) return;
+    var back = document.createElement("div");
+    back.className = "modal-back";
+    back.innerHTML = '<div class="modal" style="max-width:420px"><h2>Move ' + esc(j.name) + " to…</h2>" +
+      '<div class="stage-list">' +
+      stagesForJob(j).map(function (st) {
+        return '<button class="btn' + (st.id === j.stage ? " dark" : "") + '" data-st="' + st.id + '"' +
+          (st.id === j.stage ? " disabled" : "") + ">" + esc(st.label) + (st.id === j.stage ? " (current)" : "") + "</button>";
+      }).join("") +
+      '</div><div class="form-actions"><button class="btn" id="mv-cancel">Cancel</button></div></div>';
+    document.body.appendChild(back);
+    back.addEventListener("click", function (e) { if (e.target === back) back.remove(); });
+    back.querySelector("#mv-cancel").addEventListener("click", function () { back.remove(); });
+    back.querySelectorAll("button[data-st]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var st = b.getAttribute("data-st");
+        if (st === "lost" && j.stage !== "lost") {
+          var reason = prompt("Marking as lost — why? (optional)");
+          if (reason === null) return;
+          j.lostReason = reason || "";
+        }
+        back.remove();
+        setStage(j, st);
+        render();
+      });
+    });
+  }
+
+  /* ======================================================================
+     Schedule — who's roofing where, week by week
+     ====================================================================== */
+
+  function renderSchedule() {
+    var today = isoToday();
+
+    function weekStartOf(dateStr) {
+      var d = new Date(dateStr + "T00:00:00");
+      var day = (d.getDay() + 6) % 7; /* Monday = 0 */
+      d.setDate(d.getDate() - day);
+      return d;
+    }
+    function isoOf(d) {
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+    function weekLabel(d) {
+      var end = new Date(d); end.setDate(end.getDate() + 6);
+      return d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + " – " +
+        end.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    }
+
+    var scheduled = state.jobs.filter(function (j) { return j.scheduledDate && j.stage !== "lost" && j.stage !== "paid"; });
+    var thisMonday = weekStartOf(today);
+
+    /* overdue starts: dated in the past but the job never reached production */
+    var missed = scheduled.filter(function (j) {
+      return j.scheduledDate < today && (j.stage === "approved" || ACTIVE_STAGES.indexOf(j.stage) >= 0 && stageIndex(j.stage) < stageIndex("production"));
+    }).sort(function (a, b) { return a.scheduledDate < b.scheduledDate ? -1 : 1; });
+
+    /* jobs sold but never given a date */
+    var undated = state.jobs.filter(function (j) {
+      return !j.scheduledDate && (j.stage === "approved" || j.stage === "production");
+    });
+
+    function jobRow(j) {
+      var crew = crewById(j.crewId);
+      var d = new Date(j.scheduledDate + "T00:00:00");
+      return '<tr class="clickable" data-job="' + esc(j.id) + '">' +
+        "<td><b>" + (isNaN(d) ? esc(j.scheduledDate) : d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })) + "</b></td>" +
+        "<td><b>" + esc(j.name) + "</b></td>" +
+        "<td>" + esc(j.city || j.address || "") + "</td>" +
+        "<td>" + (crew ? "👷 " + esc(crew.name) : '<span class="chip overdue">no crew</span>') + "</td>" +
+        "<td>" + stageChip(j.stage) + "</td>" +
+        '<td class="num">' + (jobValue(j) ? money(jobValue(j)) : "—") + "</td></tr>";
+    }
+    function table(rows) {
+      return '<div class="table-scroll"><table><thead><tr><th>Date</th><th>Customer</th><th>Where</th><th>Crew</th><th>Stage</th><th class="num">Value</th></tr></thead><tbody>' +
+        rows + "</tbody></table></div>";
+    }
+
+    var weeksHtml = "";
+    for (var w = 0; w < 6; w++) {
+      var start = new Date(thisMonday); start.setDate(start.getDate() + w * 7);
+      var end = new Date(start); end.setDate(end.getDate() + 6);
+      var s0 = isoOf(start), s1 = isoOf(end);
+      var wk = scheduled.filter(function (j) { return j.scheduledDate >= s0 && j.scheduledDate <= s1 && j.scheduledDate >= today; })
+        .sort(function (a, b) { return a.scheduledDate < b.scheduledDate ? -1 : 1; });
+      var title = w === 0 ? "This week" : (w === 1 ? "Next week" : "Week of " + weekLabel(start));
+      weeksHtml += '<div class="card"><h2>🗓 ' + title + ' <span class="sub" style="margin:0;font-weight:400">(' + weekLabel(start) + ")</span></h2>" +
+        (wk.length ? table(wk.map(jobRow).join("")) : '<p class="empty">Nothing on the books.</p>') + "</div>";
+    }
+
+    var later = scheduled.filter(function (j) {
+      var cut = new Date(thisMonday); cut.setDate(cut.getDate() + 42);
+      return j.scheduledDate >= isoOf(cut);
+    }).sort(function (a, b) { return a.scheduledDate < b.scheduledDate ? -1 : 1; });
+
+    view.innerHTML = '<div class="page-head"><h1>Install schedule</h1><div class="spacer"></div>' +
+      '<span class="sub" style="margin:0">Set a job\'s start date and crew from its Edit screen.</span></div>' +
+      (missed.length ? '<div class="card danger-zone"><h2>⚠️ Start date passed, job not in production</h2>' + table(missed.map(jobRow).join("")) + "</div>" : "") +
+      (undated.length ? '<div class="card"><h2>❓ Sold but no start date</h2>' + table(undated.map(function (j) {
+        var crew = crewById(j.crewId);
+        return '<tr class="clickable" data-job="' + esc(j.id) + '"><td>—</td><td><b>' + esc(j.name) + "</b></td><td>" + esc(j.city || "") + "</td>" +
+          "<td>" + (crew ? "👷 " + esc(crew.name) : "—") + "</td><td>" + stageChip(j.stage) + '</td><td class="num">' + (jobValue(j) ? money(jobValue(j)) : "—") + "</td></tr>";
+      }).join("")) + "</div>" : "") +
+      weeksHtml +
+      (later.length ? '<div class="card"><h2>📆 Further out</h2>' + table(later.map(jobRow).join("")) + "</div>" : "");
+
+    view.querySelectorAll("tr[data-job]").forEach(function (tr) {
+      tr.addEventListener("click", function () { location.hash = "#/job/" + tr.getAttribute("data-job"); });
+    });
+  }
+
+  /* ======================================================================
+     Reports — close rate, lead sources, lost reasons, monthly money
+     ====================================================================== */
+
+  function renderReports() {
+    var WON = { approved: 1, production: 1, complete: 1, paid: 1 };
+    var jobs = state.jobs;
+    var won = jobs.filter(function (j) { return WON[j.stage]; });
+    var lost = jobs.filter(function (j) { return j.stage === "lost"; });
+    var working = jobs.filter(function (j) { return !WON[j.stage] && j.stage !== "lost"; });
+    var closeRate = (won.length + lost.length) ? Math.round((won.length / (won.length + lost.length)) * 100) : 0;
+
+    var builtJobs = jobs.filter(function (j) { return j.stage === "complete" || j.stage === "paid"; });
+    var revenue = 0, profit = 0, profitKnown = 0;
+    builtJobs.forEach(function (j) {
+      var p = numVal(j.money.contractPrice);
+      revenue += p;
+      if (p && numVal(j.money.cost)) { profit += p - numVal(j.money.cost); profitKnown += p; }
+    });
+    var marginPct = profitKnown ? Math.round((profit / profitKnown) * 100) : 0;
+    var avgJob = builtJobs.length ? revenue / builtJobs.length : 0;
+
+    /* lead sources */
+    var srcMap = {};
+    jobs.forEach(function (j) {
+      var s = srcMap[j.source] || (srcMap[j.source] = { n: 0, won: 0, lost: 0, rev: 0 });
+      s.n++;
+      if (WON[j.stage]) { s.won++; s.rev += jobValue(j); }
+      if (j.stage === "lost") s.lost++;
+    });
+    var srcRows = Object.keys(srcMap).sort(function (a, b) { return srcMap[b].rev - srcMap[a].rev; }).map(function (k) {
+      var s = srcMap[k];
+      var wr = (s.won + s.lost) ? Math.round((s.won / (s.won + s.lost)) * 100) + "%" : "—";
+      return "<tr><td><b>" + esc(k) + '</b></td><td class="num">' + s.n + '</td><td class="num">' + s.won + '</td><td class="num">' + s.lost +
+        '</td><td class="num">' + wr + '</td><td class="num">' + money(s.rev) + "</td></tr>";
+    }).join("");
+
+    /* job types */
+    var typeMap = {};
+    jobs.forEach(function (j) {
+      var t = typeMap[j.jobType] || (typeMap[j.jobType] = { n: 0, rev: 0 });
+      t.n++;
+      if (WON[j.stage]) t.rev += jobValue(j);
+    });
+    var typeRows = Object.keys(typeMap).map(function (k) {
+      return "<tr><td><b>" + esc(k) + '</b></td><td class="num">' + typeMap[k].n + '</td><td class="num">' + money(typeMap[k].rev) + "</td></tr>";
+    }).join("");
+
+    /* lost reasons */
+    var lostMap = {};
+    lost.forEach(function (j) {
+      var r = (j.lostReason || "No reason recorded").trim() || "No reason recorded";
+      lostMap[r] = (lostMap[r] || 0) + 1;
+    });
+    var lostRows = Object.keys(lostMap).sort(function (a, b) { return lostMap[b] - lostMap[a]; }).map(function (k) {
+      return "<tr><td>" + esc(k) + '</td><td class="num">' + lostMap[k] + "</td></tr>";
+    }).join("");
+
+    /* monthly: last 12 months of completed work */
+    var months = {};
+    builtJobs.forEach(function (j) {
+      var d = j.completedDate ? new Date(j.completedDate + "T00:00:00") : new Date(j.updatedAt);
+      if (isNaN(d)) return;
+      var k = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+      var m = months[k] || (months[k] = { n: 0, rev: 0, profit: 0 });
+      m.n++;
+      m.rev += numVal(j.money.contractPrice);
+      if (numVal(j.money.contractPrice) && numVal(j.money.cost)) m.profit += numVal(j.money.contractPrice) - numVal(j.money.cost);
+    });
+    var monthRows = Object.keys(months).sort().reverse().slice(0, 12).map(function (k) {
+      var m = months[k];
+      var label = new Date(k + "-01T00:00:00").toLocaleDateString(undefined, { month: "long", year: "numeric" });
+      return "<tr><td><b>" + esc(label) + '</b></td><td class="num">' + m.n + '</td><td class="num">' + money(m.rev) + '</td><td class="num">' + money(m.profit) + "</td></tr>";
+    }).join("");
+
+    view.innerHTML = '<div class="page-head"><h1>Reports</h1></div>' +
+      '<div class="stat-strip">' +
+      '<div class="stat"><strong>' + jobs.length + "</strong><span>Total jobs</span></div>" +
+      '<div class="stat"><strong>' + won.length + "</strong><span>Won</span></div>" +
+      '<div class="stat"><strong>' + lost.length + "</strong><span>Lost</span></div>" +
+      '<div class="stat"><strong>' + working.length + "</strong><span>Still working</span></div>" +
+      '<div class="stat hot"><strong>' + closeRate + "%</strong><span>Close rate</span></div>" +
+      '<div class="stat"><strong>' + money(revenue) + "</strong><span>Revenue built</span></div>" +
+      '<div class="stat"><strong>' + money(profit) + "</strong><span>Profit (" + marginPct + "%)</span></div>" +
+      '<div class="stat"><strong>' + money(avgJob) + "</strong><span>Avg job size</span></div>" +
+      "</div>" +
+      '<div class="grid2">' +
+      '<div class="card"><h2>📣 Lead sources</h2>' +
+      (srcRows ? '<div class="table-scroll"><table><thead><tr><th>Source</th><th class="num">Jobs</th><th class="num">Won</th><th class="num">Lost</th><th class="num">Win rate</th><th class="num">Revenue won</th></tr></thead><tbody>' + srcRows + "</tbody></table></div>" : '<p class="empty">No jobs yet.</p>') +
+      "</div>" +
+      '<div class="card"><h2>🧾 Job types</h2>' +
+      (typeRows ? '<div class="table-scroll"><table><thead><tr><th>Type</th><th class="num">Jobs</th><th class="num">Revenue won</th></tr></thead><tbody>' + typeRows + "</tbody></table></div>" : '<p class="empty">No jobs yet.</p>') +
+      "</div>" +
+      '<div class="card"><h2>📉 Why we lose</h2>' +
+      (lostRows ? '<div class="table-scroll"><table><thead><tr><th>Reason</th><th class="num">Jobs</th></tr></thead><tbody>' + lostRows + "</tbody></table></div>" : '<p class="empty">No lost jobs — keep it that way. 💪</p>') +
+      "</div>" +
+      '<div class="card"><h2>📆 Month by month (built work)</h2>' +
+      (monthRows ? '<div class="table-scroll"><table><thead><tr><th>Month</th><th class="num">Jobs</th><th class="num">Revenue</th><th class="num">Profit</th></tr></thead><tbody>' + monthRows + "</tbody></table></div>" : '<p class="empty">Nothing completed yet.</p>') +
+      '<p class="sub" style="margin:.5rem 0 0">Profit only counts jobs where “Our cost” was filled in on the Money card.</p>' +
+      "</div></div>";
   }
 
   /* ======================================================================
@@ -600,10 +882,15 @@
     var paid = jobPaid(j), balance = jobBalance(j);
     var crew = crewById(j.crewId);
 
-    var stepper = STAGES.map(function (st) {
-      var cls = st.id === j.stage ? "current" : (stageIndex(st.id) < stageIndex(j.stage) && st.id !== "lost" ? "done" : "");
+    var jobStages = stagesForJob(j);
+    var curIdx = -1;
+    jobStages.forEach(function (st, i) { if (st.id === j.stage) curIdx = i; });
+    var stepper = jobStages.map(function (st, i) {
+      var cls = st.id === j.stage ? "current" : (curIdx >= 0 && i < curIdx && st.id !== "lost" ? "done" : "");
       return '<button data-stage="' + st.id + '" class="' + cls + '">' + esc(st.label) + "</button>";
     }).join("");
+    var nextStage = (curIdx >= 0 && curIdx < jobStages.length - 1 && jobStages[curIdx + 1].id !== "lost")
+      ? jobStages[curIdx + 1] : null;
 
     var openTasks = jobTasks(j).filter(function (t) { return !t.done; });
     var doneTasks = jobTasks(j).filter(function (t) { return t.done; }).sort(function (a, b) { return b.doneAt - a.doneAt; });
@@ -632,7 +919,9 @@
       '<button class="btn" id="edit-job">✏️ Edit</button>' +
       '<button class="btn danger" id="del-job">Delete</button></div></div>' +
 
-      '<div class="stage-stepper" id="stepper">' + stepper + "</div>" +
+      '<div class="stage-stepper" id="stepper">' + stepper +
+      (nextStage ? '<button class="advance" id="advance-btn">Advance → ' + esc(nextStage.label) + "</button>" : "") +
+      "</div>" +
       (j.stage === "lost" && j.lostReason ? '<p class="sub">Lost — ' + esc(j.lostReason) + "</p>" : "") +
 
       '<div class="grid2">' +
@@ -662,7 +951,9 @@
         "<dt>RCV</dt><dd>" + (numVal(ins.rcv) ? money(ins.rcv) : "—") + "</dd>" +
         "<dt>Deductible</dt><dd>" + (ded ? money(ded) : "—") + "</dd>" +
         "<dt>ACV not in scope</dt><dd>" + (acv ? money(acv) : "—") + "</dd>" +
-        "<dt>Supplements</dt><dd>" + esc(ins.supplements || "—") + "</dd>" +
+        "<dt>Supplements approved</dt><dd>" + (numVal(ins.supplementsAmount) ? money(ins.supplementsAmount) : "—") + "</dd>" +
+        (numVal(ins.rcv) && numVal(ins.supplementsAmount) ? "<dt>Total claim value</dt><dd><b>" + money(numVal(ins.rcv) + numVal(ins.supplementsAmount)) + "</b> (RCV + supplements)</dd>" : "") +
+        "<dt>Supplement notes</dt><dd>" + esc(ins.supplements || "—") + "</dd>" +
         "</dl>" +
         (ded ? '<div class="calc">💡 <b>Deductible offset:</b> ACV on items not in scope covers <strong class="' + (offsetPct >= 100 ? "good" : "bad") + '">' + money(offsetCovered) + " (" + offsetPct + "%)</strong> of the " + money(ded) + " deductible → customer's true out-of-pocket ≈ <b>" + money(outOfPocket) + "</b>.</div>" : "") +
         "</div>" : "") +
@@ -681,7 +972,11 @@
       "<h2 style=\"margin-top:1rem\">Payments</h2>" +
       (payRows ? '<div class="table-scroll"><table><thead><tr><th>Date</th><th>Method</th><th class="num">Amount</th><th>Note</th><th></th></tr></thead><tbody>' + payRows + "</tbody></table></div>" : '<p class="empty">No payments logged.</p>') +
       '<dl class="kv" style="margin-top:.6rem"><dt>Collected</dt><dd><b>' + money(paid) + "</b></dd>" +
-      "<dt>Balance</dt><dd><b" + (balance > 0 && numVal(m.contractPrice) ? ' style="color:var(--red-dark)"' : "") + ">" + (numVal(m.contractPrice) ? money(balance) : "—") + "</b></dd></dl>" +
+      "<dt>Balance</dt><dd><b" + (balance > 0 && numVal(m.contractPrice) ? ' style="color:var(--red-dark)"' : "") + ">" + (numVal(m.contractPrice) ? money(balance) : "—") + "</b></dd>" +
+      (cost > 0 && numVal(m.contractPrice) > 0 ?
+        "<dt>Profit</dt><dd><b style=\"color:" + (numVal(m.contractPrice) - cost > 0 ? "var(--green-text)" : "var(--red-dark)") + "\">" +
+        money(numVal(m.contractPrice) - cost) + "</b> (" + Math.round(((numVal(m.contractPrice) - cost) / numVal(m.contractPrice)) * 100) + "% margin)</dd>" : "") +
+      "</dl>" +
       '<form id="pay-form" class="form-grid" style="margin-top:.6rem">' +
       '<div><label>Date</label><input type="date" id="p-date" value="' + isoToday() + '"></div>' +
       '<div><label>Amount</label><input id="p-amount" inputmode="decimal" placeholder="0" required></div>' +
@@ -712,7 +1007,10 @@
     /* --- wiring --- */
     wireTaskCheckboxes(view);
 
-    document.getElementById("stepper").querySelectorAll("button").forEach(function (b) {
+    var advBtn = document.getElementById("advance-btn");
+    if (advBtn) advBtn.addEventListener("click", function () { setStage(j, nextStage.id); render(); });
+
+    document.getElementById("stepper").querySelectorAll("button[data-stage]").forEach(function (b) {
       b.addEventListener("click", function () {
         var st = b.getAttribute("data-stage");
         if (st === "lost" && j.stage !== "lost") {
@@ -798,7 +1096,7 @@
   function openJobModal(job) {
     var isNew = !job;
     var j = job || { name: "", phone: "", email: "", address: "", city: "", jobType: "Insurance", source: "Referral", roofType: "", squares: "",
-      insurance: { carrier: "", claimNumber: "", adjusterName: "", adjusterPhone: "", rcv: "", deductible: "", acvOffset: "", supplements: "" },
+      insurance: { carrier: "", claimNumber: "", adjusterName: "", adjusterPhone: "", rcv: "", deductible: "", acvOffset: "", supplementsAmount: "", supplements: "" },
       links: { roofr: "", companycam: "", dropbox: "", other: "" }, scheduledDate: "", crewId: "" };
 
     var back = document.createElement("div");
@@ -826,7 +1124,8 @@
       f("RCV total", "ins.rcv", j.insurance.rcv, "text", false, "$") +
       f("Deductible", "ins.deductible", j.insurance.deductible, "text", false, "$") +
       f("ACV not in scope", "ins.acvOffset", j.insurance.acvOffset, "text", false, "$ — offsets the deductible") +
-      f("Supplements", "ins.supplements", j.insurance.supplements, "text", false, "status / amounts") +
+      f("Supplements approved ($)", "ins.supplementsAmount", j.insurance.supplementsAmount, "text", false, "$ — adds to the claim total") +
+      f("Supplement notes", "ins.supplements", j.insurance.supplements, "text", false, "what was submitted / status") +
       '</div><h2 style="margin-top:1rem">Links</h2><div class="form-grid">' +
       f("Roofr proposal / report", "links.roofr", j.links.roofr, "url") +
       f("CompanyCam project", "links.companycam", j.links.companycam, "url") +
@@ -870,6 +1169,7 @@
       target.insurance.rcv = g("ins.rcv");
       target.insurance.deductible = g("ins.deductible");
       target.insurance.acvOffset = g("ins.acvOffset");
+      target.insurance.supplementsAmount = g("ins.supplementsAmount");
       target.insurance.supplements = g("ins.supplements");
       target.links.roofr = g("links.roofr");
       target.links.companycam = g("links.companycam");
