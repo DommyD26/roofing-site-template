@@ -95,6 +95,8 @@
   function freshState() {
     return {
       version: 1,
+      rev: 0,
+      tombstones: {}, /* deleted ids → deletion time, so deletes sync across devices */
       settings: {
         companyName: "T^Rock Contracting",
         markup: 2.0,
@@ -125,12 +127,18 @@
       for (var k in base.settings) if (s.settings && s.settings[k] !== undefined) base.settings[k] = s.settings[k];
       base.jobs = s.jobs || []; base.contacts = s.contacts || []; base.crews = s.crews || [];
       base.tasks = s.tasks || []; base.activity = s.activity || [];
+      base.rev = s.rev || 0; base.tombstones = s.tombstones || {};
       return base;
     } catch (e) { return freshState(); }
   }
 
   var syncTimer = null;
+  function tombstone(id) {
+    state.tombstones = state.tombstones || {};
+    state.tombstones[id] = Date.now();
+  }
   function save() {
+    state.rev = (state.rev || 0) + 1;
     try { localStorage.setItem(DB_KEY, JSON.stringify(state)); } catch (e) { toast("⚠️ Couldn't save — storage full?"); }
     if (state.settings.syncUrl && state.settings.syncKey) {
       clearTimeout(syncTimer);
@@ -339,28 +347,109 @@
     }).catch(function () { if (!quiet) toast("Cloud push failed — check the URL / connection."); });
   }
 
-  function pullCloud() {
+  /* ---- automatic two-way sync ----------------------------------------
+     Push: debounced a few seconds after every save (above).
+     Pull: on app open, on returning to the tab, and every 90 seconds —
+     merged rather than replaced, so nobody's edits get clobbered:
+     · each job/contact/crew/task keeps whichever version was touched last
+     · deletions carry across devices via tombstones
+     · nothing refreshes while the user is typing or has a form open      */
+
+  var PULL_MS = 90000;
+  var lastPullAt = 0;
+
+  function itemTime(x) { return x.updatedAt || x.doneAt || x.createdAt || 0; }
+
+  function mergeCollection(loc, rem, tombs) {
+    var byId = {};
+    (rem || []).forEach(function (x) { if (x && x.id) byId[x.id] = x; });
+    (loc || []).forEach(function (x) {
+      if (!x || !x.id) return;
+      var r = byId[x.id];
+      byId[x.id] = (!r || itemTime(x) >= itemTime(r)) ? x : r;
+    });
+    var out = [];
+    Object.keys(byId).forEach(function (id) {
+      var t = tombs[id] || 0;
+      if (t && t >= itemTime(byId[id])) return; /* deleted after its last edit */
+      out.push(byId[id]);
+    });
+    return out;
+  }
+
+  function mergeStates(loc, rem) {
+    var tombs = {}, k;
+    for (k in (loc.tombstones || {})) tombs[k] = loc.tombstones[k];
+    for (k in (rem.tombstones || {})) if (!tombs[k] || rem.tombstones[k] > tombs[k]) tombs[k] = rem.tombstones[k];
+    var cutoff = Date.now() - 90 * 86400000;
+    for (k in tombs) if (tombs[k] < cutoff) delete tombs[k];
+
+    var seen = {}, act = [];
+    (loc.activity || []).concat(rem.activity || []).forEach(function (a) {
+      var key = a.ts + "|" + a.text;
+      if (seen[key]) return;
+      seen[key] = 1;
+      act.push(a);
+    });
+    act.sort(function (a, b) { return b.ts - a.ts; });
+
+    return {
+      version: 1,
+      rev: Math.max(loc.rev || 0, rem.rev || 0) + 1,
+      tombstones: tombs,
+      settings: loc.settings, /* this device's settings + sync creds always win locally */
+      jobs: mergeCollection(loc.jobs, rem.jobs, tombs).sort(function (a, b) { return (b.updatedAt || 0) - (a.updatedAt || 0); }),
+      contacts: mergeCollection(loc.contacts, rem.contacts, tombs),
+      crews: mergeCollection(loc.crews, rem.crews, tombs),
+      tasks: mergeCollection(loc.tasks, rem.tasks, tombs),
+      activity: act.slice(0, 500)
+    };
+  }
+
+  function userIsBusy() {
+    if (document.querySelector(".modal-back")) return true;
+    var el = document.activeElement;
+    return !!(el && /INPUT|TEXTAREA|SELECT/.test(el.tagName));
+  }
+
+  function autoPull(reason) {
     var s = state.settings;
-    if (!s.syncUrl || !s.syncKey) { toast("Set the sync URL + key in Settings first."); return; }
+    if (!s.syncUrl || !s.syncKey) {
+      if (reason === "manual") toast("Set the sync URL + key first.");
+      return;
+    }
+    if (userIsBusy() && reason !== "manual") return;
+    lastPullAt = Date.now();
     fetch(s.syncUrl + (s.syncUrl.indexOf("?") >= 0 ? "&" : "?") + "key=" + encodeURIComponent(s.syncKey) + "&t=" + Date.now())
       .then(function (r) { return r.json(); })
       .then(function (j) {
-        if (!j || !j.ok) { toast("Cloud pull failed — check the key."); return; }
-        if (!j.state) { toast("Nothing in the cloud yet — push first."); return; }
-        if (!confirm("Replace everything on this device with the cloud copy?")) return;
-        var keep = { syncUrl: s.syncUrl, syncKey: s.syncKey };
-        state = j.state;
-        var base = freshState();
-        state.settings = state.settings || base.settings;
-        state.settings.syncUrl = keep.syncUrl;
-        state.settings.syncKey = keep.syncKey;
+        if (!j || !j.ok) { if (reason === "manual") toast("Cloud check failed — check the key."); return; }
+        if (!j.state) { pushCloud(true); return; } /* empty cloud: seed it with this book */
+        var snap = function (st) { return JSON.stringify({ j: st.jobs, c: st.contacts, w: st.crews, t: st.tasks }); };
+        var localBefore = snap(state), cloudNow = snap(j.state);
+        var merged = mergeStates(state, j.state);
+        if (userIsBusy() && reason !== "manual") return; /* re-check after the network wait */
+        state = merged;
         state.settings.lastSync = Date.now();
-        save();
-        toast("☁️ Pulled from cloud");
-        render();
+        try { localStorage.setItem(DB_KEY, JSON.stringify(state)); } catch (e) {}
+        var mergedSnap = snap(state);
+        if (mergedSnap !== cloudNow) { /* we have something the cloud doesn't */
+          clearTimeout(syncTimer);
+          syncTimer = setTimeout(function () { pushCloud(true); }, 1500);
+        }
+        if (mergedSnap !== localBefore) { render(); toast("↺ Updated from cloud"); }
+        else if (reason === "manual") toast("✓ Already in sync");
       })
-      .catch(function () { toast("Cloud pull failed — check the URL / connection."); });
+      .catch(function () { if (reason === "manual") toast("Cloud check failed — check the connection."); });
   }
+  window.__crmPull = autoPull;
+
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && Date.now() - lastPullAt > 5000) autoPull("focus");
+  });
+  setInterval(function () {
+    if (!document.hidden && Date.now() - lastPullAt > PULL_MS - 500) autoPull("interval");
+  }, PULL_MS);
 
   /* ======================================================================
      Router
@@ -438,6 +527,7 @@
         if (!t) return;
         t.done = cb.checked;
         t.doneAt = cb.checked ? Date.now() : 0;
+        t.updatedAt = Date.now();
         if (t.jobId) {
           var j = jobById(t.jobId);
           if (j) { j.updatedAt = Date.now(); if (cb.checked) logActivity(j.id, "✔ " + t.title + " — " + j.name); }
@@ -453,6 +543,7 @@
         if (!t) return;
         if (!confirm("Delete task “" + t.title + "”?")) return;
         state.tasks = state.tasks.filter(function (x) { return x.id !== id; });
+        tombstone(id);
         save();
         render();
       });
@@ -1199,6 +1290,8 @@
     document.getElementById("edit-job").addEventListener("click", function () { openJobModal(j); });
     document.getElementById("del-job").addEventListener("click", function () {
       if (!confirm("Delete " + j.name + " and all their tasks/notes? This can't be undone.")) return;
+      state.tasks.forEach(function (t) { if (t.jobId === j.id) tombstone(t.id); });
+      tombstone(j.id);
       state.jobs = state.jobs.filter(function (x) { return x.id !== j.id; });
       state.tasks = state.tasks.filter(function (t) { return t.jobId !== j.id; });
       logActivity("", "Deleted job — " + j.name);
@@ -1551,6 +1644,7 @@
         var c = contactById(b.getAttribute("data-del"));
         if (c && confirm("Delete " + c.name + "?")) {
           state.contacts = state.contacts.filter(function (x) { return x.id !== c.id; });
+          tombstone(c.id);
           save(); render();
         }
       });
@@ -1585,6 +1679,7 @@
       if (isNew) { c.id = uid(); state.contacts.push(c); }
       c.name = g("name"); c.type = g("type"); c.company = g("company");
       c.phone = g("phone"); c.email = g("email"); c.notes = g("notes");
+      c.updatedAt = Date.now();
       save(); back.remove(); render();
     });
   }
@@ -1647,6 +1742,7 @@
         if (!c) return;
         c.onboard = c.onboard || {};
         c.onboard[parts[1]] = cb.checked;
+        c.updatedAt = Date.now();
         save(); render();
       });
     });
@@ -1660,6 +1756,7 @@
         var c = crewById(b.getAttribute("data-del"));
         if (c && confirm("Delete crew " + c.name + "? Jobs assigned to it will show no crew.")) {
           state.crews = state.crews.filter(function (x) { return x.id !== c.id; });
+          tombstone(c.id);
           state.jobs.forEach(function (j) { if (j.crewId === c.id) j.crewId = ""; });
           save(); render();
         }
@@ -1696,6 +1793,7 @@
       c.name = g("name"); c.lead = g("lead"); c.phone = g("phone"); c.notes = g("notes");
       c.rate = g("rate"); c.coiExpiry = g("coiExpiry");
       c.onboard = c.onboard || {};
+      c.updatedAt = Date.now();
       save(); back.remove(); render();
     });
   }
@@ -1740,8 +1838,9 @@
       '</div><div class="form-actions"><button class="btn primary">Save sync settings</button></div></form>' +
       '<div class="form-actions" style="margin-top:.6rem">' +
       '<button class="btn" id="push-btn">☁️ Push to cloud now</button>' +
-      '<button class="btn" id="pull-btn">⬇ Pull from cloud</button></div>' +
-      '<p class="sub" style="margin:.6rem 0 0">Last push: ' + (s.lastSync ? fmtDT(s.lastSync) : "never") + ". When sync is on, changes auto-push a few seconds after you make them.</p></div>" +
+      '<button class="btn" id="pull-btn">↺ Check cloud now</button></div>' +
+      '<p class="sub" style="margin:.6rem 0 0">Last synced: ' + (s.lastSync ? fmtDT(s.lastSync) : "never") +
+      ". Sync is automatic: your changes upload a few seconds after you make them, and this device checks for everyone else's changes when you open the app, when you come back to it, and every 90 seconds. Updates from other devices merge in — the most recently edited version of each job wins, and deletions carry across. The buttons just force it.</p></div>" +
 
       '<div class="card"><h2>📈 Book at a glance</h2><dl class="kv">' +
       "<dt>Jobs</dt><dd>" + state.jobs.length + "</dd>" +
@@ -1772,7 +1871,7 @@
     });
 
     document.getElementById("push-btn").addEventListener("click", function () { pushCloud(false); });
-    document.getElementById("pull-btn").addEventListener("click", pullCloud);
+    document.getElementById("pull-btn").addEventListener("click", function () { autoPull("manual"); });
     document.getElementById("tour-replay").addEventListener("click", function () { window.__startTour(); });
 
     document.getElementById("export-btn").addEventListener("click", function () {
@@ -2211,4 +2310,5 @@
 
   render();
   maybeInviteTour();
+  autoPull("boot");
 })();
