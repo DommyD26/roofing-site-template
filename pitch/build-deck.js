@@ -254,7 +254,55 @@ function footer(slide, n, note) {
     footer(s, 6, "*Founding Member: all Platinum features, $2,000/month locked for life. Get cancellation terms in writing on the demo. Source: stormscout.ai/pricing, Aug 20, 2026.");
   }
 
-  // ------------------------------------------------------------- 7. BREAK-EVEN
+  // ------------------------------------------------------ 7. COST PER LEAD
+  {
+    const s = pres.addSlide();
+    s.background = { color: WHITE };
+    s.addText("Cost per lead vs. the channels we already know", {
+      x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
+    });
+    s.addText("Typical published per-lead prices for roofing (midpoints charted, ranges at right). Worth checking against our own ad history.", {
+      x: 0.6, y: 1.18, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
+    });
+
+    s.addChart(pres.ChartType.bar, [
+      {
+        name: "Typical cost per roofing lead",
+        labels: ["Storm Scout (Founding)", "Thumbtack", "Angi", "Google Ads / LSA"],
+        values: [10, 58, 90, 160],
+      },
+    ], {
+      x: 0.6, y: 1.75, w: 7.3, h: 4.1,
+      barDir: "bar",
+      chartColors: [RED],
+      showTitle: true, title: "Typical cost per roofing lead ($)", titleFontSize: 14, titleColor: BLACK, titleFontFace: "Arial",
+      showValue: true, dataLabelPosition: "outEnd", dataLabelColor: BLACK, dataLabelFontSize: 12, dataLabelFontFace: "Arial", dataLabelFormatCode: "$#,##0",
+      showLegend: false,
+      catAxisLabelColor: INK, catAxisLabelFontSize: 12, catAxisLabelFontFace: "Arial",
+      valAxisLabelColor: MUTED, valAxisLabelFontSize: 10, valAxisLabelFontFace: "Arial", valAxisLabelFormatCode: "$#,##0",
+      valAxisMaxVal: 180,
+      valGridLine: { color: "E8E8E8", size: 0.5 },
+      catGridLine: { style: "none" },
+    });
+
+    s.addShape("roundRect", { x: 8.15, y: 1.75, w: 4.55, h: 4.1, fill: { color: CARD }, rectRadius: 0.08 });
+    s.addText("What each dollar buys", { x: 8.5, y: 1.95, w: 3.9, h: 0.35, fontSize: 15, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
+    s.addText([
+      { text: "Google Ads / LSA — $75–250: exclusive, but intent and quality swing wildly", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
+      { text: "Angi — $50–125: same lead sold to 3–4 competing contractors", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
+      { text: "Thumbtack — $25–90: pay per contact, homeowner is price-shopping", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
+      { text: "Storm Scout — $2,000/mo flat: even a slow 200 records/month prices at $10; every record past that is free, exclusive, and damage-verified", options: { bullet: true, breakLine: true, color: RED, bold: true } },
+    ], { x: 8.5, y: 2.4, w: 3.9, h: 3.3, fontSize: 11.5, color: INK, fontFace: "Arial", margin: 0 });
+
+    s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
+    s.addText([
+      { text: "Different animals — inbound requests vs. targeted verified-damage contacts — ", options: { color: "E6E6E6" } },
+      { text: "but they compete for the same marketing dollar, at a 6–16× price gap.", options: { bold: true, color: WHITE } },
+    ], { x: 0.95, y: 6.18, w: 11.5, h: 0.55, fontSize: 14.5, fontFace: "Arial", margin: 0 });
+    footer(s, 7, "Channel figures are typical published ranges for roofing leads, not quotes — swap in T^Rock's actual per-lead costs where we have history.");
+  }
+
+  // ------------------------------------------------------------- 8. BREAK-EVEN
   {
     const s = pres.addSlide();
     s.background = { color: WHITE };
@@ -312,7 +360,7 @@ function footer(slide, n, note) {
       { text: "Founding breaks even at 4.8 jobs a year — one incremental roof every ~11 weeks — on T^Rock's share alone. ", options: { bold: true, color: WHITE } },
       { text: "Past that it's margin, at $500/mo under Platinum sticker forever.", options: { color: "E6E6E6" } },
     ], { x: 0.95, y: 6.2, w: 11.5, h: 0.5, fontSize: 15, fontFace: "Arial", margin: 0 });
-    footer(s, 7, "Per job: $30,000 × 35% = $10,500, less 2% RCV scope fee ($600) = $9,900, split 50/50 with the PM → $4,950 to T^Rock.");
+    footer(s, 8, "Per job: $30,000 × 35% = $10,500, less 2% RCV scope fee ($600) = $9,900, split 50/50 with the PM → $4,950 to T^Rock.");
   }
 
   // ---------------------------------------------------------------- 8. UPSIDE
@@ -327,28 +375,41 @@ function footer(slide, n, note) {
     });
 
     const scen = [
-      { icon: icons.check, tag: "CONSERVATIVE", roofs: "8", rev: "$240,000 revenue", net: "+$15,600 net to T^Rock" },
-      { icon: icons.chart, tag: "BASE CASE", roofs: "18", rev: "$540,000 revenue", net: "+$65,100 net to T^Rock" },
-      { icon: icons.bolt, tag: "STRONG STORM YEAR", roofs: "30", rev: "$900,000 revenue", net: "+$124,500 net to T^Rock" },
+      { icon: icons.check, tag: "CONSERVATIVE", roofs: "8" },
+      { icon: icons.chart, tag: "BASE CASE", roofs: "18" },
+      { icon: icons.bolt, tag: "STRONG STORM YEAR", roofs: "30" },
     ];
     scen.forEach((t, i) => {
       const x = 0.6 + i * 4.15;
-      s.addShape("roundRect", { x, y: 1.95, w: 3.85, h: 3.75, fill: { color: CARD }, rectRadius: 0.08 });
-      circleIcon(s, t.icon, x + 0.35, 2.25, 0.7);
-      s.addText(t.tag, { x: x + 1.25, y: 2.42, w: 2.5, h: 0.35, fontSize: 12, bold: true, color: RED, fontFace: "Arial", margin: 0 });
-      s.addText(t.roofs, { x: x + 0.35, y: 3.0, w: 3.2, h: 0.95, fontSize: 54, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
-      s.addText("incremental roofs / yr", { x: x + 0.35, y: 3.95, w: 3.2, h: 0.3, fontSize: 12, color: MUTED, fontFace: "Arial", margin: 0 });
-      s.addText(t.rev, { x: x + 0.35, y: 4.35, w: 3.2, h: 0.4, fontSize: 18, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
-      s.addText(t.net, { x: x + 0.35, y: 4.78, w: 3.2, h: 0.35, fontSize: 15, bold: true, color: RED, fontFace: "Arial", margin: 0 });
-      s.addText("after scope fee, PM split & subscription", { x: x + 0.35, y: 5.18, w: 3.2, h: 0.35, fontSize: 10, italic: true, color: MUTED, fontFace: "Arial", margin: 0 });
+      s.addShape("roundRect", { x, y: 1.85, w: 3.85, h: 1.85, fill: { color: CARD }, rectRadius: 0.08 });
+      circleIcon(s, t.icon, x + 0.3, 2.1, 0.55);
+      s.addText(t.tag, { x: x + 1.0, y: 2.2, w: 2.7, h: 0.35, fontSize: 12, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+      s.addText(t.roofs, { x: x + 0.3, y: 2.6, w: 1.3, h: 0.75, fontSize: 40, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
+      s.addText("incremental roofs / yr", { x: x + 1.6, y: 2.95, w: 2.1, h: 0.3, fontSize: 12, color: MUTED, fontFace: "Arial", margin: 0 });
     });
 
-    s.addShape("roundRect", { x: 0.6, y: 6.0, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
+    // the math trail behind each scenario
+    const mh = { bold: true, color: WHITE, fill: { color: BLACK }, fontFace: "Arial", fontSize: 11.5, valign: "middle", align: "center" };
+    const mc = { fontFace: "Arial", fontSize: 12, color: INK, valign: "middle", align: "center" };
+    const mn = { fontFace: "Arial", fontSize: 12.5, bold: true, color: RED, valign: "middle", align: "center" };
+    const mrows = [
+      [{ text: "Roofs", options: mh }, { text: "Revenue (× $30,000)", options: mh }, { text: "Gross profit (35%)", options: mh }, { text: "Scope fee (2% RCV)", options: mh }, { text: "T^Rock half after fee", options: mh }, { text: "Less $24,000 sub = NET", options: mh }],
+      [{ text: "8", options: mc }, { text: "$240,000", options: mc }, { text: "$84,000", options: mc }, { text: "− $4,800", options: mc }, { text: "$39,600", options: mc }, { text: "+$15,600", options: mn }],
+      [{ text: "18", options: mc }, { text: "$540,000", options: mc }, { text: "$189,000", options: mc }, { text: "− $10,800", options: mc }, { text: "$89,100", options: mc }, { text: "+$65,100", options: mn }],
+      [{ text: "30", options: mc }, { text: "$900,000", options: mc }, { text: "$315,000", options: mc }, { text: "− $18,000", options: mc }, { text: "$148,500", options: mc }, { text: "+$124,500", options: mn }],
+    ];
+    s.addTable(mrows, {
+      x: 0.6, y: 3.95, w: 12.1, colW: [1.1, 2.35, 2.2, 2.2, 2.15, 2.1],
+      border: { type: "solid", color: "DDDDDD", pt: 0.75 },
+      rowH: [0.5, 0.45, 0.45, 0.45], margin: 0.06,
+    });
+
+    s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
     s.addText([
       { text: "The maps exist either way. ", options: { bold: true, color: WHITE } },
       { text: "The only question is whether T^Rock or a competitor is holding them when the next storm hits.", options: { color: "E6E6E6" } },
-    ], { x: 0.95, y: 6.13, w: 11.5, h: 0.55, fontSize: 15, fontFace: "Arial", margin: 0 });
-    footer(s, 8, "Net = (RCV × 35% − 2% scope fee) ÷ 2 − $24,000/yr subscription. Any shared-lead or list spend this replaces is a direct offset on top.");
+    ], { x: 0.95, y: 6.18, w: 11.5, h: 0.55, fontSize: 15, fontFace: "Arial", margin: 0 });
+    footer(s, 9, "T^Rock half = (gross profit − scope fee) ÷ 2 (50/50 PM split). Any shared-lead or ad spend this replaces is a direct offset on top.");
   }
 
   // ----------------------------------------------------- 9. PROOF SCORECARD
@@ -383,7 +444,7 @@ function footer(slide, n, note) {
       { text: "Kill criteria, agreed up front: ", options: { bold: true, color: BLACK } },
       { text: "if all-in cost per sold job isn't beating our current baseline at day 90, we cancel. Spend at risk: $6,000 — T^Rock's net on about 1.2 jobs. Founding bills $2,000 monthly; we get clean cancellation terms in writing before signing.", options: { color: INK } },
     ], { x: 1.6, y: 5.55, w: 11.0, h: 0.85, fontSize: 14.5, fontFace: "Arial", margin: 0 });
-    footer(s, 9, "Start the 90-day clock on the first mapped storm, not a calendar date. Leadership sets final thresholds up front.");
+    footer(s, 10, "Start the 90-day clock on the first mapped storm, not a calendar date. Leadership sets final thresholds up front.");
   }
 
   // ---------------------------------------------------- 8. STRAIGHT ANSWERS
@@ -408,10 +469,10 @@ function footer(slide, n, note) {
       s.addText(it.h, { x: x + 1.15, y: y + 0.28, w: 4.55, h: 0.4, fontSize: 16, bold: true, color: RED, fontFace: "Arial", margin: 0 });
       s.addText(it.b, { x: x + 1.15, y: y + 0.72, w: 4.55, h: 1.6, fontSize: 12, color: INK, fontFace: "Arial", margin: 0 });
     });
-    footer(s, 10, "");
+    footer(s, 11, "");
   }
 
-  // ----------------------------------------------------------------- 11. ASK
+  // ----------------------------------------------------------------- 12. ASK
   {
     const s = pres.addSlide();
     s.background = { color: BLACK };
