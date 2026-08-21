@@ -517,6 +517,7 @@
       q.cat = entry.cat;
     } else {
       q = { q: entry.q, a: entry.a.slice(), correct: entry.correct, cat: entry.cat, bi: ch.bank.indexOf(entry) };
+      if (entry.x) q.x = entry.x; // expansion-bank questions carry their own explanation
     }
     q.chapter = ch.id;
     // shuffle answers, track new correct index
@@ -526,12 +527,44 @@
     return q;
   }
 
-  /* Chapter tests are always exactly 10 questions: fill from the bank,
+  /* Rotating question decks: instead of sampling the bank at random
+     (which repeats questions constantly), each chapter keeps a shuffled
+     deck of bank indices in localStorage. Draws come off the top, so
+     every question in the bank appears before any question repeats —
+     shared across chapter tests, practice tests and the exam. */
+  var DECK_KEY = "rce-deck";
+  function loadDecks() {
+    try { var d = JSON.parse(localStorage.getItem(DECK_KEY)); return plainObject(d) ? d : {}; }
+    catch (e) { return {}; }
+  }
+  function saveDecks(d) {
+    try { localStorage.setItem(DECK_KEY, JSON.stringify(d)); } catch (e) {}
+  }
+  function drawFromBank(ch, n) {
+    var decks = loadDecks();
+    var deck = Array.isArray(decks[ch.id]) ? decks[ch.id].filter(function (i) {
+      return typeof i === "number" && i >= 0 && i < ch.bank.length;
+    }) : [];
+    n = Math.min(n, ch.bank.length);
+    var out = [];
+    while (out.length < n) {
+      if (!deck.length) {
+        deck = shuffle(ch.bank.map(function (_, i) { return i; })
+          .filter(function (i) { return out.indexOf(i) === -1; }));
+      }
+      out.push(deck.shift());
+    }
+    decks[ch.id] = deck;
+    saveDecks(decks);
+    return out.map(function (i) { return ch.bank[i]; });
+  }
+
+  /* Chapter tests are always exactly 10 questions: fill from the deck,
      topped up with the chapter's generated fresh-numbers problems. */
   function buildChapterTest(ch) {
     var gensUsed = Math.min(ch.gens.length, 2);
     var staticCount = Math.min(ch.bank.length, 10 - gensUsed);
-    var qs = shuffle(ch.bank).slice(0, staticCount).map(function (e) { return materialize(e, ch); });
+    var qs = drawFromBank(ch, staticCount).map(function (e) { return materialize(e, ch); });
     shuffle(ch.gens).slice(0, 10 - qs.length).forEach(function (g) { qs.push(materialize(g, ch)); });
     return shuffle(qs);
   }
@@ -550,8 +583,9 @@
   function buildPractice() {
     var pool = [];
     C.chapters.forEach(function (ch) {
-      var picks = shuffle(ch.bank).slice(0, 2);
-      if (ch.gens.length && Math.random() < 0.5) picks[0] = R.pick(ch.gens);
+      var useGen = ch.gens.length && Math.random() < 0.5;
+      var picks = drawFromBank(ch, useGen ? 1 : 2);
+      if (useGen) picks.push(R.pick(ch.gens));
       picks.forEach(function (e) { pool.push(materialize(e, ch)); });
     });
     return shuffle(pool);
@@ -562,7 +596,7 @@
   function buildFinal() {
     var pool = [];
     C.chapters.forEach(function (ch) {
-      var statics = shuffle(ch.bank).slice(0, ch.gens.length ? 3 : 4);
+      var statics = drawFromBank(ch, ch.gens.length ? 3 : 4);
       statics.forEach(function (e) { pool.push(materialize(e, ch)); });
       if (ch.gens.length) pool.push(materialize(R.pick(ch.gens), ch));
     });
@@ -1332,6 +1366,7 @@
         DB = { attempts: [], badges: {}, read: {}, name: DB.name, firstName: DB.firstName, lastName: DB.lastName, playerId: DB.playerId, syncCode: DB.syncCode };
         skipNextCloud = true; // keep the cloud copy as a recovery point
         try { localStorage.removeItem(QUIZ_KEY); } catch (e) {}
+        try { localStorage.removeItem(DECK_KEY); } catch (e) {}
         save();
         route();
       }

@@ -11,7 +11,8 @@ and tracks every test you've ever taken.
   reading assignment (chapter + page range) and closes with a Summary / Key Points /
   Things to Remember / Tips & Tricks recap.
 - **Chapter tests (~10 Q), a 30-question practice test (2 per chapter), and a 60-question certification exam (4 per chapter)**
-  (70% passes chapters, 80% passes the exam) drawn from a 175-question bank.
+  (70% passes chapters, 80% passes the exam) drawn from a 290+-question bank
+  that rotates so no question repeats until the whole bank has been seen.
 - **Fresh numbers every attempt** — math/takeoff problems are generated with new values
   each time, so retakes test skill, not memory.
 - **Complete grading history** — every attempt is saved; each chapter shows a *chapter score*
