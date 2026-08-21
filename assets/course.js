@@ -830,6 +830,78 @@
     document.querySelectorAll(".sidebar a").forEach(function (a) {
       a.classList.toggle("active", a.getAttribute("href") === (location.hash || "#/home"));
     });
+    renderTabbar();
+  }
+
+  /* ---------------- bottom tab bar (app-style navigation) ---------------- */
+
+  var TABS = [
+    { href: "#/home", icon: "🏠", label: "Home", match: /^#\/home/ },
+    { href: "#/chapters", icon: "📚", label: "Chapters", match: /^#\/(chapters|chapter\/|test\/)/ },
+    { href: "#/practice", icon: "🎯", label: "Practice", match: /^#\/practice/ },
+    { href: "#/final", icon: "🏆", label: "Exam", match: /^#\/(final|certificate)/ }
+  ];
+  var MORE_MATCH = /^#\/(leaderboard|stats|badges|gear)/;
+
+  function renderTabbar() {
+    var bar = document.getElementById("tabbar");
+    if (!bar) return;
+    var hash = location.hash || "#/home";
+    bar.innerHTML = "";
+    TABS.forEach(function (t) {
+      var a = el("a", "tab" + (t.match.test(hash) ? " active" : ""));
+      a.href = t.href;
+      a.innerHTML = '<span class="tab-icon" aria-hidden="true">' + t.icon + '</span><span class="tab-label">' + t.label + "</span>";
+      if (t.match.test(hash)) a.setAttribute("aria-current", "page");
+      bar.appendChild(a);
+    });
+    var more = el("button", "tab" + (MORE_MATCH.test(hash) ? " active" : ""));
+    more.type = "button";
+    more.setAttribute("aria-haspopup", "true");
+    more.innerHTML = '<span class="tab-icon" aria-hidden="true">☰</span><span class="tab-label">More</span>';
+    more.onclick = toggleMoreSheet;
+    bar.appendChild(more);
+  }
+
+  function toggleMoreSheet() {
+    var sheet = document.getElementById("more-sheet");
+    var overlay = document.getElementById("more-overlay");
+    if (!sheet || !overlay) return;
+    if (!sheet.hidden) { closeMoreSheet(); return; }
+    var bCount = Object.keys(DB.badges).length;
+    var rows = [
+      ["#/leaderboard", "🏁", "Leaderboard"],
+      ["#/stats", "📊", "My Stats"],
+      ["#/badges", "🎖️", "Badges (" + bCount + "/" + C.badges.length + ")"]
+    ];
+    if (finalPassed()) rows.push(["#/certificate", "📜", "My Certificate"]);
+    rows.push(["#/gear", "🧰", "Tools & Equipment"]);
+    sheet.innerHTML = '<div class="sheet-grab" aria-hidden="true"></div><h2 class="sheet-title">More</h2>';
+    rows.forEach(function (r) {
+      var a = el("a", "sheet-row");
+      a.href = r[0];
+      a.innerHTML = '<span class="sheet-icon" aria-hidden="true">' + r[1] + "</span>" + esc(r[2]);
+      sheet.appendChild(a);
+    });
+    var book = el("a", "sheet-row");
+    book.href = C.bookUrl; book.target = "_blank"; book.rel = "noopener";
+    book.innerHTML = '<span class="sheet-icon" aria-hidden="true">📖</span>Open the Book';
+    sheet.appendChild(book);
+    var fb = el("a", "sheet-row");
+    fb.href = feedbackHref();
+    fb.innerHTML = '<span class="sheet-icon" aria-hidden="true">💬</span>Send feedback';
+    sheet.appendChild(fb);
+    sheet.addEventListener("click", function (e) { if (e.target.closest("a")) closeMoreSheet(); });
+    overlay.onclick = closeMoreSheet;
+    sheet.hidden = false;
+    overlay.hidden = false;
+  }
+
+  function closeMoreSheet() {
+    var sheet = document.getElementById("more-sheet");
+    var overlay = document.getElementById("more-overlay");
+    if (sheet) sheet.hidden = true;
+    if (overlay) overlay.hidden = true;
   }
 
   /* ---------------- views ---------------- */
@@ -883,7 +955,7 @@
     exam.innerHTML = '<span class="card-num">★</span><h3>Certification Exam</h3>' +
       "<p>" + C.finalSize + " questions across every chapter. Pass at " + C.finalPassScore + "% to earn your certificate.</p>" +
       '<div class="card-meta">' + (finalPassed() ? '<span class="badge pass">PASSED</span>' :
-        '<span class="badge">' + passedCount + "/" + C.chapters.length + " chapters ready</span>") + "</div>";
+        '<span class="badge">Open to everyone</span>') + "</div>";
     grid.appendChild(exam);
     wrap.appendChild(grid);
     return wrap;
@@ -894,6 +966,35 @@
       if (!chapterPassed(C.chapters[i].id)) return "#/chapter/" + C.chapters[i].id;
     }
     return "#/final";
+  }
+
+  function viewChapters() {
+    var wrap = el("div", "view");
+    var passedCount = C.chapters.filter(function (ch) { return chapterPassed(ch.id); }).length;
+    wrap.appendChild(el("header", "lesson-head",
+      '<p class="kicker">All ' + C.chapters.length + " chapters · in book order</p>" +
+      "<h1>Chapters</h1>" +
+      '<p class="lede">You\'ve passed <strong>' + passedCount + " of " + C.chapters.length +
+      "</strong> chapter tests. Each chapter has its lessons, reading assignment and a 10-question test.</p>"));
+    var lsec = el("section", "chapter-list");
+    C.chapters.forEach(function (ch, i) {
+      var readCount = ch.lessons.filter(function (_, li) { return DB.read[ch.id + "|" + li]; }).length;
+      var avg = chapterAvg(ch.id);
+      var passed = chapterPassed(ch.id);
+      var a = el("a", "lesson-row" + (passed ? " read" : ""));
+      a.href = "#/chapter/" + ch.id;
+      a.innerHTML = '<span class="check">' + (passed ? "✓" : (i + 1)) + "</span>" +
+        "<span class='lesson-t'>" + esc(ch.title) +
+        "<small class='lesson-sub'>" + readCount + "/" + ch.lessons.length + " lessons read · " +
+        (avg === null ? "not tested" : "score " + avg + "%") + "</small></span>" +
+        '<span class="lesson-min">~' + chapterMinutes(ch) + " min</span>";
+      lsec.appendChild(a);
+    });
+    wrap.appendChild(lsec);
+    var pager = el("div", "pager");
+    pager.appendChild(linkBtn(nextTarget(), "Continue where you left off →", "primary"));
+    wrap.appendChild(pager);
+    return wrap;
   }
 
   function viewChapter(id) {
@@ -1066,38 +1167,6 @@
     var unpassed = C.chapters.filter(function (ch) { return !chapterPassed(ch.id); });
     var ready = C.chapters.length - unpassed.length;
 
-    /* The exam is gated: every chapter test must be passed first.
-       Practice tests stay open the whole time. */
-    if (unpassed.length) {
-      var wrap = el("div", "view");
-      wrap.appendChild(el("header", "lesson-head",
-        '<p class="kicker">Certification exam · pass at ' + C.finalPassScore + "%</p>" +
-        "<h1>🔒 Certification Exam</h1>" +
-        '<p class="lede">The exam unlocks once you\'ve passed all ' + C.chapters.length +
-        " chapter tests. You've passed <strong>" + ready + " of " + C.chapters.length + "</strong> so far.</p>"));
-      var lock = el("section", "lesson-section");
-      lock.innerHTML = "<h2>Still to pass</h2><p>Knock these out and the " + C.finalSize + "-question exam opens up:</p>";
-      var list = el("div", "");
-      unpassed.forEach(function (ch) {
-        var idx = chapterIndex(ch.id);
-        var a = el("a", "lesson-row");
-        a.href = "#/chapter/" + ch.id;
-        a.innerHTML = '<span class="check">' + (idx + 1) + "</span><span class='lesson-t'>" + esc(ch.title) + "</span>" +
-          '<span class="lesson-min">' + (chapterAttempts(ch.id).length ? "best " + chapterBest(ch.id) + "%" : "not tested") + "</span>";
-        list.appendChild(a);
-      });
-      lock.appendChild(list);
-      wrap.appendChild(lock);
-      wrap.appendChild(el("aside", "book-note",
-        "🎯 <strong>Practice tests are always open</strong> — <a href='#/practice'>take one now</a> to drill all " +
-        C.chapters.length + " chapters while you work toward the exam."));
-      var pager = el("div", "pager");
-      pager.appendChild(linkBtn("#/chapter/" + unpassed[0].id, "Go to " + unpassed[0].title + " →", "primary"));
-      pager.appendChild(linkBtn("#/practice", "Take a practice test", ""));
-      wrap.appendChild(pager);
-      return wrap;
-    }
-
     var v = testView({
       kind: "final", pass: C.finalPassScore,
       kicker: "Certification exam · pass at " + C.finalPassScore + "%",
@@ -1109,6 +1178,12 @@
       var note = el("aside", "book-note");
       note.innerHTML = "🏆 You're already certified — <a href='#/certificate'>view your certificate</a>. Retakes can only raise your record.";
       v.insertBefore(note, v.children[1]);
+    } else if (unpassed.length) {
+      var warm = el("aside", "book-note");
+      warm.innerHTML = "📚 <strong>Heads up:</strong> the exam covers every chapter and you've passed <strong>" +
+        ready + " of " + C.chapters.length + "</strong> chapter tests so far. It's open whenever you're ready — " +
+        "<a href='#/practice'>a practice test</a> makes a good warm-up.";
+      v.insertBefore(warm, v.children[1]);
     }
     return v;
   }
@@ -1457,6 +1532,7 @@
       ch = chapterById(m[1]);
       title = ch ? ch.title + " — Test" : title;
     }
+    else if (hash === "#/chapters") { view = viewChapters(); title = "Chapters"; }
     else if (hash === "#/practice") { view = viewPractice(); title = "Practice Test"; }
     else if (hash === "#/leaderboard") { view = viewLeaderboard(); title = "Leaderboard"; }
     else if (hash === "#/gear") { view = viewGear(); title = "Tools & Equipment"; }
@@ -1467,6 +1543,7 @@
     else view = viewHome();
 
     document.title = title + " · Roofing Construction & Estimating E-Course";
+    closeMoreSheet();
     app.innerHTML = "";
     app.appendChild(view);
     renderSidebar();
