@@ -1,4 +1,4 @@
-// T^Rock performance pay plan — scope writing & lead operations commission structure.
+// T^Rock performance pay plan — lead-provision commission structure.
 // Build: node pitch/build-commission-deck.js  → pitch/Commission-Plan.pptx
 const pptxgen = require("pptxgenjs");
 const React = require("react");
@@ -62,7 +62,7 @@ function footer(slide, n, note) {
     s.addText("T^ROCK PERFORMANCE PAY PLAN", {
       x: 0.75, y: 2.35, w: 11.8, h: 1.1, fontSize: 44, bold: true, color: WHITE, fontFace: "Arial", margin: 0
     });
-    s.addText("Scope writing & lead operations — paid only on jobs that close and collect", {
+    s.addText("Storm-targeted lead generation — paid only on jobs that close and collect", {
       x: 0.78, y: 3.5, w: 11.5, h: 0.6, fontSize: 22, color: "D9D9D9", fontFace: "Arial", margin: 0
     });
     s.addText([
@@ -86,10 +86,10 @@ function footer(slide, n, note) {
     });
 
     const feats = [
-      { icon: icons.sign, h: "Insurance-grade scope writing (RSOW)", b: "Full restoration scopes of work per job — line items, quantities, code items — built to survive adjuster review and maximize approved RCV." },
-      { icon: icons.map, h: "Storm targeting & lead operations", b: "Runs the damage-map platform: territories, filtered knock lists, alert response. Reps knock verified-damage doors instead of guessing." },
+      { icon: icons.map, h: "Damage-verified lead lists", b: "Storm-mapped, filter-qualified homeowners — owner-occupied, right roof age, right income band — handed to reps as ready-to-knock lists." },
+      { icon: icons.sign, h: "Storm response & territory ops", b: "Runs the damage-map platform: alerts, territories, routed lists, outreach timing. Reps are on verified-damage doors while competitors are reading the weather." },
       { icon: icons.invoice, h: "Fee booked as a job cost", b: "The fee attaches to a specific closed job, so it lands in job costing — not overhead. Margins per job stay honest and auditable." },
-      { icon: icons.hand, h: "Paid on collected, not promised", b: "No base, no draw, no per-scope charge. If a job doesn't close and fund, the work was free. All of the risk sits on this side of the table." },
+      { icon: icons.hand, h: "Paid on collected, not promised", b: "No base, no draw, no per-lead charge. If a job doesn't close and fund, the lead was free. All of the risk sits on this side of the table." },
     ];
     feats.forEach((f, i) => {
       const x = 0.6 + (i % 2) * 6.2;
@@ -110,8 +110,8 @@ function footer(slide, n, note) {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
     s.addText([
-      { text: "Fee = % of job profit on scoped jobs, booked as a job expense, paid only when closed AND collected. ", options: { bold: true, color: INK } },
-      { text: "The % is set by the close rate on scoped leads, measured quarterly. ", options: { color: MUTED } },
+      { text: "Fee = % of job profit on jobs from provided leads, booked as a job expense, paid only when closed AND collected. ", options: { bold: true, color: INK } },
+      { text: "The % is set by the close rate on those leads, measured quarterly. ", options: { color: MUTED } },
       { text: "Cash flow: the 2% floor is paid as each job funds; quarter-end reconciliation trues up to the earned average rate — T^Rock never prepays a rate, and nothing is ever clawed back.", options: { bold: true, color: RED } },
     ], { x: 0.6, y: 1.15, w: 11.9, h: 0.75, fontSize: 14, fontFace: "Arial", margin: 0 });
 
@@ -122,7 +122,7 @@ function footer(slide, n, note) {
     const dim = { fontFace: "Arial", fontSize: 12, color: MUTED, valign: "middle", align: "center" };
     const tot = { fontFace: "Arial", fontSize: 13, bold: true, color: RED, valign: "middle", align: "center", fill: { color: LTRED } };
     const rows = [
-      [{ text: "Per 10 scoped leads", options: hdr }, { text: "20% close (floor)", options: hdr }, { text: "40%", options: hdr }, { text: "60%", options: hdr }, { text: "80%", options: hdr }, { text: "100% (ceiling)", options: hdr }],
+      [{ text: "Per 10 delivered leads", options: hdr }, { text: "20% close (floor)", options: hdr }, { text: "40%", options: hdr }, { text: "60%", options: hdr }, { text: "80%", options: hdr }, { text: "100% (ceiling)", options: hdr }],
       [{ text: "Fee (% of job profit)", options: lbl }, { text: "2%", options: r }, { text: "4%", options: r }, { text: "6%", options: r }, { text: "8%", options: r }, { text: "10%", options: r }],
       [{ text: "Jobs closed & collected (fee paid on these only)", options: lbl }, { text: "2 of 10", options: c }, { text: "4 of 10", options: c }, { text: "6 of 10", options: c }, { text: "8 of 10", options: c }, { text: "10 of 10", options: c }],
       [{ text: "Fee per closed job ($15,000 profit)", options: lbl }, { text: "$300", options: c }, { text: "$600", options: c }, { text: "$900", options: c }, { text: "$1,200", options: c }, { text: "$1,500", options: c }],
@@ -141,7 +141,7 @@ function footer(slide, n, note) {
       { text: "The “expensive” end of the slider is the one where T^Rock banks $67,500 on 10 leads instead of $14,700. ", options: { bold: true, color: BLACK } },
       { text: "The 10% fee only exists when all 10 closed and funded — it can never run ahead of collected cash.", options: { color: INK } },
     ], { x: 0.95, y: 5.48, w: 11.5, h: 0.72, fontSize: 14, fontFace: "Arial", margin: 0 });
-    footer(s, 3, "Typical job: $30,000 RCV at 50% margin = $15,000 profit; fee is a job expense, so profit after fee splits 50/50. Close rate is cohort-based — a lead belongs to the quarter it was scoped; late closers re-rate that cohort (180-day window), so the rate only moves up.");
+    footer(s, 3, "Typical job: $30,000 RCV at 50% margin = $15,000 profit; fee is a job expense, so profit after fee splits 50/50. Close rate is cohort-based — a lead belongs to the quarter it was delivered; late closers re-rate that cohort (180-day window), so the rate only moves up.");
   }
 
   // ------------------------------------------------ 4. WHERE THE SLIDER COMES FROM
@@ -160,7 +160,7 @@ function footer(slide, n, note) {
     circleIcon(s, icons.sign, 0.9, 2.1, 0.7);
     s.addText("The floor — raw leads", { x: 1.8, y: 2.25, w: 4.5, h: 0.4, fontSize: 17, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
     s.addText("2%", { x: 0.9, y: 2.95, w: 2.0, h: 0.9, fontSize: 48, bold: true, color: RED, fontFace: "Arial", margin: 0 });
-    s.addText("Of job profit — $300 on a typical roof. Scoped leads where most won't close; the fee collects on the few that do. At a 20% close rate, 8 of every 10 scopes were written for free.", {
+    s.addText("Of job profit — $300 on a typical roof. Raw lead lists where most won't close; the fee collects on the few that do. At a 20% close rate, 8 of every 10 leads were handed over for free.", {
       x: 0.9, y: 3.95, w: 5.3, h: 1.2, fontSize: 12.5, color: INK, fontFace: "Arial", margin: 0
     });
 
@@ -188,12 +188,12 @@ function footer(slide, n, note) {
     s.addText("Why the slider pays for itself", {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
-    s.addText("Same 100 scoped leads, five close rates. The fee % rises — the pie rises much faster.", {
+    s.addText("Same 100 delivered leads, five close rates. The fee % rises — the pie rises much faster.", {
       x: 0.6, y: 1.18, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
     // hand-drawn columns — render in every viewer, unlike native charts
-    s.addText("T^Rock net profit per 100 scoped leads  (after fee & PM split)", {
+    s.addText("T^Rock net profit per 100 delivered leads  (after fee & PM split)", {
       x: 0.6, y: 1.75, w: 12.1, h: 0.35, fontSize: 14, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
     const bars = [
@@ -218,7 +218,7 @@ function footer(slide, n, note) {
       { text: "Top of the slider = T^Rock's take is up 4.6×. ", options: { bold: true, color: WHITE } },
       { text: "The higher fee is only ever paid out of jobs that already closed — the plan cannot cost money in a bad quarter.", options: { color: "E6E6E6" } },
     ], { x: 0.95, y: 6.18, w: 11.5, h: 0.55, fontSize: 15, fontFace: "Arial", margin: 0 });
-    footer(s, 5, "Per closed job: $30,000 × 50% margin = $15,000, less slider fee (a job expense), split 50/50 with the PM. 100 scoped leads held constant.");
+    footer(s, 5, "Per closed job: $30,000 × 50% margin = $15,000, less slider fee (a job expense), split 50/50 with the PM. 100 delivered leads held constant.");
   }
 
   // ------------------------------------------------------ 5. RCV VS PROFIT BASE
@@ -275,14 +275,14 @@ function footer(slide, n, note) {
     s.addText("What this costs vs. the alternatives", {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
-    s.addText("Every other way to buy scope writing carries fixed cost or scales with paperwork. This one scales only with collected revenue.", {
+    s.addText("Every other way to buy leads charges up front, win or lose. This one bills only against collected revenue.", {
       x: 0.6, y: 1.2, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
     const alts = [
-      { icon: icons.tie, h: "Staff estimator", big: "$70–90k/yr", b: "Salary paid whether jobs close or not. Pure fixed overhead, plus payroll burden — and someone still has to run lead targeting." },
-      { icon: icons.clip, h: "Supplement service", big: "25–33%", b: "of every supplement dollar they add — cost scales with paperwork volume, not with closed jobs, and they touch nothing else." },
-      { icon: iconsW.hand, h: "This plan", big: "$0", b: "until a job closes AND the check clears. Scope writing and lead operations in one seat, booked as a job cost on collected revenue." },
+      { icon: icons.tie, h: "Lead sellers", big: "$150–300", b: "per shared Angi-style lead, paid up front whether it closes or not — and the same homeowner is resold to 3–4 competitors." },
+      { icon: icons.clip, h: "Paid ads (Google / LSA)", big: "$75–250", b: "per inbound lead — spend is committed before anyone knocks, and quality swings wildly from click to click." },
+      { icon: iconsW.hand, h: "This plan", big: "$0", b: "until a job closes AND the check clears. Damage-verified, exclusive leads, billed as a job cost on collected revenue." },
     ];
     alts.forEach((t, i) => {
       const x = 0.6 + i * 4.15;
@@ -293,7 +293,7 @@ function footer(slide, n, note) {
       s.addText(t.big, { x: x + 0.35, y: 3.15, w: 3.2, h: 0.85, fontSize: 40, bold: true, color: RED, fontFace: "Arial", margin: 0 });
       s.addText(t.b, { x: x + 0.35, y: 4.1, w: 3.2, h: 1.55, fontSize: 12, color: hot ? "E0E0E0" : INK, fontFace: "Arial", margin: 0 });
     });
-    footer(s, 7, "Estimator salary and supplement-fee ranges are industry-typical figures for the region, not quotes.");
+    footer(s, 7, "Per-lead price ranges are typical published figures for roofing, not quotes.");
   }
 
   // ------------------------------------------------------------ 7. NEXT STEPS
@@ -303,7 +303,7 @@ function footer(slide, n, note) {
     s.addText("Next steps", { x: 0.75, y: 0.6, w: 11.8, h: 0.8, fontSize: 40, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
 
     const steps = [
-      { icon: iconsW.check, n: "1", h: "Define the metrics", b: "Close rate = funded jobs ÷ scoped leads. A scoped lead = homeowner + written RSOW handed to a rep; raw map records don't count. A lead belongs to the quarter it was scoped (180-day window)." },
+      { icon: iconsW.check, n: "1", h: "Define the metrics", b: "Close rate = funded jobs ÷ delivered leads. A delivered lead = homeowner + property accepted by a rep onto a route; raw map records don't count. A lead belongs to the quarter delivered (180-day window)." },
       { icon: iconsW.scale, n: "2", h: "Pick the base", b: "Option A (% of job profit, splits like a job cost) or Option B (% of RCV). One page, signed, with the slider table attached." },
       { icon: iconsW.shake, n: "3", h: "True-up quarterly, review at 6 months", b: "2% floor paid as jobs fund; each quarter-end re-rates every open cohort and pays the difference. Six-month check: if the numbers say adjust the curve, adjust it." },
     ];

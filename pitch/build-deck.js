@@ -321,14 +321,14 @@ function footer(slide, n, note) {
     // headline card — lead with what T^Rock keeps, not a deduction stack
     s.addShape("roundRect", { x: 0.6, y: 1.8, w: 4.3, h: 4.0, fill: { color: CARD }, rectRadius: 0.08 });
     s.addText("T^Rock keeps", { x: 0.95, y: 2.1, w: 3.6, h: 0.4, fontSize: 17, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
-    s.addText("$4,950", { x: 0.95, y: 2.5, w: 3.6, h: 1.0, fontSize: 60, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+    s.addText("$5,145", { x: 0.95, y: 2.5, w: 3.6, h: 1.0, fontSize: 60, bold: true, color: RED, fontFace: "Arial", margin: 0 });
     s.addText("of every closed roof", { x: 0.95, y: 3.55, w: 3.6, h: 0.4, fontSize: 17, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
     s.addText("Company share of each job after all job costs and the 50/50 PM split — full math in the footnote.", {
       x: 0.95, y: 4.05, w: 3.6, h: 0.75, fontSize: 12, color: MUTED, fontFace: "Arial", margin: 0
     });
     s.addText([
       { text: "Break even = ", options: { bold: true, color: BLACK } },
-      { text: "annual subscription ÷ $4,950", options: { bold: true, color: RED } },
+      { text: "annual subscription ÷ $5,145", options: { bold: true, color: RED } },
     ], { x: 0.95, y: 4.95, w: 3.6, h: 0.6, fontSize: 14, fontFace: "Arial", margin: 0 });
 
     // hand-drawn columns — render in every viewer, unlike native charts
@@ -338,9 +338,9 @@ function footer(slide, n, note) {
     const tiers = [
       { label: "Bronze", price: "$100/mo", val: 0.2 },
       { label: "Silver", price: "$500/mo", val: 1.2 },
-      { label: "Gold", price: "$1,000/mo", val: 2.4 },
-      { label: "Founding", price: "$2,000/mo", val: 4.8, hot: true },
-      { label: "Platinum", price: "$2,500/mo", val: 6.1 },
+      { label: "Gold", price: "$1,000/mo", val: 2.3 },
+      { label: "Founding", price: "$2,000/mo", val: 4.7, hot: true },
+      { label: "Platinum", price: "$2,500/mo", val: 5.8 },
     ];
     const baseY = 5.3, maxH = 2.75, colScale = maxH / 6.1;
     s.addShape("rect", { x: 5.35, y: baseY, w: 7.3, h: 0.015, fill: { color: "CCCCCC" } });
@@ -357,10 +357,10 @@ function footer(slide, n, note) {
 
     s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
     s.addText([
-      { text: "Founding breaks even at 4.8 jobs a year — one incremental roof every ~11 weeks — on T^Rock's share alone. ", options: { bold: true, color: WHITE } },
+      { text: "Founding breaks even at 4.7 jobs a year — one incremental roof every ~11 weeks — on T^Rock's share alone. ", options: { bold: true, color: WHITE } },
       { text: "Past that it's margin, at $500/mo under Platinum sticker forever.", options: { color: "E6E6E6" } },
     ], { x: 0.95, y: 6.2, w: 11.5, h: 0.5, fontSize: 15, fontFace: "Arial", margin: 0 });
-    footer(s, 8, "Per job: $30,000 × 35% = $10,500, less 2% RCV scope fee ($600) = $9,900, split 50/50 with the PM → $4,950 to T^Rock.");
+    footer(s, 8, "Per job: $30,000 × 35% = $10,500, less 2%-of-profit lead fee ($210) = $10,290, split 50/50 with the PM → $5,145 to T^Rock.");
   }
 
   // ---------------------------------------------------------------- 8. UPSIDE
@@ -393,10 +393,10 @@ function footer(slide, n, note) {
     const mc = { fontFace: "Arial", fontSize: 12, color: INK, valign: "middle", align: "center" };
     const mn = { fontFace: "Arial", fontSize: 12.5, bold: true, color: RED, valign: "middle", align: "center" };
     const mrows = [
-      [{ text: "Roofs", options: mh }, { text: "Revenue (× $30,000)", options: mh }, { text: "Gross profit (35%)", options: mh }, { text: "Scope fee (2% RCV)", options: mh }, { text: "T^Rock half after fee", options: mh }, { text: "Less $24,000 sub = NET", options: mh }],
-      [{ text: "8", options: mc }, { text: "$240,000", options: mc }, { text: "$84,000", options: mc }, { text: "− $4,800", options: mc }, { text: "$39,600", options: mc }, { text: "+$15,600", options: mn }],
-      [{ text: "18", options: mc }, { text: "$540,000", options: mc }, { text: "$189,000", options: mc }, { text: "− $10,800", options: mc }, { text: "$89,100", options: mc }, { text: "+$65,100", options: mn }],
-      [{ text: "30", options: mc }, { text: "$900,000", options: mc }, { text: "$315,000", options: mc }, { text: "− $18,000", options: mc }, { text: "$148,500", options: mc }, { text: "+$124,500", options: mn }],
+      [{ text: "Roofs", options: mh }, { text: "Revenue (× $30,000)", options: mh }, { text: "Gross profit (35%)", options: mh }, { text: "Lead fee (2% of profit)", options: mh }, { text: "T^Rock half after fee", options: mh }, { text: "Less $24,000 sub = NET", options: mh }],
+      [{ text: "8", options: mc }, { text: "$240,000", options: mc }, { text: "$84,000", options: mc }, { text: "− $1,680", options: mc }, { text: "$41,160", options: mc }, { text: "+$17,160", options: mn }],
+      [{ text: "18", options: mc }, { text: "$540,000", options: mc }, { text: "$189,000", options: mc }, { text: "− $3,780", options: mc }, { text: "$92,610", options: mc }, { text: "+$68,610", options: mn }],
+      [{ text: "30", options: mc }, { text: "$900,000", options: mc }, { text: "$315,000", options: mc }, { text: "− $6,300", options: mc }, { text: "$154,350", options: mc }, { text: "+$130,350", options: mn }],
     ];
     s.addTable(mrows, {
       x: 0.6, y: 3.95, w: 12.1, colW: [1.1, 2.35, 2.2, 2.2, 2.15, 2.1],
@@ -409,7 +409,7 @@ function footer(slide, n, note) {
       { text: "The maps exist either way. ", options: { bold: true, color: WHITE } },
       { text: "The only question is whether T^Rock or a competitor is holding them when the next storm hits.", options: { color: "E6E6E6" } },
     ], { x: 0.95, y: 6.18, w: 11.5, h: 0.55, fontSize: 15, fontFace: "Arial", margin: 0 });
-    footer(s, 9, "T^Rock half = (gross profit − scope fee) ÷ 2 (50/50 PM split). Any shared-lead or ad spend this replaces is a direct offset on top.");
+    footer(s, 9, "T^Rock half = (gross profit − lead fee) ÷ 2 (50/50 PM split). Lead fee shown at the 2% floor. Any shared-lead or ad spend this replaces is a direct offset on top.");
   }
 
   // ----------------------------------------------------- 9. PROOF SCORECARD
