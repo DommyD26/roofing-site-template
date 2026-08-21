@@ -61,7 +61,7 @@ function footer(slide, n, note) {
     s.background = { color: BLACK };
     circleIcon(s, iconsW.bolt, 0.75, 0.85, 0.9);
     s.addText("STORM SCOUT  ×  T^ROCK", {
-      x: 0.75, y: 2.35, w: 11.8, h: 1.1, fontSize: 54, bold: true, color: WHITE, fontFace: "Arial", margin: 0
+      x: 0.75, y: 2.35, w: 11.8, h: 1.1, fontSize: 46, bold: true, color: WHITE, fontFace: "Arial", margin: 0
     });
     s.addText("The numbers case for data-driven storm leads", {
       x: 0.78, y: 3.5, w: 11.5, h: 0.6, fontSize: 24, color: "D9D9D9", fontFace: "Arial", margin: 0
@@ -83,7 +83,7 @@ function footer(slide, n, note) {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
     s.addText("Storm work is a race. Whoever gets a rep to a damaged, insured, owner-occupied roof first usually signs it.", {
-      x: 0.6, y: 1.2, w: 11.8, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
+      x: 0.6, y: 1.2, w: 11.8, h: 0.55, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
     const tiles = [
@@ -103,7 +103,7 @@ function footer(slide, n, note) {
     s.addText([
       { text: "The real metric:  ", options: { bold: true, color: WHITE } },
       { text: "sold jobs per rep per storm. On a 50/50 split, wasted knocks starve the rep and the company alike — and reps who can't close, quit.", options: { color: "E6E6E6" } },
-    ], { x: 0.95, y: 6.22, w: 11.5, h: 0.5, fontSize: 15, fontFace: "Arial", margin: 0 });
+    ], { x: 0.95, y: 6.15, w: 11.5, h: 0.62, fontSize: 13.5, fontFace: "Arial", margin: 0 });
     footer(s, 2, "Lead-price and canvassing figures are industry benchmarks, not Storm Scout claims.");
   }
 
@@ -129,8 +129,8 @@ function footer(slide, n, note) {
       const y = 2.0 + Math.floor(i / 2) * 2.4;
       s.addShape("roundRect", { x, y, w: 5.9, h: 2.15, fill: { color: CARD }, rectRadius: 0.08 });
       circleIcon(s, f.icon, x + 0.3, y + 0.3, 0.7);
-      s.addText(f.h, { x: x + 1.2, y: y + 0.28, w: 4.5, h: 0.4, fontSize: 17, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
-      s.addText(f.b, { x: x + 1.2, y: y + 0.75, w: 4.5, h: 1.3, fontSize: 12.5, color: INK, fontFace: "Arial", margin: 0 });
+      s.addText(f.h, { x: x + 1.2, y: y + 0.24, w: 4.5, h: 0.58, fontSize: 15, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
+      s.addText(f.b, { x: x + 1.2, y: y + 0.88, w: 4.5, h: 1.2, fontSize: 12, color: INK, fontFace: "Arial", margin: 0 });
     });
     footer(s, 3, "Feature descriptions paraphrased from stormscout.ai (Home + How It Works pages).");
   }
@@ -164,7 +164,7 @@ function footer(slide, n, note) {
     s.addText([
       { text: "Net effect: ", options: { bold: true, color: BLACK } },
       { text: "the same crew, the same day, working only the doors with verified damage and the right owner profile.", options: { color: MUTED } },
-    ], { x: 0.6, y: 6.15, w: 12.1, h: 0.45, fontSize: 15, fontFace: "Arial", margin: 0 });
+    ], { x: 0.6, y: 6.15, w: 12.1, h: 0.6, fontSize: 14, fontFace: "Arial", margin: 0 });
     footer(s, 4, "Workflow per stormscout.ai How It Works.");
   }
 
@@ -200,7 +200,7 @@ function footer(slide, n, note) {
     s.addText([
       { text: "Every one of these is already a number in our world. ", options: { bold: true, color: BLACK } },
       { text: "That means the tool can be proven — or disproven — with our own data in one quarter.", options: { color: INK } },
-    ], { x: 0.95, y: 6.2, w: 11.5, h: 0.5, fontSize: 15, fontFace: "Arial", margin: 0 });
+    ], { x: 0.95, y: 6.15, w: 11.5, h: 0.62, fontSize: 13.5, fontFace: "Arial", margin: 0 });
     footer(s, 5, "");
   }
 
@@ -215,8 +215,8 @@ function footer(slide, n, note) {
       x: 0.6, y: 1.02, w: 11.9, h: 0.35, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
-    const hdr = { bold: true, color: WHITE, fill: { color: BLACK }, fontFace: "Arial", fontSize: 12.5, valign: "middle", align: "center" };
-    const hdrHot = { bold: true, color: WHITE, fill: { color: RED }, fontFace: "Arial", fontSize: 12.5, valign: "middle", align: "center" };
+    const hdr = { bold: true, color: WHITE, fill: { color: BLACK }, fontFace: "Arial", fontSize: 11.5, valign: "middle", align: "center" };
+    const hdrHot = { bold: true, color: WHITE, fill: { color: RED }, fontFace: "Arial", fontSize: 11.5, valign: "middle", align: "center" };
     const lbl = { bold: true, color: BLACK, fontFace: "Arial", fontSize: 11, valign: "middle" };
     const c = { fontFace: "Arial", fontSize: 10.5, color: INK, valign: "middle", align: "center" };
     const cHot = { fontFace: "Arial", fontSize: 10.5, color: INK, valign: "middle", align: "center", fill: { color: LTRED } };
@@ -234,7 +234,7 @@ function footer(slide, n, note) {
     s.addTable(rows, {
       x: 0.6, y: 1.5, w: 12.1, colW: [1.9, 1.85, 2.1, 2.0, 2.15, 2.1],
       border: { type: "solid", color: "DDDDDD", pt: 0.75 },
-      rowH: [0.4, 0.45, 0.45, 0.75, 0.45, 0.45, 0.75], margin: 0.06,
+      rowH: [0.52, 0.45, 0.45, 0.75, 0.45, 0.45, 0.75], margin: 0.06,
     });
 
     s.addShape("roundRect", { x: 0.6, y: 6.0, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
@@ -253,7 +253,7 @@ function footer(slide, n, note) {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
     s.addText("Typical published per-lead prices for roofing (midpoints charted, ranges at right). Worth checking against our own ad history.", {
-      x: 0.6, y: 1.18, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
+      x: 0.6, y: 1.18, w: 11.9, h: 0.55, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
     // hand-drawn bars — render in every viewer, unlike native charts
@@ -282,12 +282,12 @@ function footer(slide, n, note) {
       { n: "100 leads/mo", d: "$20" }, { n: "200", d: "$10" }, { n: "500", d: "$4" }, { n: "1,000", d: "$2" },
     ];
     vols.forEach((v, i) => {
-      const x = 0.6 + i * 1.85;
-      s.addShape("roundRect", { x, y: 5.4, w: 1.7, h: 0.45, fill: { color: i === 3 ? RED : CARD }, rectRadius: 0.06 });
+      const x = 0.6 + i * 1.9;
+      s.addShape("roundRect", { x, y: 5.4, w: 1.78, h: 0.45, fill: { color: i === 3 ? RED : CARD }, rectRadius: 0.06 });
       s.addText([
-        { text: v.d + " ", options: { bold: true, fontSize: 14, color: i === 3 ? WHITE : RED } },
-        { text: v.n, options: { fontSize: 9.5, color: i === 3 ? "F2C6CD" : MUTED } },
-      ], { x: x + 0.1, y: 5.4, w: 1.55, h: 0.45, fontFace: "Arial", valign: "middle", margin: 0 });
+        { text: v.d + " ", options: { bold: true, fontSize: 13, color: i === 3 ? WHITE : RED } },
+        { text: v.n, options: { fontSize: 9, color: i === 3 ? "F2C6CD" : MUTED } },
+      ], { x: x + 0.08, y: 5.4, w: 1.66, h: 0.45, fontFace: "Arial", valign: "middle", margin: 0 });
     });
 
     s.addShape("roundRect", { x: 8.15, y: 1.75, w: 4.55, h: 4.1, fill: { color: CARD }, rectRadius: 0.08 });
@@ -321,7 +321,7 @@ function footer(slide, n, note) {
     // headline card — lead with what T^Rock keeps, not a deduction stack
     s.addShape("roundRect", { x: 0.6, y: 1.8, w: 4.3, h: 4.0, fill: { color: CARD }, rectRadius: 0.08 });
     s.addText("T^Rock keeps", { x: 0.95, y: 2.1, w: 3.6, h: 0.4, fontSize: 17, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
-    s.addText("$5,145", { x: 0.95, y: 2.5, w: 3.6, h: 1.0, fontSize: 60, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+    s.addText("$5,145", { x: 0.95, y: 2.48, w: 3.6, h: 1.06, fontSize: 60, bold: true, color: RED, fontFace: "Arial", margin: 0 });
     s.addText("of every closed roof", { x: 0.95, y: 3.55, w: 3.6, h: 0.4, fontSize: 17, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
     s.addText("Company share of each job after all job costs and the 50/50 PM split — full math in the footnote.", {
       x: 0.95, y: 4.05, w: 3.6, h: 0.75, fontSize: 12, color: MUTED, fontFace: "Arial", margin: 0
@@ -359,7 +359,7 @@ function footer(slide, n, note) {
     s.addText([
       { text: "Founding breaks even at 4.7 jobs a year — one incremental roof every ~11 weeks — on T^Rock's share alone. ", options: { bold: true, color: WHITE } },
       { text: "Past that it's margin, at $500/mo under Platinum sticker forever.", options: { color: "E6E6E6" } },
-    ], { x: 0.95, y: 6.2, w: 11.5, h: 0.5, fontSize: 15, fontFace: "Arial", margin: 0 });
+    ], { x: 0.95, y: 6.15, w: 11.5, h: 0.62, fontSize: 13.5, fontFace: "Arial", margin: 0 });
     footer(s, 8, "Per job: $30,000 × 35% = $10,500, less 2%-of-profit lead fee ($210) = $10,290, split 50/50 with the PM → $5,145 to T^Rock.");
   }
 
@@ -420,7 +420,7 @@ function footer(slide, n, note) {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
     s.addText("Full team goes live on Founding day 1 — but 2 reps keep the current playbook as the control, so the comparison stays honest.", {
-      x: 0.6, y: 1.18, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
+      x: 0.6, y: 1.18, w: 11.9, h: 0.55, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
     const hdrOpts = { bold: true, color: WHITE, fill: { color: BLACK }, fontFace: "Arial", fontSize: 14, valign: "middle" };
@@ -466,8 +466,8 @@ function footer(slide, n, note) {
       const y = 1.5 + Math.floor(i / 2) * 2.65;
       s.addShape("roundRect", { x, y, w: 5.9, h: 2.4, fill: { color: CARD }, rectRadius: 0.08 });
       circleIcon(s, it.icon, x + 0.3, y + 0.3, 0.65);
-      s.addText(it.h, { x: x + 1.15, y: y + 0.28, w: 4.55, h: 0.4, fontSize: 16, bold: true, color: RED, fontFace: "Arial", margin: 0 });
-      s.addText(it.b, { x: x + 1.15, y: y + 0.72, w: 4.55, h: 1.6, fontSize: 12, color: INK, fontFace: "Arial", margin: 0 });
+      s.addText(it.h, { x: x + 1.15, y: y + 0.24, w: 4.55, h: 0.58, fontSize: 15, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+      s.addText(it.b, { x: x + 1.15, y: y + 0.88, w: 4.55, h: 1.45, fontSize: 12, color: INK, fontFace: "Arial", margin: 0 });
     });
     footer(s, 11, "");
   }
@@ -489,7 +489,7 @@ function footer(slide, n, note) {
       circleIcon(s, st.icon, x + 0.32, 2.05, 0.7);
       s.addText(st.n, { x: x + 2.7, y: 1.95, w: 0.85, h: 0.85, fontSize: 44, bold: true, color: RED, fontFace: "Arial", align: "right", margin: 0 });
       s.addText(st.h, { x: x + 0.32, y: 3.0, w: 3.2, h: 0.7, fontSize: 17, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
-      s.addText(st.b, { x: x + 0.32, y: 3.7, w: 3.2, h: 1.3, fontSize: 12.5, color: "CFCFCF", fontFace: "Arial", margin: 0 });
+      s.addText(st.b, { x: x + 0.32, y: 3.7, w: 3.2, h: 1.35, fontSize: 12, color: "CFCFCF", fontFace: "Arial", margin: 0 });
     });
 
     s.addText("Locked-in price. Measured on our own baseline. Easy to kill.", {

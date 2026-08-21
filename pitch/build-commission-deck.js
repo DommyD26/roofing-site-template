@@ -60,10 +60,10 @@ function footer(slide, n, note) {
     s.background = { color: BLACK };
     circleIcon(s, iconsW.slider, 0.75, 0.85, 0.9);
     s.addText("T^ROCK PERFORMANCE PAY PLAN", {
-      x: 0.75, y: 2.35, w: 11.8, h: 1.1, fontSize: 44, bold: true, color: WHITE, fontFace: "Arial", margin: 0
+      x: 0.75, y: 2.35, w: 11.8, h: 1.1, fontSize: 36, bold: true, color: WHITE, fontFace: "Arial", margin: 0
     });
     s.addText("Storm-targeted lead generation — paid only on jobs that close and collect", {
-      x: 0.78, y: 3.5, w: 11.5, h: 0.6, fontSize: 22, color: "D9D9D9", fontFace: "Arial", margin: 0
+      x: 0.78, y: 3.5, w: 11.5, h: 1.0, fontSize: 21, color: "D9D9D9", fontFace: "Arial", margin: 0
     });
     s.addText([
       { text: "Proposed structure", options: { bold: true, color: WHITE } },
@@ -96,8 +96,8 @@ function footer(slide, n, note) {
       const y = 2.0 + Math.floor(i / 2) * 2.4;
       s.addShape("roundRect", { x, y, w: 5.9, h: 2.15, fill: { color: CARD }, rectRadius: 0.08 });
       circleIcon(s, f.icon, x + 0.3, y + 0.3, 0.7);
-      s.addText(f.h, { x: x + 1.2, y: y + 0.28, w: 4.5, h: 0.4, fontSize: 16, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
-      s.addText(f.b, { x: x + 1.2, y: y + 0.75, w: 4.5, h: 1.3, fontSize: 12, color: INK, fontFace: "Arial", margin: 0 });
+      s.addText(f.h, { x: x + 1.2, y: y + 0.24, w: 4.5, h: 0.58, fontSize: 15, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
+      s.addText(f.b, { x: x + 1.2, y: y + 0.88, w: 4.5, h: 1.22, fontSize: 12, color: INK, fontFace: "Arial", margin: 0 });
     });
     footer(s, 2, "");
   }
@@ -113,9 +113,9 @@ function footer(slide, n, note) {
       { text: "Fee = % of job profit on jobs from provided leads, booked as a job expense, paid only when closed AND collected. ", options: { bold: true, color: INK } },
       { text: "The % is set by the close rate on those leads, measured quarterly. ", options: { color: MUTED } },
       { text: "Cash flow: the 2% floor is paid as each job funds; quarter-end reconciliation trues up to the earned average rate — T^Rock never prepays a rate, and nothing is ever clawed back.", options: { bold: true, color: RED } },
-    ], { x: 0.6, y: 1.15, w: 11.9, h: 0.75, fontSize: 14, fontFace: "Arial", margin: 0 });
+    ], { x: 0.6, y: 1.12, w: 11.9, h: 0.95, fontSize: 13, fontFace: "Arial", margin: 0 });
 
-    const hdr = { bold: true, color: WHITE, fill: { color: BLACK }, fontFace: "Arial", fontSize: 13, valign: "middle", align: "center" };
+    const hdr = { bold: true, color: WHITE, fill: { color: BLACK }, fontFace: "Arial", fontSize: 12, valign: "middle", align: "center" };
     const lbl = { bold: true, color: BLACK, fontFace: "Arial", fontSize: 12, valign: "middle" };
     const c = { fontFace: "Arial", fontSize: 12.5, color: INK, valign: "middle", align: "center" };
     const r = { fontFace: "Arial", fontSize: 13, bold: true, color: RED, valign: "middle", align: "center" };
@@ -131,9 +131,9 @@ function footer(slide, n, note) {
       [{ text: "T^Rock TOTAL net on the 10 leads", options: lbl }, { text: "$10,290", options: tot }, { text: "$20,160", options: tot }, { text: "$29,610", options: tot }, { text: "$38,640", options: tot }, { text: "$47,250", options: tot }],
     ];
     s.addTable(rows, {
-      x: 0.6, y: 2.05, w: 12.1, colW: [3.6, 1.8, 1.6, 1.6, 1.6, 1.9],
+      x: 0.6, y: 2.1, w: 12.1, colW: [3.6, 1.8, 1.6, 1.6, 1.6, 1.9],
       border: { type: "solid", color: "DDDDDD", pt: 0.75 },
-      rowH: [0.4, 0.42, 0.42, 0.42, 0.42, 0.42, 0.5], margin: 0.07,
+      rowH: [0.5, 0.42, 0.42, 0.42, 0.42, 0.42, 0.5], margin: 0.07,
     });
 
     s.addShape("roundRect", { x: 0.6, y: 5.35, w: 12.1, h: 0.95, fill: { color: LTRED }, rectRadius: 0.06 });
@@ -276,7 +276,7 @@ function footer(slide, n, note) {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
     s.addText("Every other way to buy leads charges up front, win or lose. This one bills only against collected revenue.", {
-      x: 0.6, y: 1.2, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
+      x: 0.6, y: 1.2, w: 11.9, h: 0.55, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
     const alts = [
@@ -289,7 +289,7 @@ function footer(slide, n, note) {
       const hot = i === 2;
       s.addShape("roundRect", { x, y: 1.9, w: 3.85, h: 3.9, fill: { color: hot ? BLACK : CARD }, rectRadius: 0.08 });
       circleIcon(s, t.icon, x + 0.35, 2.2, 0.75);
-      s.addText(t.h, { x: x + 1.25, y: 2.4, w: 2.5, h: 0.4, fontSize: 15, bold: true, color: hot ? WHITE : BLACK, fontFace: "Arial", margin: 0 });
+      s.addText(t.h, { x: x + 1.25, y: 2.32, w: 2.5, h: 0.62, fontSize: 14, bold: true, color: hot ? WHITE : BLACK, fontFace: "Arial", margin: 0 });
       s.addText(t.big, { x: x + 0.35, y: 3.15, w: 3.2, h: 0.85, fontSize: 40, bold: true, color: RED, fontFace: "Arial", margin: 0 });
       s.addText(t.b, { x: x + 0.35, y: 4.1, w: 3.2, h: 1.55, fontSize: 12, color: hot ? "E0E0E0" : INK, fontFace: "Arial", margin: 0 });
     });
@@ -313,7 +313,7 @@ function footer(slide, n, note) {
       circleIcon(s, st.icon, x + 0.32, 2.05, 0.7);
       s.addText(st.n, { x: x + 2.7, y: 1.95, w: 0.85, h: 0.85, fontSize: 44, bold: true, color: RED, fontFace: "Arial", align: "right", margin: 0 });
       s.addText(st.h, { x: x + 0.32, y: 3.0, w: 3.2, h: 0.7, fontSize: 17, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
-      s.addText(st.b, { x: x + 0.32, y: 3.7, w: 3.2, h: 1.4, fontSize: 12.5, color: "CFCFCF", fontFace: "Arial", margin: 0 });
+      s.addText(st.b, { x: x + 0.32, y: 3.7, w: 3.2, h: 1.42, fontSize: 11.5, color: "CFCFCF", fontFace: "Arial", margin: 0 });
     });
 
     s.addText("Paid on collections. Priced by close rate. Free until the check clears.", {
