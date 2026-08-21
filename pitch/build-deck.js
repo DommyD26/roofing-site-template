@@ -1,4 +1,4 @@
-// Storm Scout pitch deck for T-Rock — audience: Aaron & Alan (numbers-first).
+// Storm Scout pitch deck for T^Rock leadership — numbers-first framing.
 // Build: node pitch/build-deck.js  → pitch/Storm-Scout-Pitch.pptx
 const pptxgen = require("pptxgenjs");
 const React = require("react");
@@ -69,17 +69,17 @@ function footer(slide, n, note) {
     const s = pres.addSlide();
     s.background = { color: BLACK };
     circleIcon(s, icons.bolt, 0.75, 0.85, 0.9);
-    s.addText("STORM SCOUT  ×  T-ROCK", {
+    s.addText("STORM SCOUT  ×  T^ROCK", {
       x: 0.75, y: 2.35, w: 11.8, h: 1.1, fontSize: 54, bold: true, color: WHITE, fontFace: "Arial", margin: 0
     });
     s.addText("The numbers case for data-driven storm leads", {
       x: 0.78, y: 3.5, w: 11.5, h: 0.6, fontSize: 24, color: "D9D9D9", fontFace: "Arial", margin: 0
     });
     s.addText([
-      { text: "Prepared for Aaron & Alan", options: { bold: true, color: WHITE } },
+      { text: "T^Rock Contracting", options: { bold: true, color: WHITE } },
       { text: "   ·   August 2026   ·   Source material: stormscout.ai", options: { color: "9E9E9E" } },
     ], { x: 0.78, y: 5.9, w: 11.5, h: 0.4, fontSize: 14, fontFace: "Arial", margin: 0 });
-    s.addText("No fluff. Website facts, break-even math, and a 90-day test with kill criteria.", {
+    s.addText("Published pricing, break-even math, and a 90-day test with kill criteria.", {
       x: 0.78, y: 6.35, w: 11.5, h: 0.4, fontSize: 14, italic: true, color: RED, fontFace: "Arial", margin: 0
     });
   }
@@ -111,7 +111,7 @@ function footer(slide, n, note) {
     s.addShape("roundRect", { x: 0.6, y: 6.1, w: 12.1, h: 0.75, fill: { color: BLACK }, rectRadius: 0.06 });
     s.addText([
       { text: "The real metric:  ", options: { bold: true, color: WHITE } },
-      { text: "rep-hours per signed contract. Every knock on an undamaged roof is payroll spent producing $0.", options: { color: "E6E6E6" } },
+      { text: "sold jobs per rep per storm. On a 50/50 split, wasted knocks starve the rep and the company alike — and reps who can't close, quit.", options: { color: "E6E6E6" } },
     ], { x: 0.95, y: 6.22, w: 11.5, h: 0.5, fontSize: 15, fontFace: "Arial", margin: 0 });
     footer(s, 2, "Lead-price and canvassing figures are industry benchmarks, not Storm Scout claims.");
   }
@@ -261,13 +261,13 @@ function footer(slide, n, note) {
     s.addText("The break-even math, tier by tier", {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
-    s.addText("Their published prices against T-Rock's actual job economics.", {
+    s.addText("Their published prices against T^Rock's actual job economics.", {
       x: 0.6, y: 1.18, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
     // assumptions card
     s.addShape("roundRect", { x: 0.6, y: 1.8, w: 4.6, h: 4.0, fill: { color: CARD }, rectRadius: 0.08 });
-    s.addText("T-Rock net per job", { x: 0.95, y: 2.0, w: 3.9, h: 0.4, fontSize: 16, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
+    s.addText("T^Rock net per job", { x: 0.95, y: 2.0, w: 3.9, h: 0.4, fontSize: 16, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
     s.addText([
       { text: "Avg ticket (RCV):  ", options: { bullet: true, bold: true } },
       { text: "$30,000", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
@@ -277,12 +277,12 @@ function footer(slide, n, note) {
       { text: "− $600", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
       { text: "Job profit:  ", options: { bullet: true, bold: true } },
       { text: "$9,900, split 50/50 w/ PM", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
-      { text: "T-Rock net / job:  ", options: { bullet: true, bold: true } },
+      { text: "T^Rock net / job:  ", options: { bullet: true, bold: true } },
       { text: "$4,950", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
       { text: "Break even:  ", options: { bullet: true, bold: true } },
       { text: "annual cost ÷ $4,950", options: { color: RED, bold: true } },
     ], { x: 0.95, y: 2.45, w: 3.9, h: 2.5, fontSize: 12.5, color: INK, fontFace: "Arial", margin: 0 });
-    s.addText("Subscription is overhead (not job-attributable), so it's measured against T-Rock's share — the conservative view.", {
+    s.addText("Subscription is overhead (not job-attributable), so it's measured against T^Rock's share — the conservative view.", {
       x: 0.95, y: 5.05, w: 3.9, h: 0.6, fontSize: 10.5, italic: true, color: MUTED, fontFace: "Arial", margin: 0
     });
 
@@ -309,13 +309,49 @@ function footer(slide, n, note) {
 
     s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
     s.addText([
-      { text: "Founding breaks even at 4.8 jobs a year — one incremental roof every ~11 weeks — on T-Rock's share alone. ", options: { bold: true, color: WHITE } },
+      { text: "Founding breaks even at 4.8 jobs a year — one incremental roof every ~11 weeks — on T^Rock's share alone. ", options: { bold: true, color: WHITE } },
       { text: "Past that it's margin, at $500/mo under Platinum sticker forever.", options: { color: "E6E6E6" } },
     ], { x: 0.95, y: 6.2, w: 11.5, h: 0.5, fontSize: 15, fontFace: "Arial", margin: 0 });
-    footer(s, 7, "Per job: $30,000 × 35% = $10,500, less 2% RCV scope fee ($600) = $9,900, split 50/50 with the PM → $4,950 to T-Rock.");
+    footer(s, 7, "Per job: $30,000 × 35% = $10,500, less 2% RCV scope fee ($600) = $9,900, split 50/50 with the PM → $4,950 to T^Rock.");
   }
 
-  // ----------------------------------------------------- 7. PILOT SCORECARD
+  // ---------------------------------------------------------------- 8. UPSIDE
+  {
+    const s = pres.addSlide();
+    s.background = { color: WHITE };
+    s.addText("The upside, sized for a hail market", {
+      x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
+    });
+    s.addText("DFW sits in one of the most hail-active corridors in the country. Scenarios for incremental roofs — jobs from verified-damage targeting we wouldn't have knocked otherwise:", {
+      x: 0.6, y: 1.2, w: 11.9, h: 0.55, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
+    });
+
+    const scen = [
+      { icon: icons.check, tag: "CONSERVATIVE", roofs: "8", rev: "$240,000 revenue", net: "+$15,600 net to T^Rock" },
+      { icon: icons.chart, tag: "BASE CASE", roofs: "18", rev: "$540,000 revenue", net: "+$65,100 net to T^Rock" },
+      { icon: icons.bolt, tag: "STRONG STORM YEAR", roofs: "30", rev: "$900,000 revenue", net: "+$124,500 net to T^Rock" },
+    ];
+    scen.forEach((t, i) => {
+      const x = 0.6 + i * 4.15;
+      s.addShape("roundRect", { x, y: 1.95, w: 3.85, h: 3.75, fill: { color: CARD }, rectRadius: 0.08 });
+      circleIcon(s, t.icon, x + 0.35, 2.25, 0.7);
+      s.addText(t.tag, { x: x + 1.25, y: 2.42, w: 2.5, h: 0.35, fontSize: 12, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+      s.addText(t.roofs, { x: x + 0.35, y: 3.0, w: 3.2, h: 0.95, fontSize: 54, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
+      s.addText("incremental roofs / yr", { x: x + 0.35, y: 3.95, w: 3.2, h: 0.3, fontSize: 12, color: MUTED, fontFace: "Arial", margin: 0 });
+      s.addText(t.rev, { x: x + 0.35, y: 4.35, w: 3.2, h: 0.4, fontSize: 18, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
+      s.addText(t.net, { x: x + 0.35, y: 4.78, w: 3.2, h: 0.35, fontSize: 15, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+      s.addText("after scope fee, PM split & subscription", { x: x + 0.35, y: 5.18, w: 3.2, h: 0.35, fontSize: 10, italic: true, color: MUTED, fontFace: "Arial", margin: 0 });
+    });
+
+    s.addShape("roundRect", { x: 0.6, y: 6.0, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
+    s.addText([
+      { text: "The maps exist either way. ", options: { bold: true, color: WHITE } },
+      { text: "The only question is whether T^Rock or a competitor is holding them when the next storm hits.", options: { color: "E6E6E6" } },
+    ], { x: 0.95, y: 6.13, w: 11.5, h: 0.55, fontSize: 15, fontFace: "Arial", margin: 0 });
+    footer(s, 8, "Net = (RCV × 35% − 2% scope fee) ÷ 2 − $24,000/yr subscription. Any shared-lead or list spend this replaces is a direct offset on top.");
+  }
+
+  // ----------------------------------------------------- 9. PROOF SCORECARD
   {
     const s = pres.addSlide();
     s.background = { color: WHITE };
@@ -345,9 +381,9 @@ function footer(slide, n, note) {
     circleIcon(s, icons.warn, 0.75, 5.55, 0.65);
     s.addText([
       { text: "Kill criteria, agreed up front: ", options: { bold: true, color: BLACK } },
-      { text: "if all-in cost per sold job isn't beating our current baseline at day 90, we cancel. Spend at risk: $6,000 — T-Rock's net on about 1.2 jobs. Founding bills $2,000 monthly; we get clean cancellation terms in writing before signing.", options: { color: INK } },
+      { text: "if all-in cost per sold job isn't beating our current baseline at day 90, we cancel. Spend at risk: $6,000 — T^Rock's net on about 1.2 jobs. Founding bills $2,000 monthly; we get clean cancellation terms in writing before signing.", options: { color: INK } },
     ], { x: 1.6, y: 5.55, w: 11.0, h: 0.85, fontSize: 14.5, fontFace: "Arial", margin: 0 });
-    footer(s, 8, "Targets are proposals — Aaron/Alan set final thresholds before we start.");
+    footer(s, 9, "Start the 90-day clock on the first mapped storm, not a calendar date. Leadership sets final thresholds up front.");
   }
 
   // ---------------------------------------------------- 8. STRAIGHT ANSWERS
@@ -359,7 +395,7 @@ function footer(slide, n, note) {
     });
 
     const items = [
-      { icon: icons.searchDollar, h: "“Isn't the ‘limited offer’ a sales tactic?”", b: "Probably — and it doesn't matter. Billing is $2,000 monthly, locked forever: keep it and we pay $500/mo under sticker for life; cancel at day 90 and we're out $6,000 — T-Rock's net on about one job. Only dealbreaker: cancellation terms that aren't clean." },
+      { icon: icons.searchDollar, h: "“Isn't the ‘limited offer’ a sales tactic?”", b: "Probably — and it doesn't matter. Billing is $2,000 monthly, locked forever: keep it and we pay $500/mo under sticker for life; cancel at day 90 and we're out $6,000 — T^Rock's net on about one job. Only dealbreaker: cancellation terms that aren't clean." },
       { icon: icons.warn, h: "“Their case studies are marketing.”", b: "Correct. Titan Roofing & Restoration and others on their site are vendor-published, no audited numbers. That's exactly why the pilot has our own scorecard — we trust our data, not theirs." },
       { icon: icons.cross, h: "“Is the damage data real?”", b: "We verify it ourselves: weeks 1–2, every map-flagged roof a rep inspects gets logged confirmed/not confirmed. Below 70% accuracy, the tool dies on that metric alone." },
       { icon: icons.users, h: "“Will the reps actually use it?”", b: "Adoption is the real risk with any tool. So it gets a named owner (Dom), the whole team trains on it day 1, and usage shows up in the weekly scorecard. Reps not working the lists is visible in the numbers within two weeks." },
@@ -372,18 +408,18 @@ function footer(slide, n, note) {
       s.addText(it.h, { x: x + 1.15, y: y + 0.28, w: 4.55, h: 0.4, fontSize: 16, bold: true, color: RED, fontFace: "Arial", margin: 0 });
       s.addText(it.b, { x: x + 1.15, y: y + 0.72, w: 4.55, h: 1.6, fontSize: 12, color: INK, fontFace: "Arial", margin: 0 });
     });
-    footer(s, 9, "");
+    footer(s, 10, "");
   }
 
-  // ----------------------------------------------------------------- 10. ASK
+  // ----------------------------------------------------------------- 11. ASK
   {
     const s = pres.addSlide();
     s.background = { color: BLACK };
     s.addText("The ask", { x: 0.75, y: 0.6, w: 11.8, h: 0.8, fontSize: 40, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
 
     const steps = [
-      { icon: icons.hand, n: "1", h: "Book the demo — this week", b: "30 minutes. Confirm the Founding offer is still open, get cancellation terms in writing, and ask how automated calls/texts handle DNC & TCPA compliance." },
-      { icon: icons.clip, n: "2", h: "Buy Founding Member", b: "$2,000/mo, every Platinum feature, price locked for life. Full team live day 1; 2 control reps keep the old playbook." },
+      { icon: icons.hand, n: "1", h: "Book the demo — this week", b: "30 min. Confirm the Founding offer is still open; get cancellation and lead-data-export terms in writing; ask how automated calls/texts handle DNC & TCPA." },
+      { icon: icons.clip, n: "2", h: "Buy Founding Member", b: "$2,000/mo, every Platinum feature, price locked for life. Full team live day 1; 2 control reps keep the old playbook. Weekly scorecard to leadership." },
       { icon: icons.check, n: "3", h: "Day-90 scorecard: keep or kill", b: "Beats baseline → we own Platinum features at $500/mo under sticker, forever. Misses → cancel; at risk was $6,000." },
     ];
     steps.forEach((st, i) => {
