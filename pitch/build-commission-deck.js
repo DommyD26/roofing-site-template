@@ -303,7 +303,7 @@ function footer(slide, n, note) {
     s.addText("Next steps", { x: 0.75, y: 0.6, w: 11.8, h: 0.8, fontSize: 40, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
 
     const steps = [
-      { icon: iconsW.check, n: "1", h: "Define the metrics", b: "Cohorts: a lead belongs to the quarter it was scoped; its close counts whenever it funds, inside a 180-day window. Define scoped lead, attribution, and collected = funds received." },
+      { icon: iconsW.check, n: "1", h: "Define the metrics", b: "Close rate = funded jobs ÷ scoped leads. A scoped lead = homeowner + written RSOW handed to a rep; raw map records don't count. A lead belongs to the quarter it was scoped (180-day window)." },
       { icon: iconsW.scale, n: "2", h: "Pick the base", b: "Option A (% of job profit, splits like a job cost) or Option B (% of RCV). One page, signed, with the slider table attached." },
       { icon: iconsW.shake, n: "3", h: "True-up quarterly, review at 6 months", b: "2% floor paid as jobs fund; each quarter-end re-rates every open cohort and pays the difference. Six-month check: if the numbers say adjust the curve, adjust it." },
     ];
