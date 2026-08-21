@@ -958,6 +958,7 @@
     ];
     if (finalPassed()) rows.push(["#/certificate", "📜", "My Certificate"]);
     rows.push(["#/gear", "🧰", "Tools & Equipment"]);
+    rows.push(["commercial/", "🏗️", "Commercial Exam"]);
     sheet.innerHTML = '<div class="sheet-grab" aria-hidden="true"></div><h2 class="sheet-title">More</h2>';
     rows.forEach(function (r) {
       var a = el("a", "sheet-row");
