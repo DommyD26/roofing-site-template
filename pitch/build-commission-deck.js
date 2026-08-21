@@ -122,25 +122,29 @@ function footer(slide, n, note) {
     const lbl = { bold: true, color: BLACK, fontFace: "Arial", fontSize: 12, valign: "middle" };
     const c = { fontFace: "Arial", fontSize: 12.5, color: INK, valign: "middle", align: "center" };
     const r = { fontFace: "Arial", fontSize: 13, bold: true, color: RED, valign: "middle", align: "center" };
+    const dim = { fontFace: "Arial", fontSize: 12, color: MUTED, valign: "middle", align: "center" };
+    const tot = { fontFace: "Arial", fontSize: 13, bold: true, color: RED, valign: "middle", align: "center", fill: { color: LTRED } };
     const rows = [
-      [{ text: "", options: hdr }, { text: "20% close (floor)", options: hdr }, { text: "40%", options: hdr }, { text: "60%", options: hdr }, { text: "80%", options: hdr }, { text: "100% (ceiling)", options: hdr }],
+      [{ text: "Per 10 scoped leads", options: hdr }, { text: "20% close (floor)", options: hdr }, { text: "40%", options: hdr }, { text: "60%", options: hdr }, { text: "80%", options: hdr }, { text: "100% (ceiling)", options: hdr }],
       [{ text: "Fee (% of RCV)", options: lbl }, { text: "2%", options: r }, { text: "4%", options: r }, { text: "6%", options: r }, { text: "8%", options: r }, { text: "10%", options: r }],
-      [{ text: "Fee on a $30,000 job", options: lbl }, { text: "$600", options: c }, { text: "$1,200", options: c }, { text: "$1,800", options: c }, { text: "$2,400", options: c }, { text: "$3,000", options: c }],
-      [{ text: "Job profit after fee (35% margin)", options: lbl }, { text: "$9,900", options: c }, { text: "$9,300", options: c }, { text: "$8,700", options: c }, { text: "$8,100", options: c }, { text: "$7,500", options: c }],
-      [{ text: "T^Rock net per job (after 50/50 PM split)", options: lbl }, { text: "$4,950", options: r }, { text: "$4,650", options: r }, { text: "$4,350", options: r }, { text: "$4,050", options: r }, { text: "$3,750", options: r }],
+      [{ text: "Jobs closed & collected (fee paid on these only)", options: lbl }, { text: "2 of 10", options: c }, { text: "4 of 10", options: c }, { text: "6 of 10", options: c }, { text: "8 of 10", options: c }, { text: "10 of 10", options: c }],
+      [{ text: "Fee per closed $30,000 job", options: lbl }, { text: "$600", options: c }, { text: "$1,200", options: c }, { text: "$1,800", options: c }, { text: "$2,400", options: c }, { text: "$3,000", options: c }],
+      [{ text: "Fee on the other 8 / 6 / 4 / 2 / 0 leads", options: lbl }, { text: "$0", options: dim }, { text: "$0", options: dim }, { text: "$0", options: dim }, { text: "$0", options: dim }, { text: "$0", options: dim }],
+      [{ text: "T^Rock net per closed job (after 50/50 PM split)", options: lbl }, { text: "$4,950", options: c }, { text: "$4,650", options: c }, { text: "$4,350", options: c }, { text: "$4,050", options: c }, { text: "$3,750", options: c }],
+      [{ text: "T^Rock TOTAL net on the 10 leads", options: lbl }, { text: "$9,900", options: tot }, { text: "$18,600", options: tot }, { text: "$26,100", options: tot }, { text: "$32,400", options: tot }, { text: "$37,500", options: tot }],
     ];
     s.addTable(rows, {
-      x: 0.6, y: 2.0, w: 12.1, colW: [3.6, 1.8, 1.6, 1.6, 1.6, 1.9],
+      x: 0.6, y: 1.95, w: 12.1, colW: [3.6, 1.8, 1.6, 1.6, 1.6, 1.9],
       border: { type: "solid", color: "DDDDDD", pt: 0.75 },
-      rowH: [0.45, 0.55, 0.55, 0.55, 0.6], margin: 0.08,
+      rowH: [0.4, 0.42, 0.42, 0.42, 0.42, 0.42, 0.5], margin: 0.07,
     });
 
-    s.addShape("roundRect", { x: 0.6, y: 5.4, w: 12.1, h: 0.95, fill: { color: LTRED }, rectRadius: 0.06 });
+    s.addShape("roundRect", { x: 0.6, y: 5.35, w: 12.1, h: 0.95, fill: { color: LTRED }, rectRadius: 0.06 });
     s.addText([
-      { text: "Worst case for T^Rock is still $3,750 net per closed job ", options: { bold: true, color: BLACK } },
-      { text: "— and that case only exists in a quarter where every single scoped lead closed. The fee can never run ahead of collected cash.", options: { color: INK } },
-    ], { x: 0.95, y: 5.55, w: 11.5, h: 0.7, fontSize: 14.5, fontFace: "Arial", margin: 0 });
-    footer(s, 3, "Rates between tiers interpolate linearly. Close rate = closed & collected jobs ÷ scoped leads, trailing quarter.");
+      { text: "The “expensive” end of the slider is the one where T^Rock banks $37,500 on 10 leads instead of $9,900. ", options: { bold: true, color: BLACK } },
+      { text: "The 10% fee only exists when all 10 closed and funded — it can never run ahead of collected cash.", options: { color: INK } },
+    ], { x: 0.95, y: 5.48, w: 11.5, h: 0.72, fontSize: 14, fontFace: "Arial", margin: 0 });
+    footer(s, 3, "Total net = jobs closed (of 10) × net per closed job. Rates between tiers interpolate linearly. Close rate measured on a trailing quarter.");
   }
 
   // ----------------------------------------------- 4. WHY THE SLIDER SELF-FUNDS
