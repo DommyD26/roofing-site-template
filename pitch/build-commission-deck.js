@@ -115,8 +115,9 @@ function footer(slide, n, note) {
     });
     s.addText([
       { text: "Fee = % of RCV on scoped jobs, paid only when closed AND collected. ", options: { bold: true, color: INK } },
-      { text: "The % is set by the close rate on scoped leads, measured quarterly — better conversion, better rate, for both sides.", options: { color: MUTED } },
-    ], { x: 0.6, y: 1.2, w: 11.9, h: 0.55, fontSize: 14.5, fontFace: "Arial", margin: 0 });
+      { text: "The % is set by the close rate on scoped leads, measured quarterly. ", options: { color: MUTED } },
+      { text: "Cash flow: the 2% floor is paid as each job funds; quarter-end reconciliation trues up to the earned average rate — T^Rock never prepays a rate, and nothing is ever clawed back.", options: { bold: true, color: RED } },
+    ], { x: 0.6, y: 1.15, w: 11.9, h: 0.75, fontSize: 14, fontFace: "Arial", margin: 0 });
 
     const hdr = { bold: true, color: WHITE, fill: { color: BLACK }, fontFace: "Arial", fontSize: 13, valign: "middle", align: "center" };
     const lbl = { bold: true, color: BLACK, fontFace: "Arial", fontSize: 12, valign: "middle" };
@@ -134,7 +135,7 @@ function footer(slide, n, note) {
       [{ text: "T^Rock TOTAL net on the 10 leads", options: lbl }, { text: "$9,900", options: tot }, { text: "$18,600", options: tot }, { text: "$26,100", options: tot }, { text: "$32,400", options: tot }, { text: "$37,500", options: tot }],
     ];
     s.addTable(rows, {
-      x: 0.6, y: 1.95, w: 12.1, colW: [3.6, 1.8, 1.6, 1.6, 1.6, 1.9],
+      x: 0.6, y: 2.05, w: 12.1, colW: [3.6, 1.8, 1.6, 1.6, 1.6, 1.9],
       border: { type: "solid", color: "DDDDDD", pt: 0.75 },
       rowH: [0.4, 0.42, 0.42, 0.42, 0.42, 0.42, 0.5], margin: 0.07,
     });
@@ -307,7 +308,7 @@ function footer(slide, n, note) {
     const steps = [
       { icon: icons.check, n: "1", h: "Define the metrics", b: "Close-rate window (trailing quarter), what counts as a scoped lead, attribution rules, and “collected” = funds received." },
       { icon: icons.scale, n: "2", h: "Pick the base", b: "Option A (% of RCV) or Option B (% of job profit). One page, signed, with the slider table attached." },
-      { icon: icons.shake, n: "3", h: "True-up quarterly, review at 6 months", b: "Rate recalculates each quarter from actuals. Six-month check: if the numbers say adjust the curve, adjust the curve." },
+      { icon: icons.shake, n: "3", h: "True-up quarterly, review at 6 months", b: "2% floor paid as jobs fund; quarter-end true-up to the earned average rate. Six-month check: if the numbers say adjust the curve, adjust the curve." },
     ];
     steps.forEach((st, i) => {
       const x = 0.75 + i * 4.1;
