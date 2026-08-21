@@ -277,14 +277,26 @@ function footer(slide, n, note) {
     ];
     const barX = 2.6, barScale = 4.5 / 160;
     cpl.forEach((b, i) => {
-      const y = 2.35 + i * 0.82;
+      const y = 2.25 + i * 0.72;
       const bw = Math.max(b.val * barScale, 0.22);
       s.addText(b.label, { x: 0.6, y: y, w: 1.9, h: 0.5, fontSize: 12.5, bold: true, color: b.color === RED ? RED : INK, fontFace: "Arial", align: "right", valign: "middle", margin: 0 });
       s.addShape("roundRect", { x: barX, y: y + 0.05, w: bw, h: 0.42, fill: { color: b.color }, rectRadius: 0.04 });
       s.addText("$" + b.val, { x: barX + bw + 0.1, y: y, w: 0.9, h: 0.5, fontSize: 14, bold: true, color: b.color === RED ? RED : BLACK, fontFace: "Arial", valign: "middle", margin: 0 });
     });
-    s.addText("*$2,000/mo flat ÷ a slow 200 records — every record past that has a marginal cost of $0.", {
-      x: 0.6, y: 5.65, w: 7.3, h: 0.3, fontSize: 10.5, italic: true, color: MUTED, fontFace: "Arial", margin: 0
+    // *the more it's used, the cheaper each lead gets — closes don't affect the meter
+    s.addText("*Subscription cost per lead falls with volume (leads provided, not closed):", {
+      x: 0.6, y: 5.05, w: 7.3, h: 0.3, fontSize: 11, bold: true, color: BLACK, fontFace: "Arial", margin: 0
+    });
+    const vols = [
+      { n: "100 leads/mo", d: "$20" }, { n: "200", d: "$10" }, { n: "500", d: "$4" }, { n: "1,000", d: "$2" },
+    ];
+    vols.forEach((v, i) => {
+      const x = 0.6 + i * 1.85;
+      s.addShape("roundRect", { x, y: 5.4, w: 1.7, h: 0.45, fill: { color: i === 3 ? RED : CARD }, rectRadius: 0.06 });
+      s.addText([
+        { text: v.d + " ", options: { bold: true, fontSize: 14, color: i === 3 ? WHITE : RED } },
+        { text: v.n, options: { fontSize: 9.5, color: i === 3 ? "F2C6CD" : MUTED } },
+      ], { x: x + 0.1, y: 5.4, w: 1.55, h: 0.45, fontFace: "Arial", valign: "middle", margin: 0 });
     });
 
     s.addShape("roundRect", { x: 8.15, y: 1.75, w: 4.55, h: 4.1, fill: { color: CARD }, rectRadius: 0.08 });

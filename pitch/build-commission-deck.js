@@ -114,7 +114,7 @@ function footer(slide, n, note) {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
     s.addText([
-      { text: "Fee = % of RCV on scoped jobs, paid only when closed AND collected. ", options: { bold: true, color: INK } },
+      { text: "Fee = % of job profit on scoped jobs, booked as a job expense, paid only when closed AND collected. ", options: { bold: true, color: INK } },
       { text: "The % is set by the close rate on scoped leads, measured quarterly. ", options: { color: MUTED } },
       { text: "Cash flow: the 2% floor is paid as each job funds; quarter-end reconciliation trues up to the earned average rate — T^Rock never prepays a rate, and nothing is ever clawed back.", options: { bold: true, color: RED } },
     ], { x: 0.6, y: 1.15, w: 11.9, h: 0.75, fontSize: 14, fontFace: "Arial", margin: 0 });
@@ -127,12 +127,12 @@ function footer(slide, n, note) {
     const tot = { fontFace: "Arial", fontSize: 13, bold: true, color: RED, valign: "middle", align: "center", fill: { color: LTRED } };
     const rows = [
       [{ text: "Per 10 scoped leads", options: hdr }, { text: "20% close (floor)", options: hdr }, { text: "40%", options: hdr }, { text: "60%", options: hdr }, { text: "80%", options: hdr }, { text: "100% (ceiling)", options: hdr }],
-      [{ text: "Fee (% of RCV)", options: lbl }, { text: "2%", options: r }, { text: "4%", options: r }, { text: "6%", options: r }, { text: "8%", options: r }, { text: "10%", options: r }],
+      [{ text: "Fee (% of job profit)", options: lbl }, { text: "2%", options: r }, { text: "4%", options: r }, { text: "6%", options: r }, { text: "8%", options: r }, { text: "10%", options: r }],
       [{ text: "Jobs closed & collected (fee paid on these only)", options: lbl }, { text: "2 of 10", options: c }, { text: "4 of 10", options: c }, { text: "6 of 10", options: c }, { text: "8 of 10", options: c }, { text: "10 of 10", options: c }],
-      [{ text: "Fee per closed $30,000 job", options: lbl }, { text: "$600", options: c }, { text: "$1,200", options: c }, { text: "$1,800", options: c }, { text: "$2,400", options: c }, { text: "$3,000", options: c }],
+      [{ text: "Fee per closed job ($15,000 profit)", options: lbl }, { text: "$300", options: c }, { text: "$600", options: c }, { text: "$900", options: c }, { text: "$1,200", options: c }, { text: "$1,500", options: c }],
       [{ text: "Fee on the other 8 / 6 / 4 / 2 / 0 leads", options: lbl }, { text: "$0", options: dim }, { text: "$0", options: dim }, { text: "$0", options: dim }, { text: "$0", options: dim }, { text: "$0", options: dim }],
-      [{ text: "T^Rock net per closed job (after 50/50 PM split)", options: lbl }, { text: "$4,950", options: c }, { text: "$4,650", options: c }, { text: "$4,350", options: c }, { text: "$4,050", options: c }, { text: "$3,750", options: c }],
-      [{ text: "T^Rock TOTAL net on the 10 leads", options: lbl }, { text: "$9,900", options: tot }, { text: "$18,600", options: tot }, { text: "$26,100", options: tot }, { text: "$32,400", options: tot }, { text: "$37,500", options: tot }],
+      [{ text: "T^Rock net per closed job (fee splits like any job cost)", options: lbl }, { text: "$7,350", options: c }, { text: "$7,200", options: c }, { text: "$7,050", options: c }, { text: "$6,900", options: c }, { text: "$6,750", options: c }],
+      [{ text: "T^Rock TOTAL net on the 10 leads", options: lbl }, { text: "$14,700", options: tot }, { text: "$28,800", options: tot }, { text: "$42,300", options: tot }, { text: "$55,200", options: tot }, { text: "$67,500", options: tot }],
     ];
     s.addTable(rows, {
       x: 0.6, y: 2.05, w: 12.1, colW: [3.6, 1.8, 1.6, 1.6, 1.6, 1.9],
@@ -142,10 +142,10 @@ function footer(slide, n, note) {
 
     s.addShape("roundRect", { x: 0.6, y: 5.35, w: 12.1, h: 0.95, fill: { color: LTRED }, rectRadius: 0.06 });
     s.addText([
-      { text: "The “expensive” end of the slider is the one where T^Rock banks $37,500 on 10 leads instead of $9,900. ", options: { bold: true, color: BLACK } },
+      { text: "The “expensive” end of the slider is the one where T^Rock banks $67,500 on 10 leads instead of $14,700. ", options: { bold: true, color: BLACK } },
       { text: "The 10% fee only exists when all 10 closed and funded — it can never run ahead of collected cash.", options: { color: INK } },
     ], { x: 0.95, y: 5.48, w: 11.5, h: 0.72, fontSize: 14, fontFace: "Arial", margin: 0 });
-    footer(s, 3, "Total net = jobs closed (of 10) × net per closed job. Rates between tiers interpolate linearly. Close rate measured on a trailing quarter.");
+    footer(s, 3, "Typical job: $30,000 RCV at 50% margin = $15,000 profit. Fee is a job expense, so profit after fee splits 50/50 with the PM. Tiers interpolate linearly; close rate measured on a trailing quarter.");
   }
 
   // ------------------------------------------------ 4. WHERE THE SLIDER COMES FROM
@@ -164,7 +164,7 @@ function footer(slide, n, note) {
     circleIcon(s, icons.sign, 0.9, 2.1, 0.7);
     s.addText("The floor — raw leads", { x: 1.8, y: 2.25, w: 4.5, h: 0.4, fontSize: 17, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
     s.addText("2%", { x: 0.9, y: 2.95, w: 2.0, h: 0.9, fontSize: 48, bold: true, color: RED, fontFace: "Arial", margin: 0 });
-    s.addText("Scoped leads where most won't close. The fee collects on the few that do — priced like professional scope work, paid only on results. At a 20% close rate, 8 of every 10 scopes were written for free.", {
+    s.addText("Of job profit — $300 on a typical roof. Scoped leads where most won't close; the fee collects on the few that do. At a 20% close rate, 8 of every 10 scopes were written for free.", {
       x: 0.9, y: 3.95, w: 5.3, h: 1.2, fontSize: 12.5, color: INK, fontFace: "Arial", margin: 0
     });
 
@@ -173,7 +173,7 @@ function footer(slide, n, note) {
     circleIcon(s, icons.shake, 7.1, 2.1, 0.7);
     s.addText("The ceiling — a done deal", { x: 8.0, y: 2.25, w: 4.5, h: 0.4, fontSize: 17, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
     s.addText("10%", { x: 7.1, y: 2.95, w: 2.4, h: 0.9, fontSize: 48, bold: true, color: RED, fontFace: "Arial", margin: 0 });
-    s.addText("A lead that closes 100% of the time is a signed contract changing hands. That's a referral — and 10% of contract value is the standard referral fee. Nobody blinks at 10% for a job that's already sold.", {
+    s.addText("A lead that closes 100% of the time is a signed contract changing hands — a referral. The customary referral fee is ~10% of contract value; 10% of profit is $1,500 on a $30,000 roof — just 5% of contract. Half the going rate for a done deal.", {
       x: 7.1, y: 3.95, w: 5.3, h: 1.2, fontSize: 12.5, color: "E0E0E0", fontFace: "Arial", margin: 0
     });
 
@@ -182,7 +182,7 @@ function footer(slide, n, note) {
       { text: "Everything between is interpolation. ", options: { bold: true, color: BLACK } },
       { text: "The quarter's actual close rate measures how pre-sold the leads really were, and the fee settles to match — on results, not promises. The slider doesn't invent a price; it connects two prices the industry already accepts.", options: { color: INK } },
     ], { x: 0.95, y: 5.72, w: 11.5, h: 0.78, fontSize: 14, fontFace: "Arial", margin: 0 });
-    footer(s, 4, "Referral benchmark: ~10% of contract value is the customary fee for handed-off, ready-to-sign work in residential contracting.");
+    footer(s, 4, "Referral benchmark: ~10% of contract value is the customary fee for handed-off, ready-to-sign work — this plan's ceiling works out to half that.");
   }
 
   // ----------------------------------------------- 5. WHY THE SLIDER SELF-FUNDS
@@ -201,13 +201,13 @@ function footer(slide, n, note) {
       x: 0.6, y: 1.75, w: 12.1, h: 0.35, fontSize: 14, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
     const bars = [
-      { label: "20% close", val: 99000 },
-      { label: "40% close", val: 186000 },
-      { label: "60% close", val: 261000 },
-      { label: "80% close", val: 324000 },
-      { label: "100% close", val: 375000, hot: true },
+      { label: "20% close", val: 147000 },
+      { label: "40% close", val: 288000 },
+      { label: "60% close", val: 423000 },
+      { label: "80% close", val: 552000 },
+      { label: "100% close", val: 675000, hot: true },
     ];
-    const baseY = 5.3, maxH = 2.7, colScale = maxH / 375000;
+    const baseY = 5.3, maxH = 2.7, colScale = maxH / 675000;
     s.addShape("rect", { x: 0.75, y: baseY, w: 11.8, h: 0.015, fill: { color: "CCCCCC" } });
     bars.forEach((b, i) => {
       const cx = 1.1 + i * 2.4;
@@ -219,10 +219,10 @@ function footer(slide, n, note) {
 
     s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
     s.addText([
-      { text: "Top of the slider = T^Rock's take is up nearly 4×. ", options: { bold: true, color: WHITE } },
+      { text: "Top of the slider = T^Rock's take is up 4.6×. ", options: { bold: true, color: WHITE } },
       { text: "The higher fee is only ever paid out of jobs that already closed — the plan cannot cost money in a bad quarter.", options: { color: "E6E6E6" } },
     ], { x: 0.95, y: 6.18, w: 11.5, h: 0.55, fontSize: 15, fontFace: "Arial", margin: 0 });
-    footer(s, 5, "Per closed job: $30,000 × 35% margin, less slider fee, split 50/50 with the PM. 100 scoped leads held constant across scenarios.");
+    footer(s, 5, "Per closed job: $30,000 × 50% margin = $15,000, less slider fee (a job expense), split 50/50 with the PM. 100 scoped leads held constant.");
   }
 
   // ------------------------------------------------------ 5. RCV VS PROFIT BASE
@@ -235,21 +235,21 @@ function footer(slide, n, note) {
 
     const opts = [
       {
-        icon: icons.invoice, h: "Option A — % of RCV", tag: "the numbers shown so far",
+        icon: icons.scale, h: "Option A — % of job profit", tag: "the plan as shown",
         pts: [
-          "Verified straight off the carrier paperwork — no accounting disputes, ever",
-          "Insulated from cost overruns neither side controls",
-          "Slider band: 2% → 10% of RCV",
-          "At 50% close: 5% × $30,000 = $1,500 per closed job",
+          "Booked as a job expense, so it splits with the PM like every other job cost — each side effectively carries half",
+          "Worked example: $30,000 roof → $15,000 profit → 10% fee = $1,500 → $13,500 splits 50/50 → T^Rock nets $6,750",
+          "Fee shrinks automatically on thin-margin jobs — T^Rock is never overcharged on a bad one",
+          "Needs job costing both sides can see",
         ],
       },
       {
-        icon: icons.scale, h: "Option B — % of job profit", tag: "equivalent dollars, different base",
+        icon: icons.invoice, h: "Option B — % of RCV", tag: "same dollars, different base",
         pts: [
-          "Scales with margin — the fee shrinks automatically on thin jobs",
-          "Requires open-book job costing both sides trust",
-          "Equivalent slider band: ~6% → 28% of job gross profit",
-          "At 50% close: ~14% × $10,500 = ~$1,470 per closed job",
+          "Equivalent band at today's margins: 1% → 5% of contract value",
+          "Verified straight off the carrier paperwork — no job-costing disputes, ever",
+          "Insulated from cost overruns; the fee holds even if margins slip",
+          "Pick this if open-book job costing is a sticking point",
         ],
       },
     ];
@@ -267,7 +267,7 @@ function footer(slide, n, note) {
     s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: LTRED }, rectRadius: 0.06 });
     s.addText([
       { text: "Same money either way at today's margins. ", options: { bold: true, color: BLACK } },
-      { text: "A is simpler to verify; B is tighter to margin. The only wrong answer is leaving the definition verbal.", options: { color: INK } },
+      { text: "A rides the profit pool and splits with the PM; B is simpler to audit. The only wrong answer is leaving the definition verbal.", options: { color: INK } },
     ], { x: 0.95, y: 6.2, w: 11.5, h: 0.5, fontSize: 14.5, fontFace: "Arial", margin: 0 });
     footer(s, 6, "");
   }
@@ -308,7 +308,7 @@ function footer(slide, n, note) {
 
     const steps = [
       { icon: icons.check, n: "1", h: "Define the metrics", b: "Close-rate window (trailing quarter), what counts as a scoped lead, attribution rules, and “collected” = funds received." },
-      { icon: icons.scale, n: "2", h: "Pick the base", b: "Option A (% of RCV) or Option B (% of job profit). One page, signed, with the slider table attached." },
+      { icon: icons.scale, n: "2", h: "Pick the base", b: "Option A (% of job profit, splits like a job cost) or Option B (% of RCV). One page, signed, with the slider table attached." },
       { icon: icons.shake, n: "3", h: "True-up quarterly, review at 6 months", b: "2% floor paid as jobs fund; quarter-end true-up to the earned average rate. Six-month check: if the numbers say adjust the curve, adjust the curve." },
     ];
     steps.forEach((st, i) => {
