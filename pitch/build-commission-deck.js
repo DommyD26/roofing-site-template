@@ -147,7 +147,44 @@ function footer(slide, n, note) {
     footer(s, 3, "Total net = jobs closed (of 10) × net per closed job. Rates between tiers interpolate linearly. Close rate measured on a trailing quarter.");
   }
 
-  // ----------------------------------------------- 4. WHY THE SLIDER SELF-FUNDS
+  // ------------------------------------------------ 4. WHERE THE SLIDER COMES FROM
+  {
+    const s = pres.addSlide();
+    s.background = { color: WHITE };
+    s.addText("Where the slider comes from", {
+      x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
+    });
+    s.addText("Both ends are anchored to prices the industry already pays. The slider just connects them.", {
+      x: 0.6, y: 1.2, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
+    });
+
+    // floor anchor
+    s.addShape("roundRect", { x: 0.6, y: 1.8, w: 5.9, h: 3.5, fill: { color: CARD }, rectRadius: 0.08 });
+    circleIcon(s, icons.sign, 0.9, 2.1, 0.7);
+    s.addText("The floor — raw leads", { x: 1.8, y: 2.25, w: 4.5, h: 0.4, fontSize: 17, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
+    s.addText("2%", { x: 0.9, y: 2.95, w: 2.0, h: 0.9, fontSize: 48, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+    s.addText("Scoped leads where most won't close. The fee collects on the few that do — priced like professional scope work, paid only on results. At a 20% close rate, 8 of every 10 scopes were written for free.", {
+      x: 0.9, y: 3.95, w: 5.3, h: 1.2, fontSize: 12.5, color: INK, fontFace: "Arial", margin: 0
+    });
+
+    // ceiling anchor
+    s.addShape("roundRect", { x: 6.8, y: 1.8, w: 5.9, h: 3.5, fill: { color: BLACK }, rectRadius: 0.08 });
+    circleIcon(s, icons.shake, 7.1, 2.1, 0.7);
+    s.addText("The ceiling — a done deal", { x: 8.0, y: 2.25, w: 4.5, h: 0.4, fontSize: 17, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
+    s.addText("10%", { x: 7.1, y: 2.95, w: 2.4, h: 0.9, fontSize: 48, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+    s.addText("A lead that closes 100% of the time is a signed contract changing hands. That's a referral — and 10% of contract value is the standard referral fee. Nobody blinks at 10% for a job that's already sold.", {
+      x: 7.1, y: 3.95, w: 5.3, h: 1.2, fontSize: 12.5, color: "E0E0E0", fontFace: "Arial", margin: 0
+    });
+
+    s.addShape("roundRect", { x: 0.6, y: 5.6, w: 12.1, h: 1.0, fill: { color: LTRED }, rectRadius: 0.06 });
+    s.addText([
+      { text: "Everything between is interpolation. ", options: { bold: true, color: BLACK } },
+      { text: "The quarter's actual close rate measures how pre-sold the leads really were, and the fee settles to match — on results, not promises. The slider doesn't invent a price; it connects two prices the industry already accepts.", options: { color: INK } },
+    ], { x: 0.95, y: 5.72, w: 11.5, h: 0.78, fontSize: 14, fontFace: "Arial", margin: 0 });
+    footer(s, 4, "Referral benchmark: ~10% of contract value is the customary fee for handed-off, ready-to-sign work in residential contracting.");
+  }
+
+  // ----------------------------------------------- 5. WHY THE SLIDER SELF-FUNDS
   {
     const s = pres.addSlide();
     s.background = { color: WHITE };
@@ -183,7 +220,7 @@ function footer(slide, n, note) {
       { text: "Top of the slider = T^Rock's take is up nearly 4×. ", options: { bold: true, color: WHITE } },
       { text: "The higher fee is only ever paid out of jobs that already closed — the plan cannot cost money in a bad quarter.", options: { color: "E6E6E6" } },
     ], { x: 0.95, y: 6.18, w: 11.5, h: 0.55, fontSize: 15, fontFace: "Arial", margin: 0 });
-    footer(s, 4, "Per closed job: $30,000 × 35% margin, less slider fee, split 50/50 with the PM. 100 scoped leads held constant across scenarios.");
+    footer(s, 5, "Per closed job: $30,000 × 35% margin, less slider fee, split 50/50 with the PM. 100 scoped leads held constant across scenarios.");
   }
 
   // ------------------------------------------------------ 5. RCV VS PROFIT BASE
@@ -230,7 +267,7 @@ function footer(slide, n, note) {
       { text: "Same money either way at today's margins. ", options: { bold: true, color: BLACK } },
       { text: "A is simpler to verify; B is tighter to margin. The only wrong answer is leaving the definition verbal.", options: { color: INK } },
     ], { x: 0.95, y: 6.2, w: 11.5, h: 0.5, fontSize: 14.5, fontFace: "Arial", margin: 0 });
-    footer(s, 5, "");
+    footer(s, 6, "");
   }
 
   // ------------------------------------------------------------ 6. RISK PROFILE
@@ -258,7 +295,7 @@ function footer(slide, n, note) {
       s.addText(t.big, { x: x + 0.35, y: 3.15, w: 3.2, h: 0.85, fontSize: 40, bold: true, color: RED, fontFace: "Arial", margin: 0 });
       s.addText(t.b, { x: x + 0.35, y: 4.1, w: 3.2, h: 1.55, fontSize: 12, color: hot ? "E0E0E0" : INK, fontFace: "Arial", margin: 0 });
     });
-    footer(s, 6, "Estimator salary and supplement-fee ranges are industry-typical figures for the region, not quotes.");
+    footer(s, 7, "Estimator salary and supplement-fee ranges are industry-typical figures for the region, not quotes.");
   }
 
   // ------------------------------------------------------------ 7. NEXT STEPS
