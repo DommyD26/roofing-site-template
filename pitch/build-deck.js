@@ -213,14 +213,55 @@ function footer(slide, n, note) {
     footer(s, 5, "");
   }
 
-  // ------------------------------------------------------------- 6. BREAK-EVEN
+  // ------------------------------------------------------------ 6. PRICE LIST
   {
     const s = pres.addSlide();
     s.background = { color: WHITE };
-    s.addText("The break-even math", {
+    s.addText("The actual price list", {
+      x: 0.6, y: 0.4, w: 12.1, h: 0.6, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
+    });
+    s.addText("Published on stormscout.ai/pricing — no quote games. Silver is the pilot tier.", {
+      x: 0.6, y: 1.02, w: 11.9, h: 0.35, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
+    });
+
+    const hdr = { bold: true, color: WHITE, fill: { color: BLACK }, fontFace: "Arial", fontSize: 12.5, valign: "middle", align: "center" };
+    const hdrHot = { bold: true, color: WHITE, fill: { color: RED }, fontFace: "Arial", fontSize: 12.5, valign: "middle", align: "center" };
+    const lbl = { bold: true, color: BLACK, fontFace: "Arial", fontSize: 11, valign: "middle" };
+    const c = { fontFace: "Arial", fontSize: 10.5, color: INK, valign: "middle", align: "center" };
+    const cHot = { fontFace: "Arial", fontSize: 10.5, color: INK, valign: "middle", align: "center", fill: { color: LTRED } };
+    const price = { fontFace: "Arial", fontSize: 13, bold: true, color: RED, valign: "middle", align: "center" };
+    const priceHot = { fontFace: "Arial", fontSize: 13, bold: true, color: RED, valign: "middle", align: "center", fill: { color: LTRED } };
+    const rows = [
+      [{ text: "", options: hdr }, { text: "Bronze", options: hdr }, { text: "Silver  (pilot)", options: hdrHot }, { text: "Gold", options: hdr }, { text: "Platinum", options: hdr }, { text: "Founding*", options: hdr }],
+      [{ text: "Price / month", options: lbl }, { text: "$100", options: price }, { text: "$500", options: priceHot }, { text: "$1,000", options: price }, { text: "$2,500", options: price }, { text: "$2,000*", options: price }],
+      [{ text: "Storm maps", options: lbl }, { text: "1 / month", options: c }, { text: "5 / month", options: cHot }, { text: "Unlimited", options: c }, { text: "Unlimited", options: c }, { text: "Unlimited", options: c }],
+      [{ text: "Filters", options: lbl }, { text: "Basic (ZIP, storm date)", options: c }, { text: "Advanced (hail size, roof age…)", options: cHot }, { text: "Advanced, unlimited searches", options: c }, { text: "Custom alerts + territory tracking", options: c }, { text: "Same as Platinum", options: c }],
+      [{ text: "Homeowner leads", options: lbl }, { text: "Up to 25", options: c }, { text: "Up to 150", options: cHot }, { text: "Up to 500", options: c }, { text: "Unlimited", options: c }, { text: "Unlimited", options: c }],
+      [{ text: "Automated outreach", options: lbl }, { text: "—", options: c }, { text: "—", options: cHot }, { text: "SMS, email, calls", options: c }, { text: "SMS, email, calls", options: c }, { text: "SMS, email, calls", options: c }],
+      [{ text: "Also includes", options: lbl }, { text: "Mobile & desktop", options: c }, { text: "Real-time alerts, hail & wind maps", options: cHot }, { text: "Property-ownership detail", options: c }, { text: "Analytics, priority support & onboarding", options: c }, { text: "Lifetime price lock, partner network", options: c }],
+    ];
+    s.addTable(rows, {
+      x: 0.6, y: 1.5, w: 12.1, colW: [1.9, 1.85, 2.1, 2.0, 2.15, 2.1],
+      border: { type: "solid", color: "DDDDDD", pt: 0.75 },
+      rowH: [0.4, 0.45, 0.45, 0.75, 0.45, 0.45, 0.75], margin: 0.06,
+    });
+
+    s.addShape("roundRect", { x: 0.6, y: 6.0, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
+    s.addText([
+      { text: "Silver: ≤ $3.33 per damage-filtered homeowner record. ", options: { bold: true, color: WHITE } },
+      { text: "Shared-lead sellers: $150–300 per lead, resold to competitors. Not identical products — but that gap is the whole thesis.", options: { color: "E6E6E6" } },
+    ], { x: 0.95, y: 6.1, w: 11.5, h: 0.62, fontSize: 13.5, fontFace: "Arial", margin: 0 });
+    footer(s, 6, "*Founding Member: all Platinum features, “limited offer” price lock — verify billing cadence and terms on the demo. Source: stormscout.ai/pricing, Aug 20, 2026.");
+  }
+
+  // ------------------------------------------------------------- 7. BREAK-EVEN
+  {
+    const s = pres.addSlide();
+    s.background = { color: WHITE };
+    s.addText("The break-even math, tier by tier", {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
-    s.addText("Storm Scout doesn't publish pricing (demo first). So here's the math at a range of prices — worst case included.", {
+    s.addText("Their published prices against our job economics. Assumptions on the left — swap in T-Rock actuals.", {
       x: 0.6, y: 1.18, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
@@ -239,12 +280,12 @@ function footer(slide, n, note) {
       x: 0.95, y: 5.05, w: 3.9, h: 0.6, fontSize: 10.5, italic: true, color: MUTED, fontFace: "Arial", margin: 0
     });
 
-    // chart: jobs to break even at each price point
+    // chart: jobs to break even per published tier
     s.addChart(pres.ChartType.bar, [
       {
         name: "Incremental jobs per year to break even",
-        labels: ["$250/mo", "$500/mo", "$1,000/mo", "$2,000/mo"],
-        values: [0.7, 1.4, 2.9, 5.7],
+        labels: ["Bronze $100", "Silver $500", "Gold $1,000", "Founding $2,000", "Platinum $2,500"],
+        values: [0.3, 1.4, 2.9, 5.7, 7.1],
       },
     ], {
       x: 5.5, y: 1.8, w: 7.2, h: 4.0,
@@ -255,18 +296,17 @@ function footer(slide, n, note) {
       showLegend: false,
       catAxisLabelColor: INK, catAxisLabelFontSize: 12, catAxisLabelFontFace: "Arial",
       valAxisLabelColor: MUTED, valAxisLabelFontSize: 10, valAxisLabelFontFace: "Arial",
-      valAxisMaxVal: 7,
+      valAxisMaxVal: 8,
       valGridLine: { color: "E8E8E8", size: 0.5 },
       catGridLine: { style: "none" },
     });
 
     s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
     s.addText([
-      { text: "Even at $2,000/month, ", options: { color: "E6E6E6" } },
-      { text: "~6 incremental jobs a year", options: { bold: true, color: WHITE } },
-      { text: " pays for it. That's one good hailstorm.", options: { color: "E6E6E6" } },
+      { text: "Silver pays for itself with 2 jobs a year. ", options: { bold: true, color: WHITE } },
+      { text: "Even top-tier Platinum only needs ~7 — one good hailstorm.", options: { color: "E6E6E6" } },
     ], { x: 0.95, y: 6.2, w: 11.5, h: 0.5, fontSize: 16, fontFace: "Arial", margin: 0 });
-    footer(s, 6, "");
+    footer(s, 7, "");
   }
 
   // ----------------------------------------------------- 7. PILOT SCORECARD
@@ -276,7 +316,7 @@ function footer(slide, n, note) {
     s.addText("The 90-day pilot: scored, capped, killable", {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
-    s.addText("Two reps run Storm Scout territories; the rest keep the current playbook. Same scorecard for both.", {
+    s.addText("Two reps run Storm Scout on Silver ($500/mo); the rest keep the current playbook. Same scorecard for both.", {
       x: 0.6, y: 1.18, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
@@ -299,9 +339,9 @@ function footer(slide, n, note) {
     circleIcon(s, icons.warn, 0.75, 5.55, 0.65);
     s.addText([
       { text: "Kill criteria, agreed up front: ", options: { bold: true, color: BLACK } },
-      { text: "if all-in cost per sold job isn't beating our current baseline at day 90, we cancel. We ask for month-to-month terms in the demo — no annual lock-in without pilot data.", options: { color: INK } },
+      { text: "if all-in cost per sold job isn't beating our current baseline at day 90, we cancel. Total pilot spend: $1,500 — about a third of one job's gross profit. We confirm month-to-month terms in the demo; no annual lock-in without pilot data.", options: { color: INK } },
     ], { x: 1.6, y: 5.55, w: 11.0, h: 0.85, fontSize: 14.5, fontFace: "Arial", margin: 0 });
-    footer(s, 7, "Targets are proposals — Aaron/Alan set final thresholds before the pilot starts.");
+    footer(s, 8, "Silver's 150 homeowner records/month covers 2 reps; upgrade to Gold mid-pilot only if the cap actually binds.");
   }
 
   // ---------------------------------------------------- 8. STRAIGHT ANSWERS
@@ -313,7 +353,7 @@ function footer(slide, n, note) {
     });
 
     const items = [
-      { icon: icons.searchDollar, h: "“What does it cost?”", b: "Not published — they sell via demo. Step 1 is getting a real quote in writing. The break-even chart covers $250–$2,000/mo, so we'll know instantly if the quote pencils." },
+      { icon: icons.searchDollar, h: "“Why not the $2,000 Founding deal?”", b: "Because it's a $24k/yr decision sold on urgency. If the tool proves out, paying full Platinum later still breaks even at ~7 jobs/yr. Pilot at $500/mo first; lock in only with our own data." },
       { icon: icons.warn, h: "“Their case studies are marketing.”", b: "Correct. Titan Roofing & Restoration and others on their site are vendor-published, no audited numbers. That's exactly why the pilot has our own scorecard — we trust our data, not theirs." },
       { icon: icons.cross, h: "“Is the damage data real?”", b: "We verify it ourselves: weeks 1–2, every map-flagged roof a rep inspects gets logged confirmed/not confirmed. Below 70% accuracy, the tool dies on that metric alone." },
       { icon: icons.users, h: "“Will the reps actually use it?”", b: "Adoption is the real risk with any tool. That's why it's 2 named reps with a named owner (Dom), not a company-wide rollout. Small test, clean data, no chaos." },
@@ -326,19 +366,19 @@ function footer(slide, n, note) {
       s.addText(it.h, { x: x + 1.15, y: y + 0.28, w: 4.55, h: 0.4, fontSize: 16, bold: true, color: RED, fontFace: "Arial", margin: 0 });
       s.addText(it.b, { x: x + 1.15, y: y + 0.72, w: 4.55, h: 1.6, fontSize: 12, color: INK, fontFace: "Arial", margin: 0 });
     });
-    footer(s, 8, "");
+    footer(s, 9, "");
   }
 
-  // ------------------------------------------------------------------ 9. ASK
+  // ----------------------------------------------------------------- 10. ASK
   {
     const s = pres.addSlide();
     s.background = { color: BLACK };
     s.addText("The ask", { x: 0.75, y: 0.6, w: 11.8, h: 0.8, fontSize: 40, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
 
     const steps = [
-      { icon: icons.hand, n: "1", h: "Book the demo — this week", b: "30 minutes. Walk out with real pricing, contract terms, and coverage confirmation for our storm markets." },
-      { icon: icons.clip, n: "2", h: "Run the 90-day pilot", b: "2 reps, 1 storm market, hard budget cap at the quoted price. Weekly scorecard to Aaron & Alan." },
-      { icon: icons.check, n: "3", h: "Decide on data at day 90", b: "Scorecard beats baseline → roll out to the full team. It doesn't → cancel and we're out one quarter of a subscription." },
+      { icon: icons.hand, n: "1", h: "Book the demo — this week", b: "30 minutes. Verify storm-map coverage in our markets, confirm month-to-month terms, and pin down what counts as a “lead.”" },
+      { icon: icons.clip, n: "2", h: "Run the pilot on Silver", b: "2 reps, 1 storm market, $500/mo — $1,500 total, hard cap. Weekly scorecard to Aaron & Alan." },
+      { icon: icons.check, n: "3", h: "Decide on data at day 90", b: "Beats baseline → scale to Gold for automated outreach, then talk Platinum/Founding. Misses → cancel, out $1,500." },
     ];
     steps.forEach((st, i) => {
       const x = 0.75 + i * 4.1;
@@ -352,7 +392,7 @@ function footer(slide, n, note) {
     s.addText("Cheap to test. Measured on our own baseline. Easy to kill.", {
       x: 0.75, y: 5.6, w: 11.8, h: 0.6, fontSize: 22, bold: true, color: RED, fontFace: "Arial", margin: 0
     });
-    s.addText("Downside: one quarter of a subscription.  Upside: every storm season, our crews knock verified-damage doors first.", {
+    s.addText("Total downside: $1,500.  Upside: every storm season, our crews knock verified-damage doors first.", {
       x: 0.75, y: 6.3, w: 11.8, h: 0.5, fontSize: 14, color: "BDBDBD", fontFace: "Arial", margin: 0
     });
   }
