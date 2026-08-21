@@ -196,24 +196,25 @@ function footer(slide, n, note) {
       x: 0.6, y: 1.18, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
-    s.addChart(pres.ChartType.bar, [
-      {
-        name: "T^Rock net profit per 100 scoped leads",
-        labels: ["20% close", "40% close", "60% close", "80% close", "100% close"],
-        values: [99000, 186000, 261000, 324000, 375000],
-      },
-    ], {
-      x: 0.6, y: 1.75, w: 12.1, h: 4.1,
-      barDir: "col",
-      chartColors: [RED],
-      showTitle: true, title: "T^Rock net profit per 100 scoped leads (after fee & PM split)", titleFontSize: 14, titleColor: BLACK, titleFontFace: "Arial",
-      showValue: true, dataLabelPosition: "outEnd", dataLabelColor: BLACK, dataLabelFontSize: 12, dataLabelFontFace: "Arial", dataLabelFormatCode: "$#,##0",
-      showLegend: false,
-      catAxisLabelColor: INK, catAxisLabelFontSize: 12, catAxisLabelFontFace: "Arial",
-      valAxisLabelColor: MUTED, valAxisLabelFontSize: 10, valAxisLabelFontFace: "Arial", valAxisLabelFormatCode: "$#,##0",
-      valAxisMaxVal: 420000,
-      valGridLine: { color: "E8E8E8", size: 0.5 },
-      catGridLine: { style: "none" },
+    // hand-drawn columns — render in every viewer, unlike native charts
+    s.addText("T^Rock net profit per 100 scoped leads  (after fee & PM split)", {
+      x: 0.6, y: 1.75, w: 12.1, h: 0.35, fontSize: 14, bold: true, color: BLACK, fontFace: "Arial", margin: 0
+    });
+    const bars = [
+      { label: "20% close", val: 99000 },
+      { label: "40% close", val: 186000 },
+      { label: "60% close", val: 261000 },
+      { label: "80% close", val: 324000 },
+      { label: "100% close", val: 375000, hot: true },
+    ];
+    const baseY = 5.3, maxH = 2.7, colScale = maxH / 375000;
+    s.addShape("rect", { x: 0.75, y: baseY, w: 11.8, h: 0.015, fill: { color: "CCCCCC" } });
+    bars.forEach((b, i) => {
+      const cx = 1.1 + i * 2.4;
+      const h = b.val * colScale;
+      s.addShape("roundRect", { x: cx, y: baseY - h, w: 1.5, h: h, fill: { color: b.hot ? RED : "B9BDC2" }, rectRadius: 0.03 });
+      s.addText("$" + b.val.toLocaleString("en-US"), { x: cx - 0.35, y: baseY - h - 0.38, w: 2.2, h: 0.35, fontSize: b.hot ? 16 : 13.5, bold: true, color: b.hot ? RED : INK, fontFace: "Arial", align: "center", margin: 0 });
+      s.addText(b.label, { x: cx - 0.35, y: baseY + 0.08, w: 2.2, h: 0.3, fontSize: 12, bold: !!b.hot, color: b.hot ? RED : INK, fontFace: "Arial", align: "center", margin: 0 });
     });
 
     s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });

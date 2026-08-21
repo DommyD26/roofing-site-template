@@ -265,24 +265,26 @@ function footer(slide, n, note) {
       x: 0.6, y: 1.18, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
-    s.addChart(pres.ChartType.bar, [
-      {
-        name: "Typical cost per roofing lead",
-        labels: ["Storm Scout (Founding)", "Thumbtack", "Angi", "Google Ads / LSA"],
-        values: [10, 58, 90, 160],
-      },
-    ], {
-      x: 0.6, y: 1.75, w: 7.3, h: 4.1,
-      barDir: "bar",
-      chartColors: [RED],
-      showTitle: true, title: "Typical cost per roofing lead ($)", titleFontSize: 14, titleColor: BLACK, titleFontFace: "Arial",
-      showValue: true, dataLabelPosition: "outEnd", dataLabelColor: BLACK, dataLabelFontSize: 12, dataLabelFontFace: "Arial", dataLabelFormatCode: "$#,##0",
-      showLegend: false,
-      catAxisLabelColor: INK, catAxisLabelFontSize: 12, catAxisLabelFontFace: "Arial",
-      valAxisLabelColor: MUTED, valAxisLabelFontSize: 10, valAxisLabelFontFace: "Arial", valAxisLabelFormatCode: "$#,##0",
-      valAxisMaxVal: 180,
-      valGridLine: { color: "E8E8E8", size: 0.5 },
-      catGridLine: { style: "none" },
+    // hand-drawn bars — render in every viewer, unlike native charts
+    s.addText("Typical cost per roofing lead  ($ midpoints)", {
+      x: 0.6, y: 1.8, w: 7.2, h: 0.35, fontSize: 14, bold: true, color: BLACK, fontFace: "Arial", margin: 0
+    });
+    const cpl = [
+      { label: "Google Ads / LSA", val: 160, color: "9AA0A6" },
+      { label: "Angi", val: 90, color: "9AA0A6" },
+      { label: "Thumbtack", val: 58, color: "9AA0A6" },
+      { label: "Storm Scout*", val: 10, color: RED },
+    ];
+    const barX = 2.6, barScale = 4.5 / 160;
+    cpl.forEach((b, i) => {
+      const y = 2.35 + i * 0.82;
+      const bw = Math.max(b.val * barScale, 0.22);
+      s.addText(b.label, { x: 0.6, y: y, w: 1.9, h: 0.5, fontSize: 12.5, bold: true, color: b.color === RED ? RED : INK, fontFace: "Arial", align: "right", valign: "middle", margin: 0 });
+      s.addShape("roundRect", { x: barX, y: y + 0.05, w: bw, h: 0.42, fill: { color: b.color }, rectRadius: 0.04 });
+      s.addText("$" + b.val, { x: barX + bw + 0.1, y: y, w: 0.9, h: 0.5, fontSize: 14, bold: true, color: b.color === RED ? RED : BLACK, fontFace: "Arial", valign: "middle", margin: 0 });
+    });
+    s.addText("*$2,000/mo flat ÷ a slow 200 records — every record past that has a marginal cost of $0.", {
+      x: 0.6, y: 5.65, w: 7.3, h: 0.3, fontSize: 10.5, italic: true, color: MUTED, fontFace: "Arial", margin: 0
     });
 
     s.addShape("roundRect", { x: 8.15, y: 1.75, w: 4.55, h: 4.1, fill: { color: CARD }, rectRadius: 0.08 });
@@ -313,46 +315,41 @@ function footer(slide, n, note) {
       x: 0.6, y: 1.18, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
-    // assumptions card
-    s.addShape("roundRect", { x: 0.6, y: 1.8, w: 4.6, h: 4.0, fill: { color: CARD }, rectRadius: 0.08 });
-    s.addText("T^Rock net per job", { x: 0.95, y: 2.0, w: 3.9, h: 0.4, fontSize: 16, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
-    s.addText([
-      { text: "Avg ticket (RCV):  ", options: { bullet: true, bold: true } },
-      { text: "$30,000", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
-      { text: "Gross margin 35%:  ", options: { bullet: true, bold: true } },
-      { text: "$10,500", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
-      { text: "Scope fee (2% RCV):  ", options: { bullet: true, bold: true } },
-      { text: "− $600", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
-      { text: "Job profit:  ", options: { bullet: true, bold: true } },
-      { text: "$9,900, split 50/50 w/ PM", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
-      { text: "T^Rock net / job:  ", options: { bullet: true, bold: true } },
-      { text: "$4,950", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
-      { text: "Break even:  ", options: { bullet: true, bold: true } },
-      { text: "annual cost ÷ $4,950", options: { color: RED, bold: true } },
-    ], { x: 0.95, y: 2.45, w: 3.9, h: 2.5, fontSize: 12.5, color: INK, fontFace: "Arial", margin: 0 });
-    s.addText("Subscription is overhead (not job-attributable), so it's measured against T^Rock's share — the conservative view.", {
-      x: 0.95, y: 5.05, w: 3.9, h: 0.6, fontSize: 10.5, italic: true, color: MUTED, fontFace: "Arial", margin: 0
+    // headline card — lead with what T^Rock keeps, not a deduction stack
+    s.addShape("roundRect", { x: 0.6, y: 1.8, w: 4.3, h: 4.0, fill: { color: CARD }, rectRadius: 0.08 });
+    s.addText("T^Rock keeps", { x: 0.95, y: 2.1, w: 3.6, h: 0.4, fontSize: 17, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
+    s.addText("$4,950", { x: 0.95, y: 2.5, w: 3.6, h: 1.0, fontSize: 60, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+    s.addText("of every closed roof", { x: 0.95, y: 3.55, w: 3.6, h: 0.4, fontSize: 17, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
+    s.addText("Company share of each job after all job costs and the 50/50 PM split — full math in the footnote.", {
+      x: 0.95, y: 4.05, w: 3.6, h: 0.75, fontSize: 12, color: MUTED, fontFace: "Arial", margin: 0
     });
+    s.addText([
+      { text: "Break even = ", options: { bold: true, color: BLACK } },
+      { text: "annual subscription ÷ $4,950", options: { bold: true, color: RED } },
+    ], { x: 0.95, y: 4.95, w: 3.6, h: 0.6, fontSize: 14, fontFace: "Arial", margin: 0 });
 
-    // chart: jobs to break even per published tier
-    s.addChart(pres.ChartType.bar, [
-      {
-        name: "Incremental jobs per year to break even",
-        labels: ["Bronze $100", "Silver $500", "Gold $1,000", "Founding $2,000", "Platinum $2,500"],
-        values: [0.2, 1.2, 2.4, 4.8, 6.1],
-      },
-    ], {
-      x: 5.5, y: 1.8, w: 7.2, h: 4.0,
-      barDir: "col",
-      chartColors: [RED],
-      showTitle: true, title: "Jobs/year needed to cover the subscription", titleFontSize: 14, titleColor: BLACK, titleFontFace: "Arial",
-      showValue: true, dataLabelPosition: "outEnd", dataLabelColor: BLACK, dataLabelFontSize: 12, dataLabelFontFace: "Arial", dataLabelFormatCode: "0.0",
-      showLegend: false,
-      catAxisLabelColor: INK, catAxisLabelFontSize: 12, catAxisLabelFontFace: "Arial",
-      valAxisLabelColor: MUTED, valAxisLabelFontSize: 10, valAxisLabelFontFace: "Arial",
-      valAxisMaxVal: 7,
-      valGridLine: { color: "E8E8E8", size: 0.5 },
-      catGridLine: { style: "none" },
+    // hand-drawn columns — render in every viewer, unlike native charts
+    s.addText("Incremental jobs per year to cover each tier", {
+      x: 5.4, y: 1.8, w: 7.2, h: 0.35, fontSize: 14, bold: true, color: BLACK, fontFace: "Arial", margin: 0
+    });
+    const tiers = [
+      { label: "Bronze", price: "$100/mo", val: 0.2 },
+      { label: "Silver", price: "$500/mo", val: 1.2 },
+      { label: "Gold", price: "$1,000/mo", val: 2.4 },
+      { label: "Founding", price: "$2,000/mo", val: 4.8, hot: true },
+      { label: "Platinum", price: "$2,500/mo", val: 6.1 },
+    ];
+    const baseY = 5.3, maxH = 2.75, colScale = maxH / 6.1;
+    s.addShape("rect", { x: 5.35, y: baseY, w: 7.3, h: 0.015, fill: { color: "CCCCCC" } });
+    tiers.forEach((t, i) => {
+      const cx = 5.5 + i * 1.45;
+      const h = Math.max(t.val * colScale, 0.09);
+      s.addShape("roundRect", { x: cx, y: baseY - h, w: 1.0, h: h, fill: { color: t.hot ? RED : "B9BDC2" }, rectRadius: 0.03 });
+      s.addText(t.val.toFixed(1), { x: cx - 0.2, y: baseY - h - 0.38, w: 1.4, h: 0.35, fontSize: t.hot ? 16 : 13, bold: true, color: t.hot ? RED : INK, fontFace: "Arial", align: "center", margin: 0 });
+      s.addText([
+        { text: t.label, options: { bold: true, breakLine: true } },
+        { text: t.price, options: { color: MUTED, fontSize: 9.5 } },
+      ], { x: cx - 0.2, y: baseY + 0.08, w: 1.4, h: 0.55, fontSize: 11, color: t.hot ? RED : INK, fontFace: "Arial", align: "center", margin: 0 });
     });
 
     s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
