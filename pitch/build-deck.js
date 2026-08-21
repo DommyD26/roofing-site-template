@@ -267,16 +267,22 @@ function footer(slide, n, note) {
 
     // assumptions card
     s.addShape("roundRect", { x: 0.6, y: 1.8, w: 4.6, h: 4.0, fill: { color: CARD }, rectRadius: 0.08 });
-    s.addText("T-Rock job economics", { x: 0.95, y: 2.0, w: 3.9, h: 0.4, fontSize: 16, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
+    s.addText("T-Rock net per job", { x: 0.95, y: 2.0, w: 3.9, h: 0.4, fontSize: 16, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
     s.addText([
-      { text: "Average ticket", options: { bullet: true, breakLine: true, bold: true } },
-      { text: "$30,000 revenue", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 8, indentLevel: 1 } },
-      { text: "Gross margin", options: { bullet: true, breakLine: true, bold: true } },
-      { text: "35%  →  ~$10,500 gross profit / job", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 8, indentLevel: 1 } },
-      { text: "Jobs to break even", options: { bullet: true, breakLine: true, bold: true } },
-      { text: "annual cost ÷ $10,500", options: { color: RED, bold: true, indentLevel: 1 } },
-    ], { x: 0.95, y: 2.45, w: 3.9, h: 2.4, fontSize: 13.5, color: INK, fontFace: "Arial", margin: 0 });
-    s.addText("Average ticket and margin per Dom — T-Rock actuals, not industry benchmarks.", {
+      { text: "Avg ticket (RCV):  ", options: { bullet: true, bold: true } },
+      { text: "$30,000", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
+      { text: "Gross margin 35%:  ", options: { bullet: true, bold: true } },
+      { text: "$10,500", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
+      { text: "Scope fee (2% RCV):  ", options: { bullet: true, bold: true } },
+      { text: "− $600", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
+      { text: "Job profit:  ", options: { bullet: true, bold: true } },
+      { text: "$9,900, split 50/50 w/ PM", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
+      { text: "T-Rock net / job:  ", options: { bullet: true, bold: true } },
+      { text: "$4,950", options: { color: RED, bold: true, breakLine: true, paraSpaceAfter: 6 } },
+      { text: "Break even:  ", options: { bullet: true, bold: true } },
+      { text: "annual cost ÷ $4,950", options: { color: RED, bold: true } },
+    ], { x: 0.95, y: 2.45, w: 3.9, h: 2.5, fontSize: 12.5, color: INK, fontFace: "Arial", margin: 0 });
+    s.addText("Subscription is overhead (not job-attributable), so it's measured against T-Rock's share — the conservative view.", {
       x: 0.95, y: 5.05, w: 3.9, h: 0.6, fontSize: 10.5, italic: true, color: MUTED, fontFace: "Arial", margin: 0
     });
 
@@ -285,7 +291,7 @@ function footer(slide, n, note) {
       {
         name: "Incremental jobs per year to break even",
         labels: ["Bronze $100", "Silver $500", "Gold $1,000", "Founding $2,000", "Platinum $2,500"],
-        values: [0.1, 0.6, 1.1, 2.3, 2.9],
+        values: [0.2, 1.2, 2.4, 4.8, 6.1],
       },
     ], {
       x: 5.5, y: 1.8, w: 7.2, h: 4.0,
@@ -296,17 +302,17 @@ function footer(slide, n, note) {
       showLegend: false,
       catAxisLabelColor: INK, catAxisLabelFontSize: 12, catAxisLabelFontFace: "Arial",
       valAxisLabelColor: MUTED, valAxisLabelFontSize: 10, valAxisLabelFontFace: "Arial",
-      valAxisMaxVal: 3.5,
+      valAxisMaxVal: 7,
       valGridLine: { color: "E8E8E8", size: 0.5 },
       catGridLine: { style: "none" },
     });
 
     s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
     s.addText([
-      { text: "Founding breaks even at 2.3 jobs a year — one incremental roof every ~5 months. ", options: { bold: true, color: WHITE } },
-      { text: "Everything past that is margin, and it's $500/mo under Platinum sticker forever.", options: { color: "E6E6E6" } },
-    ], { x: 0.95, y: 6.2, w: 11.5, h: 0.5, fontSize: 16, fontFace: "Arial", margin: 0 });
-    footer(s, 7, "");
+      { text: "Founding breaks even at 4.8 jobs a year — one incremental roof every ~11 weeks — on T-Rock's share alone. ", options: { bold: true, color: WHITE } },
+      { text: "Past that it's margin, at $500/mo under Platinum sticker forever.", options: { color: "E6E6E6" } },
+    ], { x: 0.95, y: 6.2, w: 11.5, h: 0.5, fontSize: 15, fontFace: "Arial", margin: 0 });
+    footer(s, 7, "Per job: $30,000 × 35% = $10,500, less 2% RCV scope fee ($600) = $9,900, split 50/50 with the PM → $4,950 to T-Rock.");
   }
 
   // ----------------------------------------------------- 7. PILOT SCORECARD
@@ -339,7 +345,7 @@ function footer(slide, n, note) {
     circleIcon(s, icons.warn, 0.75, 5.55, 0.65);
     s.addText([
       { text: "Kill criteria, agreed up front: ", options: { bold: true, color: BLACK } },
-      { text: "if all-in cost per sold job isn't beating our current baseline at day 90, we cancel. Spend at risk: $6,000 — about half of one job's gross profit. Founding bills $2,000 monthly; we get clean cancellation terms in writing before signing.", options: { color: INK } },
+      { text: "if all-in cost per sold job isn't beating our current baseline at day 90, we cancel. Spend at risk: $6,000 — T-Rock's net on about 1.2 jobs. Founding bills $2,000 monthly; we get clean cancellation terms in writing before signing.", options: { color: INK } },
     ], { x: 1.6, y: 5.55, w: 11.0, h: 0.85, fontSize: 14.5, fontFace: "Arial", margin: 0 });
     footer(s, 8, "Targets are proposals — Aaron/Alan set final thresholds before we start.");
   }
@@ -353,7 +359,7 @@ function footer(slide, n, note) {
     });
 
     const items = [
-      { icon: icons.searchDollar, h: "“Isn't the ‘limited offer’ a sales tactic?”", b: "Probably — and it doesn't matter. Billing is $2,000 monthly, locked forever: keep it and we pay $500/mo under sticker for life; cancel at day 90 and we're out $6,000 — half of one job's gross profit. Only dealbreaker: cancellation terms that aren't clean." },
+      { icon: icons.searchDollar, h: "“Isn't the ‘limited offer’ a sales tactic?”", b: "Probably — and it doesn't matter. Billing is $2,000 monthly, locked forever: keep it and we pay $500/mo under sticker for life; cancel at day 90 and we're out $6,000 — T-Rock's net on about one job. Only dealbreaker: cancellation terms that aren't clean." },
       { icon: icons.warn, h: "“Their case studies are marketing.”", b: "Correct. Titan Roofing & Restoration and others on their site are vendor-published, no audited numbers. That's exactly why the pilot has our own scorecard — we trust our data, not theirs." },
       { icon: icons.cross, h: "“Is the damage data real?”", b: "We verify it ourselves: weeks 1–2, every map-flagged roof a rep inspects gets logged confirmed/not confirmed. Below 70% accuracy, the tool dies on that metric alone." },
       { icon: icons.users, h: "“Will the reps actually use it?”", b: "Adoption is the real risk with any tool. So it gets a named owner (Dom), the whole team trains on it day 1, and usage shows up in the weekly scorecard. Reps not working the lists is visible in the numbers within two weeks." },
@@ -376,7 +382,7 @@ function footer(slide, n, note) {
     s.addText("The ask", { x: 0.75, y: 0.6, w: 11.8, h: 0.8, fontSize: 40, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
 
     const steps = [
-      { icon: icons.hand, n: "1", h: "Book the demo — this week", b: "30 minutes. Confirm the Founding offer is still open and get cancellation terms in writing. Verify storm-map coverage in our markets." },
+      { icon: icons.hand, n: "1", h: "Book the demo — this week", b: "30 minutes. Confirm the Founding offer is still open, get cancellation terms in writing, and ask how automated calls/texts handle DNC & TCPA compliance." },
       { icon: icons.clip, n: "2", h: "Buy Founding Member", b: "$2,000/mo, every Platinum feature, price locked for life. Full team live day 1; 2 control reps keep the old playbook." },
       { icon: icons.check, n: "3", h: "Day-90 scorecard: keep or kill", b: "Beats baseline → we own Platinum features at $500/mo under sticker, forever. Misses → cancel; at risk was $6,000." },
     ];
