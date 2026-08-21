@@ -1,5 +1,5 @@
 /**
- * Roofing Course backend — Google Apps Script Web App (v2).
+ * Roofing Course backend — Google Apps Script Web App (v4).
  *
  * Lives inside a Google Sheet (Extensions → Apps Script). Handles:
  *   1. Score rows for the public leaderboard ("Scores" sheet)
@@ -39,7 +39,8 @@ function doPost(e) {
       String(d.chapter || "").slice(0, 32),
       Math.max(0, Math.min(100, Number(d.score) || 0)),
       Number(d.correct) || 0,
-      Number(d.total) || 0
+      Number(d.total) || 0,
+      Math.max(0, Math.min(14400, Math.round(Number(d.secs) || 0)))
     ]);
     return json_({ ok: true });
   } catch (err) {
@@ -51,7 +52,7 @@ function doPost(e) {
 
 function doGet(e) {
   var p = (e && e.parameter) || {};
-  if (p.ping) return json_({ ok: true, progress: true, version: 3 });
+  if (p.ping) return json_({ ok: true, progress: true, version: 4 });
   if (p.admin) return adminData_(String(p.key || ""));
   if (p.code) return loadProgress_(String(p.code));
 
@@ -114,7 +115,8 @@ function saveEvent_(d) {
     String(d.playerId || "").slice(0, 64),
     String(d.name || "").slice(0, 80),
     String(d.ev || "").slice(0, 32),
-    String(d.detail || "").slice(0, 120)
+    String(d.detail || "").slice(0, 120),
+    Math.max(0, Math.min(14400, Math.round(Number(d.secs) || 0)))
   ]);
   return json_({ ok: true });
 }
@@ -136,13 +138,14 @@ function adminData_(key) {
     out.scores.push({
       when: ss[j][0], playerId: ss[j][1], first: ss[j][2], last: ss[j][3],
       kind: ss[j][4], chapter: ss[j][5], score: Number(ss[j][6]),
-      correct: Number(ss[j][7]), total: Number(ss[j][8])
+      correct: Number(ss[j][7]), total: Number(ss[j][8]),
+      secs: Number(ss[j][9]) || 0
     });
   }
   var es = getEventsSheet_().getDataRange().getValues();
   var start = Math.max(1, es.length - MAX_EVENT_ROWS_RETURNED);
   for (var k = start; k < es.length; k++) {
-    out.events.push({ when: es[k][0], playerId: es[k][1], name: es[k][2], ev: es[k][3], detail: es[k][4] });
+    out.events.push({ when: es[k][0], playerId: es[k][1], name: es[k][2], ev: es[k][3], detail: es[k][4], secs: Number(es[k][5]) || 0 });
   }
   return json_(out);
 }
@@ -152,7 +155,7 @@ function getEventsSheet_() {
   var sh = ss.getSheetByName(EVENTS_SHEET);
   if (!sh) {
     sh = ss.insertSheet(EVENTS_SHEET);
-    sh.appendRow(["When", "Player ID", "Name", "Event", "Detail"]);
+    sh.appendRow(["When", "Player ID", "Name", "Event", "Detail", "Seconds"]);
     sh.setFrozenRows(1);
   }
   return sh;
@@ -167,7 +170,7 @@ function getSheet_() {
   var sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) {
     sh = ss.insertSheet(SHEET_NAME);
-    sh.appendRow(["When", "Player ID", "First", "Last", "Test", "Chapter", "Score %", "Correct", "Total"]);
+    sh.appendRow(["When", "Player ID", "First", "Last", "Test", "Chapter", "Score %", "Correct", "Total", "Seconds"]);
     sh.setFrozenRows(1);
   }
   return sh;

@@ -330,24 +330,55 @@
 
   /* Lightweight activity log (v3 backends only): fire-and-forget, never
      blocks the app, sends nothing until a name has been entered. */
-  function track(ev, detail) {
+  function track(ev, detail, secs) {
     if (!C.leaderboardUrl || !DB.playerId || typeof fetch !== "function") return;
     checkBackend(function (ok) {
       if (!ok || backendVersion < 3) return;
       try {
+        var payload = {
+          type: "event", playerId: DB.playerId,
+          name: (DB.firstName + " " + DB.lastName).trim(),
+          ev: ev, detail: detail || ""
+        };
+        if (typeof secs === "number" && secs > 0) payload.secs = Math.round(secs);
         fetch(C.leaderboardUrl, {
           method: "POST",
           headers: { "Content-Type": "text/plain" },
-          body: JSON.stringify({
-            type: "event", playerId: DB.playerId,
-            name: (DB.firstName + " " + DB.lastName).trim(),
-            ev: ev, detail: detail || ""
-          })
+          keepalive: true,
+          body: JSON.stringify(payload)
         }).catch(function () {});
       } catch (e) {}
     });
   }
   var visitTracked = false;
+
+  /* Reading timer: measures time actually spent on a lesson page.
+     Pauses while the tab is hidden; only reports 10s–30min so a
+     tab left open overnight doesn't count as reading. */
+  var lessonTimer = null;
+  function startLessonTimer(id) {
+    flushLessonTimer();
+    lessonTimer = { id: id, acc: 0, since: Date.now() };
+  }
+  function pauseLessonTimer() {
+    if (lessonTimer && lessonTimer.since) {
+      lessonTimer.acc += Date.now() - lessonTimer.since;
+      lessonTimer.since = 0;
+    }
+  }
+  function flushLessonTimer() {
+    if (!lessonTimer) return;
+    pauseLessonTimer();
+    var secs = Math.round(lessonTimer.acc / 1000);
+    var id = lessonTimer.id;
+    lessonTimer = null;
+    if (secs >= 10) track("lesson_time", id, Math.min(secs, 1800));
+  }
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) pauseLessonTimer();
+    else if (lessonTimer && !lessonTimer.since) lessonTimer.since = Date.now();
+  });
+  window.addEventListener("pagehide", flushLessonTimer);
 
   var cloudTimer = null;
   function cloudSaveSoon() {
@@ -419,7 +450,8 @@
         body: JSON.stringify({
           playerId: DB.playerId, first: DB.firstName, last: DB.lastName,
           kind: attempt.kind, chapter: attempt.chapter || "",
-          score: attempt.score, correct: attempt.correct, total: attempt.total, ts: attempt.ts
+          score: attempt.score, correct: attempt.correct, total: attempt.total, ts: attempt.ts,
+          secs: attempt.secs || 0
         })
       }).catch(function () { /* offline or endpoint down — local history still has it */ });
     } catch (e) { /* never let telemetry break the app */ }
@@ -573,9 +605,21 @@
       resumed = true;
       if (typeof state.pos !== "number" || state.pos < 0 || state.pos >= state.questions.length) state.pos = 0;
     } else {
-      state = { questions: opts.rebuild(), answers: {}, pos: 0, ts: Date.now() };
+      state = { questions: opts.rebuild(), answers: {}, pos: 0, ts: Date.now(), spent: 0 };
     }
+    if (typeof state.spent !== "number" || state.spent < 0) state.spent = 0;
+    state.lastAt = Date.now();
     window.__lastTest = state.questions; // QA hook
+
+    /* Active-time counter: adds up gaps between interactions, ignoring
+       breaks over 3 minutes, so an interrupted test doesn't report the
+       whole overnight pause as time spent. */
+    function tick() {
+      var now = Date.now();
+      var d = (now - (state.lastAt || now)) / 1000;
+      if (d > 0 && d <= 180) state.spent += d;
+      state.lastAt = now;
+    }
 
     function persist() { var s = quizStore(); s[storeId] = state; saveQuizStore(s); }
     function clearSaved() { var s = quizStore(); delete s[storeId]; saveQuizStore(s); }
@@ -609,7 +653,7 @@
       head.querySelector("#q-restart").onclick = function () {
         if (!confirm("Start over with a fresh set of questions? Your saved answers on this test will be discarded.")) return;
         clearSaved();
-        state = { questions: opts.rebuild(), answers: {}, pos: 0, ts: Date.now() };
+        state = { questions: opts.rebuild(), answers: {}, pos: 0, ts: Date.now(), spent: 0, lastAt: Date.now() };
         window.__lastTest = state.questions;
         persist();
         renderQuestion();
@@ -622,6 +666,7 @@
         lab.innerHTML = '<input type="radio" name="q" value="' + oi + '"' +
           (state.answers[state.pos] === oi ? " checked" : "") + '> <span>' + esc(optTxt) + "</span>";
         lab.querySelector("input").addEventListener("change", function () {
+          tick();
           state.answers[state.pos] = oi;
           persist(); // auto-save on every answer
           var fill = head.querySelector(".track-fill");
@@ -638,12 +683,13 @@
       back.type = "button";
       back.disabled = state.pos === 0;
       back.onclick = function () {
-        if (state.pos > 0) { state.pos--; persist(); renderQuestion(); }
+        if (state.pos > 0) { tick(); state.pos--; persist(); renderQuestion(); }
       };
       var isLast = state.pos === n - 1;
       var next = el("button", "btn primary quiz-next", isLast ? "Submit test ✓" : "Next →");
       next.type = "button";
       next.onclick = function () {
+        tick();
         if (!isLast) { state.pos++; persist(); renderQuestion(); return; }
         var missing = [];
         for (var i = 0; i < n; i++) if (typeof state.answers[i] !== "number") missing.push(i);
@@ -674,9 +720,11 @@
       });
       var score = Math.round(right / qns.length * 100);
       var passed = score >= opts.pass;
+      tick();
       var attempt = {
         ts: Date.now(), kind: opts.kind, chapter: opts.chapter || null,
-        score: score, correct: right, total: qns.length, cats: cats
+        score: score, correct: right, total: qns.length, cats: cats,
+        secs: Math.round(state.spent)
       };
       DB.attempts.push(attempt);
       save();
@@ -1119,6 +1167,7 @@
     DB.read[chId + "|" + li] = true;
     save();
     if (firstRead) track("lesson", chId + "|" + (li + 1) + " " + l.t.slice(0, 60));
+    startLessonTimer(chId + "|" + (li + 1) + " " + l.t.slice(0, 60));
 
     var wrap = el("div", "view");
     wrap.appendChild(el("header", "lesson-head",
@@ -1544,6 +1593,7 @@
 
     document.title = title + " · Roofing Construction & Estimating E-Course";
     closeMoreSheet();
+    if (!/^#\/chapter\/[\w-]+\/lesson\//.test(hash)) flushLessonTimer();
     app.innerHTML = "";
     app.appendChild(view);
     renderSidebar();
