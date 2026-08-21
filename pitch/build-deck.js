@@ -220,7 +220,7 @@ function footer(slide, n, note) {
     s.addText("The actual price list", {
       x: 0.6, y: 0.4, w: 12.1, h: 0.6, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
-    s.addText("Published on stormscout.ai/pricing — no quote games. Silver is the pilot tier.", {
+    s.addText("Published on stormscout.ai/pricing — no quote games. Founding Member is the play.", {
       x: 0.6, y: 1.02, w: 11.9, h: 0.35, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
@@ -232,13 +232,13 @@ function footer(slide, n, note) {
     const price = { fontFace: "Arial", fontSize: 13, bold: true, color: RED, valign: "middle", align: "center" };
     const priceHot = { fontFace: "Arial", fontSize: 13, bold: true, color: RED, valign: "middle", align: "center", fill: { color: LTRED } };
     const rows = [
-      [{ text: "", options: hdr }, { text: "Bronze", options: hdr }, { text: "Silver  (pilot)", options: hdrHot }, { text: "Gold", options: hdr }, { text: "Platinum", options: hdr }, { text: "Founding*", options: hdr }],
-      [{ text: "Price / month", options: lbl }, { text: "$100", options: price }, { text: "$500", options: priceHot }, { text: "$1,000", options: price }, { text: "$2,500", options: price }, { text: "$2,000*", options: price }],
-      [{ text: "Storm maps", options: lbl }, { text: "1 / month", options: c }, { text: "5 / month", options: cHot }, { text: "Unlimited", options: c }, { text: "Unlimited", options: c }, { text: "Unlimited", options: c }],
-      [{ text: "Filters", options: lbl }, { text: "Basic (ZIP, storm date)", options: c }, { text: "Advanced (hail size, roof age…)", options: cHot }, { text: "Advanced, unlimited searches", options: c }, { text: "Custom alerts + territory tracking", options: c }, { text: "Same as Platinum", options: c }],
-      [{ text: "Homeowner leads", options: lbl }, { text: "Up to 25", options: c }, { text: "Up to 150", options: cHot }, { text: "Up to 500", options: c }, { text: "Unlimited", options: c }, { text: "Unlimited", options: c }],
-      [{ text: "Automated outreach", options: lbl }, { text: "—", options: c }, { text: "—", options: cHot }, { text: "SMS, email, calls", options: c }, { text: "SMS, email, calls", options: c }, { text: "SMS, email, calls", options: c }],
-      [{ text: "Also includes", options: lbl }, { text: "Mobile & desktop", options: c }, { text: "Real-time alerts, hail & wind maps", options: cHot }, { text: "Property-ownership detail", options: c }, { text: "Analytics, priority support & onboarding", options: c }, { text: "Lifetime price lock, partner network", options: c }],
+      [{ text: "", options: hdr }, { text: "Bronze", options: hdr }, { text: "Silver", options: hdr }, { text: "Gold", options: hdr }, { text: "Platinum", options: hdr }, { text: "Founding*  (our pick)", options: hdrHot }],
+      [{ text: "Price / month", options: lbl }, { text: "$100", options: price }, { text: "$500", options: price }, { text: "$1,000", options: price }, { text: "$2,500", options: price }, { text: "$2,000*", options: priceHot }],
+      [{ text: "Storm maps", options: lbl }, { text: "1 / month", options: c }, { text: "5 / month", options: c }, { text: "Unlimited", options: c }, { text: "Unlimited", options: c }, { text: "Unlimited", options: cHot }],
+      [{ text: "Filters", options: lbl }, { text: "Basic (ZIP, storm date)", options: c }, { text: "Advanced (hail size, roof age…)", options: c }, { text: "Advanced, unlimited searches", options: c }, { text: "Custom alerts + territory tracking", options: c }, { text: "Same as Platinum", options: cHot }],
+      [{ text: "Homeowner leads", options: lbl }, { text: "Up to 25", options: c }, { text: "Up to 150", options: c }, { text: "Up to 500", options: c }, { text: "Unlimited", options: c }, { text: "Unlimited", options: cHot }],
+      [{ text: "Automated outreach", options: lbl }, { text: "—", options: c }, { text: "—", options: c }, { text: "SMS, email, calls", options: c }, { text: "SMS, email, calls", options: c }, { text: "SMS, email, calls", options: cHot }],
+      [{ text: "Also includes", options: lbl }, { text: "Mobile & desktop", options: c }, { text: "Real-time alerts, hail & wind maps", options: c }, { text: "Property-ownership detail", options: c }, { text: "Analytics, priority support & onboarding", options: c }, { text: "Lifetime price lock, partner network", options: cHot }],
     ];
     s.addTable(rows, {
       x: 0.6, y: 1.5, w: 12.1, colW: [1.9, 1.85, 2.1, 2.0, 2.15, 2.1],
@@ -248,8 +248,8 @@ function footer(slide, n, note) {
 
     s.addShape("roundRect", { x: 0.6, y: 6.0, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
     s.addText([
-      { text: "Silver: ≤ $3.33 per damage-filtered homeowner record. ", options: { bold: true, color: WHITE } },
-      { text: "Shared-lead sellers: $150–300 per lead, resold to competitors. Not identical products — but that gap is the whole thesis.", options: { color: "E6E6E6" } },
+      { text: "Founding = every Platinum feature at $2,000 — $6,000/yr under sticker, locked for life. ", options: { bold: true, color: WHITE } },
+      { text: "Unlimited maps, leads, and outreach for the whole team, vs. $150–300 per shared lead resold to competitors.", options: { color: "E6E6E6" } },
     ], { x: 0.95, y: 6.1, w: 11.5, h: 0.62, fontSize: 13.5, fontFace: "Arial", margin: 0 });
     footer(s, 6, "*Founding Member: all Platinum features, “limited offer” price lock — verify billing cadence and terms on the demo. Source: stormscout.ai/pricing, Aug 20, 2026.");
   }
@@ -303,8 +303,8 @@ function footer(slide, n, note) {
 
     s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
     s.addText([
-      { text: "Silver pays for itself with 2 jobs a year. ", options: { bold: true, color: WHITE } },
-      { text: "Even top-tier Platinum only needs ~7 — one good hailstorm.", options: { color: "E6E6E6" } },
+      { text: "Founding breaks even at 5.7 jobs a year — one incremental job every ~9 weeks. ", options: { bold: true, color: WHITE } },
+      { text: "Everything past that is margin, and it's $500/mo under Platinum sticker forever.", options: { color: "E6E6E6" } },
     ], { x: 0.95, y: 6.2, w: 11.5, h: 0.5, fontSize: 16, fontFace: "Arial", margin: 0 });
     footer(s, 7, "");
   }
@@ -313,10 +313,10 @@ function footer(slide, n, note) {
   {
     const s = pres.addSlide();
     s.background = { color: WHITE };
-    s.addText("The 90-day pilot: scored, capped, killable", {
+    s.addText("The 90-day proof period: scored, capped, killable", {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
-    s.addText("Two reps run Storm Scout on Silver ($500/mo); the rest keep the current playbook. Same scorecard for both.", {
+    s.addText("Full team goes live on Founding day 1 — but 2 reps keep the current playbook as the control, so the comparison stays honest.", {
       x: 0.6, y: 1.18, w: 11.9, h: 0.4, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
@@ -339,9 +339,9 @@ function footer(slide, n, note) {
     circleIcon(s, icons.warn, 0.75, 5.55, 0.65);
     s.addText([
       { text: "Kill criteria, agreed up front: ", options: { bold: true, color: BLACK } },
-      { text: "if all-in cost per sold job isn't beating our current baseline at day 90, we cancel. Total pilot spend: $1,500 — about a third of one job's gross profit. We confirm month-to-month terms in the demo; no annual lock-in without pilot data.", options: { color: INK } },
+      { text: "if all-in cost per sold job isn't beating our current baseline at day 90, we cancel. Spend at risk: $6,000 — under 1.5 jobs' gross profit. Condition: the demo must confirm Founding bills monthly and cancels clean. No prepaid annual, period.", options: { color: INK } },
     ], { x: 1.6, y: 5.55, w: 11.0, h: 0.85, fontSize: 14.5, fontFace: "Arial", margin: 0 });
-    footer(s, 8, "Silver's 150 homeowner records/month covers 2 reps; upgrade to Gold mid-pilot only if the cap actually binds.");
+    footer(s, 8, "Targets are proposals — Aaron/Alan set final thresholds before we start.");
   }
 
   // ---------------------------------------------------- 8. STRAIGHT ANSWERS
@@ -353,10 +353,10 @@ function footer(slide, n, note) {
     });
 
     const items = [
-      { icon: icons.searchDollar, h: "“Why not the $2,000 Founding deal?”", b: "Because it's a $24k/yr decision sold on urgency. If the tool proves out, paying full Platinum later still breaks even at ~7 jobs/yr. Pilot at $500/mo first; lock in only with our own data." },
+      { icon: icons.searchDollar, h: "“Isn't the ‘limited offer’ a sales tactic?”", b: "Probably — and it doesn't matter. If billing is monthly, the lock is a free option: keep it and we pay $500/mo under sticker forever; cancel at day 90 and we lose a rate we no longer wanted. We only walk if they demand prepaid annual." },
       { icon: icons.warn, h: "“Their case studies are marketing.”", b: "Correct. Titan Roofing & Restoration and others on their site are vendor-published, no audited numbers. That's exactly why the pilot has our own scorecard — we trust our data, not theirs." },
       { icon: icons.cross, h: "“Is the damage data real?”", b: "We verify it ourselves: weeks 1–2, every map-flagged roof a rep inspects gets logged confirmed/not confirmed. Below 70% accuracy, the tool dies on that metric alone." },
-      { icon: icons.users, h: "“Will the reps actually use it?”", b: "Adoption is the real risk with any tool. That's why it's 2 named reps with a named owner (Dom), not a company-wide rollout. Small test, clean data, no chaos." },
+      { icon: icons.users, h: "“Will the reps actually use it?”", b: "Adoption is the real risk with any tool. So it gets a named owner (Dom), the whole team trains on it day 1, and usage shows up in the weekly scorecard. Reps not working the lists is visible in the numbers within two weeks." },
     ];
     items.forEach((it, i) => {
       const x = 0.6 + (i % 2) * 6.2;
@@ -376,9 +376,9 @@ function footer(slide, n, note) {
     s.addText("The ask", { x: 0.75, y: 0.6, w: 11.8, h: 0.8, fontSize: 40, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
 
     const steps = [
-      { icon: icons.hand, n: "1", h: "Book the demo — this week", b: "30 minutes. Verify storm-map coverage in our markets, confirm month-to-month terms, and pin down what counts as a “lead.”" },
-      { icon: icons.clip, n: "2", h: "Run the pilot on Silver", b: "2 reps, 1 storm market, $500/mo — $1,500 total, hard cap. Weekly scorecard to Aaron & Alan." },
-      { icon: icons.check, n: "3", h: "Decide on data at day 90", b: "Beats baseline → scale to Gold for automated outreach, then talk Platinum/Founding. Misses → cancel, out $1,500." },
+      { icon: icons.hand, n: "1", h: "Book the demo — this week", b: "30 minutes. Confirm the Founding offer is still open, bills monthly, and cancels clean. Verify storm-map coverage in our markets." },
+      { icon: icons.clip, n: "2", h: "Buy Founding Member", b: "$2,000/mo, every Platinum feature, price locked for life. Full team live day 1; 2 control reps keep the old playbook." },
+      { icon: icons.check, n: "3", h: "Day-90 scorecard: keep or kill", b: "Beats baseline → we own Platinum features at $500/mo under sticker, forever. Misses → cancel; at risk was $6,000." },
     ];
     steps.forEach((st, i) => {
       const x = 0.75 + i * 4.1;
@@ -389,10 +389,10 @@ function footer(slide, n, note) {
       s.addText(st.b, { x: x + 0.32, y: 3.7, w: 3.2, h: 1.3, fontSize: 12.5, color: "CFCFCF", fontFace: "Arial", margin: 0 });
     });
 
-    s.addText("Cheap to test. Measured on our own baseline. Easy to kill.", {
+    s.addText("Locked-in price. Measured on our own baseline. Easy to kill.", {
       x: 0.75, y: 5.6, w: 11.8, h: 0.6, fontSize: 22, bold: true, color: RED, fontFace: "Arial", margin: 0
     });
-    s.addText("Total downside: $1,500.  Upside: every storm season, our crews knock verified-damage doors first.", {
+    s.addText("Downside: $6,000.  Upside: Platinum features at $2,000 for life — and crews knocking verified-damage doors first, every storm season.", {
       x: 0.75, y: 6.3, w: 11.8, h: 0.5, fontSize: 14, color: "BDBDBD", fontFace: "Arial", margin: 0
     });
   }
