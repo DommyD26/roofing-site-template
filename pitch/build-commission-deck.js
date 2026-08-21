@@ -28,10 +28,9 @@ async function iconPng(Icon, hexColor) {
   return "image/png;base64," + buf.toString("base64");
 }
 
+// flat icon glyph — no backing circle (some viewers ghost ellipse shapes across slides)
 function circleIcon(slide, data, x, y, d) {
-  slide.addShape("ellipse", { x, y, w: d, h: d, fill: { color: RED } });
-  const pad = d * 0.26;
-  slide.addImage({ data, x: x + pad, y: y + pad, w: d - 2 * pad, h: d - 2 * pad });
+  slide.addImage({ data, x, y, w: d, h: d });
 }
 
 function footer(slide, n, note) {
@@ -40,20 +39,17 @@ function footer(slide, n, note) {
 }
 
 (async () => {
-  const icons = {
-    sign: await iconPng(FaFileSignature, WHITE),
-    map: await iconPng(FaMapMarkedAlt, WHITE),
-    slider: await iconPng(FaSlidersH, WHITE),
-    hand: await iconPng(FaHandHoldingUsd, WHITE),
-    chart: await iconPng(FaChartLine, WHITE),
-    clip: await iconPng(FaClipboardCheck, WHITE),
-    scale: await iconPng(FaBalanceScale, WHITE),
-    tie: await iconPng(FaUserTie, WHITE),
-    invoice: await iconPng(FaFileInvoiceDollar, WHITE),
-    check: await iconPng(FaCheckCircle, WHITE),
-    shake: await iconPng(FaHandshake, WHITE),
-    bolt: await iconPng(FaBolt, WHITE),
+  const ICONSRC = {
+    sign: FaFileSignature, map: FaMapMarkedAlt, slider: FaSlidersH,
+    hand: FaHandHoldingUsd, chart: FaChartLine, clip: FaClipboardCheck,
+    scale: FaBalanceScale, tie: FaUserTie, invoice: FaFileInvoiceDollar,
+    check: FaCheckCircle, shake: FaHandshake, bolt: FaBolt,
   };
+  const icons = {}, iconsW = {};
+  for (const [k, I] of Object.entries(ICONSRC)) {
+    icons[k] = await iconPng(I, RED);    // for light backgrounds
+    iconsW[k] = await iconPng(I, WHITE); // for dark backgrounds
+  }
 
   const pres = new pptxgen();
   pres.layout = "LAYOUT_WIDE";
@@ -62,7 +58,7 @@ function footer(slide, n, note) {
   {
     const s = pres.addSlide();
     s.background = { color: BLACK };
-    circleIcon(s, icons.slider, 0.75, 0.85, 0.9);
+    circleIcon(s, iconsW.slider, 0.75, 0.85, 0.9);
     s.addText("T^ROCK PERFORMANCE PAY PLAN", {
       x: 0.75, y: 2.35, w: 11.8, h: 1.1, fontSize: 44, bold: true, color: WHITE, fontFace: "Arial", margin: 0
     });
@@ -145,7 +141,7 @@ function footer(slide, n, note) {
       { text: "The “expensive” end of the slider is the one where T^Rock banks $67,500 on 10 leads instead of $14,700. ", options: { bold: true, color: BLACK } },
       { text: "The 10% fee only exists when all 10 closed and funded — it can never run ahead of collected cash.", options: { color: INK } },
     ], { x: 0.95, y: 5.48, w: 11.5, h: 0.72, fontSize: 14, fontFace: "Arial", margin: 0 });
-    footer(s, 3, "Typical job: $30,000 RCV at 50% margin = $15,000 profit. Fee is a job expense, so profit after fee splits 50/50 with the PM. Tiers interpolate linearly; close rate measured on a trailing quarter.");
+    footer(s, 3, "Typical job: $30,000 RCV at 50% margin = $15,000 profit; fee is a job expense, so profit after fee splits 50/50. Close rate is cohort-based — a lead belongs to the quarter it was scoped; late closers re-rate that cohort (180-day window), so the rate only moves up.");
   }
 
   // ------------------------------------------------ 4. WHERE THE SLIDER COMES FROM
@@ -170,7 +166,7 @@ function footer(slide, n, note) {
 
     // ceiling anchor
     s.addShape("roundRect", { x: 6.8, y: 1.8, w: 5.9, h: 3.5, fill: { color: BLACK }, rectRadius: 0.08 });
-    circleIcon(s, icons.shake, 7.1, 2.1, 0.7);
+    circleIcon(s, iconsW.shake, 7.1, 2.1, 0.7);
     s.addText("The ceiling — a done deal", { x: 8.0, y: 2.25, w: 4.5, h: 0.4, fontSize: 17, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
     s.addText("10%", { x: 7.1, y: 2.95, w: 2.4, h: 0.9, fontSize: 48, bold: true, color: RED, fontFace: "Arial", margin: 0 });
     s.addText("A lead that closes 100% of the time is a signed contract changing hands — a referral. The customary referral fee is ~10% of contract value; 10% of profit is $1,500 on a $30,000 roof — just 5% of contract. Half the going rate for a done deal.", {
@@ -286,7 +282,7 @@ function footer(slide, n, note) {
     const alts = [
       { icon: icons.tie, h: "Staff estimator", big: "$70–90k/yr", b: "Salary paid whether jobs close or not. Pure fixed overhead, plus payroll burden — and someone still has to run lead targeting." },
       { icon: icons.clip, h: "Supplement service", big: "25–33%", b: "of every supplement dollar they add — cost scales with paperwork volume, not with closed jobs, and they touch nothing else." },
-      { icon: icons.hand, h: "This plan", big: "$0", b: "until a job closes AND the check clears. Scope writing and lead operations in one seat, booked as a job cost on collected revenue." },
+      { icon: iconsW.hand, h: "This plan", big: "$0", b: "until a job closes AND the check clears. Scope writing and lead operations in one seat, booked as a job cost on collected revenue." },
     ];
     alts.forEach((t, i) => {
       const x = 0.6 + i * 4.15;
@@ -307,9 +303,9 @@ function footer(slide, n, note) {
     s.addText("Next steps", { x: 0.75, y: 0.6, w: 11.8, h: 0.8, fontSize: 40, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
 
     const steps = [
-      { icon: icons.check, n: "1", h: "Define the metrics", b: "Close-rate window (trailing quarter), what counts as a scoped lead, attribution rules, and “collected” = funds received." },
-      { icon: icons.scale, n: "2", h: "Pick the base", b: "Option A (% of job profit, splits like a job cost) or Option B (% of RCV). One page, signed, with the slider table attached." },
-      { icon: icons.shake, n: "3", h: "True-up quarterly, review at 6 months", b: "2% floor paid as jobs fund; quarter-end true-up to the earned average rate. Six-month check: if the numbers say adjust the curve, adjust the curve." },
+      { icon: iconsW.check, n: "1", h: "Define the metrics", b: "Cohorts: a lead belongs to the quarter it was scoped; its close counts whenever it funds, inside a 180-day window. Define scoped lead, attribution, and collected = funds received." },
+      { icon: iconsW.scale, n: "2", h: "Pick the base", b: "Option A (% of job profit, splits like a job cost) or Option B (% of RCV). One page, signed, with the slider table attached." },
+      { icon: iconsW.shake, n: "3", h: "True-up quarterly, review at 6 months", b: "2% floor paid as jobs fund; each quarter-end re-rates every open cohort and pays the difference. Six-month check: if the numbers say adjust the curve, adjust it." },
     ];
     steps.forEach((st, i) => {
       const x = 0.75 + i * 4.1;

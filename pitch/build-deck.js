@@ -28,11 +28,9 @@ async function iconPng(Icon, hexColor) {
   return "image/png;base64," + buf.toString("base64");
 }
 
-// red circle + white icon motif
+// flat icon glyph — no backing circle (some viewers ghost ellipse shapes across slides)
 function circleIcon(slide, data, x, y, d) {
-  slide.addShape("ellipse", { x, y, w: d, h: d, fill: { color: RED } });
-  const pad = d * 0.26;
-  slide.addImage({ data, x: x + pad, y: y + pad, w: d - 2 * pad, h: d - 2 * pad });
+  slide.addImage({ data, x, y, w: d, h: d });
 }
 
 function footer(slide, n, note) {
@@ -41,25 +39,18 @@ function footer(slide, n, note) {
 }
 
 (async () => {
-  const icons = {
-    map: await iconPng(FaMapMarkedAlt, WHITE),
-    filter: await iconPng(FaFilter, WHITE),
-    bell: await iconPng(FaBell, WHITE),
-    send: await iconPng(FaPaperPlane, WHITE),
-    bolt: await iconPng(FaBolt, WHITE),
-    door: await iconPng(FaDoorOpen, WHITE),
-    dollar: await iconPng(FaDollarSign, WHITE),
-    chart: await iconPng(FaChartLine, WHITE),
-    clip: await iconPng(FaClipboardCheck, WHITE),
-    warn: await iconPng(FaExclamationTriangle, WHITE),
-    check: await iconPng(FaCheckCircle, WHITE),
-    cross: await iconPng(FaCrosshairs, WHITE),
-    watch: await iconPng(FaStopwatch, WHITE),
-    users: await iconPng(FaUsers, WHITE),
-    hand: await iconPng(FaHandshake, WHITE),
-    searchDollar: await iconPng(FaSearchDollar, WHITE),
-    boltRed: await iconPng(FaBolt, RED),
+  const ICONSRC = {
+    map: FaMapMarkedAlt, filter: FaFilter, bell: FaBell, send: FaPaperPlane,
+    bolt: FaBolt, door: FaDoorOpen, dollar: FaDollarSign, chart: FaChartLine,
+    clip: FaClipboardCheck, warn: FaExclamationTriangle, check: FaCheckCircle,
+    cross: FaCrosshairs, watch: FaStopwatch, users: FaUsers, hand: FaHandshake,
+    searchDollar: FaSearchDollar,
   };
+  const icons = {}, iconsW = {};
+  for (const [k, I] of Object.entries(ICONSRC)) {
+    icons[k] = await iconPng(I, RED);    // for light backgrounds
+    iconsW[k] = await iconPng(I, WHITE); // for dark backgrounds
+  }
 
   const pres = new pptxgen();
   pres.layout = "LAYOUT_WIDE";
@@ -68,7 +59,7 @@ function footer(slide, n, note) {
   {
     const s = pres.addSlide();
     s.background = { color: BLACK };
-    circleIcon(s, icons.bolt, 0.75, 0.85, 0.9);
+    circleIcon(s, iconsW.bolt, 0.75, 0.85, 0.9);
     s.addText("STORM SCOUT  ×  T^ROCK", {
       x: 0.75, y: 2.35, w: 11.8, h: 1.1, fontSize: 54, bold: true, color: WHITE, fontFace: "Arial", margin: 0
     });
@@ -156,7 +147,7 @@ function footer(slide, n, note) {
       { icon: icons.bell, n: "1", h: "Storm hits — alert fires", b: "Our saved territories trigger an instant alert. We're moving while others are checking the weather news." },
       { icon: icons.map, n: "2", h: "Open the damage map", b: "Verified hail & wind impact, street by street. We see which blocks actually took damage." },
       { icon: icons.cross, n: "3", h: "Filter to our buyer", b: "Owner-occupied, roof age, shingle type, hail size, income band — down to a knock list that matches our ideal job." },
-      { icon: icons.send, n: "4", h: "Dispatch + outreach", b: "Reps get routed lists; automated calls, texts, and emails warm the same doors in parallel." },
+      { icon: iconsW.send, n: "4", h: "Dispatch + outreach", b: "Reps get routed lists; automated calls, texts, and emails warm the same doors in parallel." },
     ];
     steps.forEach((st, i) => {
       const x = 0.6 + i * 3.22;
@@ -488,9 +479,9 @@ function footer(slide, n, note) {
     s.addText("The ask", { x: 0.75, y: 0.6, w: 11.8, h: 0.8, fontSize: 40, bold: true, color: WHITE, fontFace: "Arial", margin: 0 });
 
     const steps = [
-      { icon: icons.hand, n: "1", h: "Book the demo — this week", b: "30 min. Confirm the Founding offer is still open; get cancellation and lead-data-export terms in writing; ask how automated calls/texts handle DNC & TCPA." },
-      { icon: icons.clip, n: "2", h: "Buy Founding Member", b: "$2,000/mo, every Platinum feature, price locked for life. Full team live day 1; 2 control reps keep the old playbook. Weekly scorecard to leadership." },
-      { icon: icons.check, n: "3", h: "Day-90 scorecard: keep or kill", b: "Beats baseline → we own Platinum features at $500/mo under sticker, forever. Misses → cancel; at risk was $6,000." },
+      { icon: iconsW.hand, n: "1", h: "Book the demo — this week", b: "30 min. Confirm the Founding offer is still open; get cancellation and lead-data-export terms in writing; ask how automated calls/texts handle DNC & TCPA." },
+      { icon: iconsW.clip, n: "2", h: "Buy Founding Member", b: "$2,000/mo, every Platinum feature, price locked for life. Full team live day 1; 2 control reps keep the old playbook. Weekly scorecard to leadership." },
+      { icon: iconsW.check, n: "3", h: "Day-90 scorecard: keep or kill", b: "Beats baseline → we own Platinum features at $500/mo under sticker, forever. Misses → cancel; at risk was $6,000." },
     ];
     steps.forEach((st, i) => {
       const x = 0.75 + i * 4.1;
