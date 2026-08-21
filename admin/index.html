@@ -85,6 +85,13 @@
   function fmtD(x) { var d = new Date(x); return isNaN(d) ? "—" : d.toLocaleDateString(undefined, { month: "short", day: "numeric" }); }
   function fmtDT(x) { var d = new Date(x); return isNaN(d) ? "—" : d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + " " + d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" }); }
   function daysAgo(x) { var d = new Date(x); return isNaN(d) ? 9999 : Math.floor((Date.now() - d.getTime()) / 86400000); }
+  function fmtSecs(s) {
+    s = Math.round(Number(s) || 0);
+    if (s <= 0) return "—";
+    if (s < 60) return s + "s";
+    if (s < 3600) return Math.floor(s / 60) + "m " + (s % 60) + "s";
+    return Math.floor(s / 3600) + "h " + Math.floor((s % 3600) / 60) + "m";
+  }
 
   function gate(msg) {
     refreshBtn.style.display = "none"; logoutBtn.style.display = "none";
@@ -117,7 +124,7 @@
   function buildProfiles() {
     var byId = {};
     function P(id, name) {
-      if (!byId[id]) byId[id] = { id: id, name: name || "Unknown", code: "", tests: [], events: [], read: 0, badges: 0, certified: false, chapters: {}, lastActive: 0, firstSeen: Infinity };
+      if (!byId[id]) byId[id] = { id: id, name: name || "Unknown", code: "", tests: [], events: [], read: 0, badges: 0, certified: false, chapters: {}, lastActive: 0, firstSeen: Infinity, testSecs: 0, readSecs: 0 };
       if (name && byId[id].name === "Unknown") byId[id].name = name;
       return byId[id];
     }
@@ -127,9 +134,12 @@
       var t = new Date(s.when).getTime() || 0;
       if (t > p.lastActive) p.lastActive = t;
       if (t && t < p.firstSeen) p.firstSeen = t;
+      var secs = Number(s.secs) || 0;
+      p.testSecs += secs;
       if (s.kind === "chapter" && s.chapter) {
-        var c = p.chapters[s.chapter] = p.chapters[s.chapter] || { attempts: 0, best: 0, sum: 0 };
+        var c = p.chapters[s.chapter] = p.chapters[s.chapter] || { attempts: 0, best: 0, sum: 0, secsSum: 0, secsN: 0 };
         c.attempts++; c.sum += s.score; if (s.score > c.best) c.best = s.score;
+        if (secs > 0) { c.secsSum += secs; c.secsN++; }
       }
       if (s.kind === "final" && s.score >= FINAL_PASS) p.certified = true;
     });
@@ -148,6 +158,7 @@
       if (!ev.playerId || !byId[ev.playerId]) { if (ev.playerId) P(ev.playerId, ev.name); }
       var p = byId[ev.playerId]; if (!p) return;
       p.events.push(ev);
+      if (ev.ev === "lesson_time") p.readSecs += Number(ev.secs) || 0;
       var t = new Date(ev.when).getTime() || 0;
       if (t > p.lastActive) p.lastActive = t;
       if (t && t < p.firstSeen) p.firstSeen = t;
@@ -210,7 +221,7 @@
       '<div class="stat"><strong>' + (DATA.events || []).length + '</strong><span>Logged actions</span></div></div>';
 
     html += '<div class="card"><h2>Crew ranking</h2><div class="table-scroll"><table><tr>' +
-      '<th>#</th><th>Name</th><th>Index</th><th></th><th>Tier</th><th>Chapters</th><th>Avg</th><th>Lessons</th><th>Cert</th><th>Last active</th></tr>';
+      '<th>#</th><th>Name</th><th>Index</th><th></th><th>Tier</th><th>Chapters</th><th>Avg</th><th>Lessons</th><th>Time in course</th><th>Cert</th><th>Last active</th></tr>';
     profiles.forEach(function (p, i) {
       var t = tier(p.pi);
       html += '<tr class="clickable" data-i="' + i + '"><td>' + (i + 1) + '</td>' +
@@ -221,6 +232,7 @@
         '<td>' + p.passed + '/' + TOTAL_CHAPTERS + '</td>' +
         '<td>' + (p.tests.length ? p.avg + '%' : '—') + '</td>' +
         '<td>' + p.read + '/' + TOTAL_LESSONS + '</td>' +
+        '<td>' + fmtSecs(p.testSecs + p.readSecs) + '</td>' +
         '<td>' + (p.certified ? '🏆' : '—') + '</td>' +
         '<td>' + (p.lastActive ? fmtD(p.lastActive) + ' (' + daysAgo(p.lastActive) + 'd)' : '—') + '</td></tr>';
     });
@@ -242,7 +254,9 @@
       '<div class="stat"><strong>' + (p.tests.length ? p.avg + '%' : '—') + '</strong><span>Avg of ' + p.tests.length + ' tests</span></div>' +
       '<div class="stat"><strong>' + p.read + '/' + TOTAL_LESSONS + '</strong><span>Lessons read</span></div>' +
       '<div class="stat"><strong>' + p.badges + '/10</strong><span>Badges</span></div>' +
-      '<div class="stat"><strong>' + p.activeDays14 + '</strong><span>Active days (14d)</span></div></div>' +
+      '<div class="stat"><strong>' + p.activeDays14 + '</strong><span>Active days (14d)</span></div>' +
+      '<div class="stat"><strong>' + fmtSecs(p.testSecs) + '</strong><span>Time on tests</span></div>' +
+      '<div class="stat"><strong>' + fmtSecs(p.readSecs) + '</strong><span>Reading time</span></div></div>' +
       '<p class="muted">Unique ID: <strong>' + esc(p.code || "—") + '</strong> · First seen ' + (isFinite(p.firstSeen) ? fmtD(p.firstSeen) : "—") + ' · Last active ' + (p.lastActive ? fmtDT(p.lastActive) : "—") + (p.certified ? ' · 🏆 CERTIFIED' : '') + '</p></div>';
 
     html += '<div class="grid2"><div class="card"><h2>Per-chapter performance</h2><div class="chgrid">';
@@ -253,15 +267,19 @@
       var avg = Math.round(ch.sum / ch.attempts);
       var cls = ch.best >= 90 ? 'c-green' : ch.best >= PASS ? 'c-blue' : 'c-red';
       html += '<div class="chcell"><strong>' + esc(c) + '</strong>best ' + ch.best + '% · avg ' + avg + '% · ' + ch.attempts + '×' +
+        (ch.secsN ? ' · ⏱ ' + fmtSecs(ch.secsSum / ch.secsN) + '/test' : '') +
         ' <span class="chip ' + cls + '">' + (ch.best >= PASS ? 'passed' : 'not passed') + '</span></div>';
     });
     html += '</div></div>';
 
     html += '<div class="card"><h2>Activity feed</h2><div class="feed">';
-    var feed = p.events.map(function (e) { return { when: e.when, txt: ({ visit: "📱 Opened the course", lesson: "📖 Read lesson ", test_start: "✏️ Started test ", badge: "🎖️ " }[e.ev] || e.ev + " ") + (e.detail || "") }; })
+    var feed = p.events.map(function (e) {
+      if (e.ev === "lesson_time") return { when: e.when, txt: "⏱ Spent " + fmtSecs(e.secs) + " reading " + (e.detail || "a lesson") };
+      return { when: e.when, txt: ({ visit: "📱 Opened the course", lesson: "📖 Read lesson ", test_start: "✏️ Started test ", badge: "🎖️ " }[e.ev] || e.ev + " ") + (e.detail || "") };
+    })
       .concat(p.tests.map(function (s) {
         var nm = s.kind === "chapter" ? "chapter " + s.chapter : s.kind;
-        return { when: s.when, txt: (s.score >= (s.kind === "final" ? FINAL_PASS : PASS) ? "✅" : "❌") + " Scored " + s.score + "% on " + nm + " (" + s.correct + "/" + s.total + ")" };
+        return { when: s.when, txt: (s.score >= (s.kind === "final" ? FINAL_PASS : PASS) ? "✅" : "❌") + " Scored " + s.score + "% on " + nm + " (" + s.correct + "/" + s.total + ")" + (Number(s.secs) > 0 ? " in " + fmtSecs(s.secs) : "") };
       }));
     feed.sort(function (a, b) { return new Date(b.when) - new Date(a.when); });
     if (!feed.length) html += '<p class="muted">No activity yet.</p>';

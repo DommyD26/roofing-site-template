@@ -1,3 +1,19 @@
+# Backend v4 upgrade: time tracking (~2 minutes)
+
+v4 records **how long people take**: a Seconds column on every score row
+(active time spent on that test, idle breaks over 3 minutes excluded) and
+timed reading events (10s–30min per lesson visit, paused while the tab is
+hidden). The Admin HQ shows time-in-course per person, time per test by
+chapter, and reading time in the activity feed.
+
+Upgrade is the usual: paste the current [`leaderboard/Code.gs`](leaderboard/Code.gs)
+over the old code (keep your own `ADMIN_KEY` line!), Save, then
+**Deploy → Manage deployments → ✏️ → New version → Deploy**. Optionally add
+a "Seconds" header in column J of the Scores sheet and column F of Events —
+new rows fill it either way. Old rows just show no time.
+
+---
+
 # Backend v3 upgrade: Admin HQ + activity tracking (~2 minutes)
 
 v3 adds the owner-only **Admin HQ** dashboard (`/admin/` on the site) and an
