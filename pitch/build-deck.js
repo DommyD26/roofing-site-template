@@ -415,7 +415,61 @@ function footer(slide, n, note) {
     footer(s, 9, "Operator-reported figures shared with us directly; company name withheld at their request. 128 selling days followed a 30-day ramp — roughly their first 4 months on the system.");
   }
 
-  // ----------------------------------------------------- 9. PROOF SCORECARD
+  // ------------------------------------------------------ 9. WHAT TO EXPECT
+  {
+    const s = pres.addSlide();
+    s.background = { color: WHITE };
+    s.addText("What T^Rock can expect: the first five months", {
+      x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
+    });
+    s.addText("Company A's observed funnel, applied to T^Rock's ticket at the same effort level — 2 dialers, ~12 dials a day each.", {
+      x: 0.6, y: 1.18, w: 11.9, h: 0.55, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
+    });
+
+    // timeline of what happens when
+    const phases = [
+      { h: "Days 0–30 — Ramp", b: "Lists built, territories set, dialers trained. Expect $0 signed. Company A saw the same." },
+      { h: "Days 31–150 — Production", b: "Steady dialing on verified-damage lists. Inspections start booking within the first weeks of calling." },
+      { h: "Day ~120 of production — Decision", b: "Scorecard vs. this table. Beat the half-rate column and it stays; beat par and it scales." },
+    ];
+    phases.forEach((p, i) => {
+      const y = 1.9 + i * 1.35;
+      s.addShape("roundRect", { x: 0.6, y, w: 4.6, h: 1.2, fill: { color: i === 2 ? BLACK : CARD }, rectRadius: 0.08 });
+      s.addText(p.h, { x: 0.9, y: y + 0.1, w: 4.0, h: 0.5, fontSize: 12.5, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+      s.addText(p.b, { x: 0.9, y: y + 0.58, w: 4.0, h: 0.58, fontSize: 10.5, color: i === 2 ? "E0E0E0" : INK, fontFace: "Arial", margin: 0 });
+    });
+
+    // expectation table: par vs conservative
+    const eh = { bold: true, color: WHITE, fill: { color: BLACK }, fontFace: "Arial", fontSize: 12, valign: "middle", align: "center" };
+    const el = { bold: true, color: BLACK, fontFace: "Arial", fontSize: 12, valign: "middle" };
+    const ec = { fontFace: "Arial", fontSize: 12.5, color: INK, valign: "middle", align: "center" };
+    const en = { fontFace: "Arial", fontSize: 13, bold: true, color: RED, valign: "middle", align: "center" };
+    const erows = [
+      [{ text: "First ~5 months", options: eh }, { text: "At Company A's rates", options: eh }, { text: "At HALF their rates", options: eh }],
+      [{ text: "Homeowners called", options: el }, { text: "~3,200", options: ec }, { text: "~3,200", options: ec }],
+      [{ text: "Inspections booked", options: el }, { text: "~105", options: ec }, { text: "~53", options: ec }],
+      [{ text: "Roofs signed", options: el }, { text: "~31", options: ec }, { text: "~15", options: ec }],
+      [{ text: "Revenue @ $30,000 ticket", options: el }, { text: "~$930,000", options: ec }, { text: "~$450,000", options: ec }],
+      [{ text: "T^Rock net (after fee, split & sub)", options: el }, { text: "~$149,000", options: en }, { text: "~$67,000", options: en }],
+    ];
+    s.addTable(erows, {
+      x: 5.5, y: 1.9, w: 7.2, colW: [2.9, 2.2, 2.1],
+      border: { type: "solid", color: "DDDDDD", pt: 0.75 },
+      rowH: [0.5, 0.45, 0.45, 0.45, 0.45, 0.55], margin: 0.07,
+    });
+    s.addText("Funnel applied: 3.3% call → inspection, 29.5% inspection → sign (halved in the right column).", {
+      x: 5.5, y: 4.85, w: 7.2, h: 0.4, fontSize: 10.5, italic: true, color: MUTED, fontFace: "Arial", margin: 0
+    });
+
+    s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
+    s.addText([
+      { text: "Even at HALF Company A's conversion, the system nets ~$67k in its first five months — 6× the subscription. ", options: { bold: true, color: WHITE } },
+      { text: "At par, ~$149k.", options: { color: "E6E6E6" } },
+    ], { x: 0.95, y: 6.15, w: 11.5, h: 0.62, fontSize: 13.5, fontFace: "Arial", margin: 0 });
+    footer(s, 10, "Net = roofs × $5,145 T^Rock share, less ~$10,400 subscription (5.2 months at $2,000/mo). Projection, not a promise — the scorecard decides.");
+  }
+
+  // ---------------------------------------------------- 10. PROOF SCORECARD
   {
     const s = pres.addSlide();
     s.background = { color: WHITE };
@@ -447,7 +501,7 @@ function footer(slide, n, note) {
       { text: "Kill criteria, agreed up front: ", options: { bold: true, color: BLACK } },
       { text: "if all-in cost per sold job isn't beating our current baseline at day 90, we cancel. Spend at risk: $6,000 — T^Rock's net on about 1.2 jobs. Founding bills $2,000 monthly; we get clean cancellation terms in writing before signing.", options: { color: INK } },
     ], { x: 1.6, y: 5.55, w: 11.0, h: 0.85, fontSize: 14.5, fontFace: "Arial", margin: 0 });
-    footer(s, 10, "Start the 90-day clock on the first mapped storm, not a calendar date. Leadership sets final thresholds up front.");
+    footer(s, 11, "Start the 90-day clock on the first mapped storm, not a calendar date. Leadership sets final thresholds up front.");
   }
 
   // ---------------------------------------------------- 8. STRAIGHT ANSWERS
@@ -472,10 +526,10 @@ function footer(slide, n, note) {
       s.addText(it.h, { x: x + 1.15, y: y + 0.24, w: 4.55, h: 0.58, fontSize: 15, bold: true, color: RED, fontFace: "Arial", margin: 0 });
       s.addText(it.b, { x: x + 1.15, y: y + 0.88, w: 4.55, h: 1.45, fontSize: 12, color: INK, fontFace: "Arial", margin: 0 });
     });
-    footer(s, 11, "");
+    footer(s, 12, "");
   }
 
-  // ----------------------------------------------------------------- 12. ASK
+  // ----------------------------------------------------------------- 13. ASK
   {
     const s = pres.addSlide();
     s.background = { color: BLACK };
