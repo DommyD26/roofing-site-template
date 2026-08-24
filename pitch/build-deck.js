@@ -363,53 +363,56 @@ function footer(slide, n, note) {
     footer(s, 8, "Per job: $30,000 × 35% = $10,500, less 2%-of-profit lead fee ($210) = $10,290, split 50/50 with the PM → $5,145 to T^Rock.");
   }
 
-  // ---------------------------------------------------------------- 8. UPSIDE
+  // ------------------------------------------------------ 8. COMPANY A RESULTS
   {
     const s = pres.addSlide();
     s.background = { color: WHITE };
-    s.addText("The upside, sized for a hail market", {
+    s.addText("Company A: real numbers, 128 days on the system", {
       x: 0.6, y: 0.45, w: 12.1, h: 0.7, fontSize: 32, bold: true, color: BLACK, fontFace: "Arial", margin: 0
     });
-    s.addText("DFW sits in one of the most hail-active corridors in the country. Scenarios for incremental roofs — jobs from verified-damage targeting we wouldn't have knocked otherwise:", {
-      x: 0.6, y: 1.2, w: 11.9, h: 0.55, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
+    s.addText("A roofing company just 6 months old, running 2 dialers (a mix of VA callers and in-house), after a 30-day ramp-up. Their numbers, shared with us directly:", {
+      x: 0.6, y: 1.18, w: 11.9, h: 0.55, fontSize: 15, color: MUTED, fontFace: "Arial", margin: 0
     });
 
-    const scen = [
-      { icon: icons.check, tag: "CONSERVATIVE", roofs: "8" },
-      { icon: icons.chart, tag: "BASE CASE", roofs: "18" },
-      { icon: icons.bolt, tag: "STRONG STORM YEAR", roofs: "30" },
+    const tiles = [
+      { icon: icons.check, big: "31", label: "extra roofs signed in 128 selling days" },
+      { icon: icons.chart, big: "$627,000", label: "in extra revenue those roofs produced" },
+      { icon: icons.dollar, big: "$7,100", label: "total data + outreach cost — 1.1% of the revenue it generated" },
     ];
-    scen.forEach((t, i) => {
+    tiles.forEach((t, i) => {
       const x = 0.6 + i * 4.15;
-      s.addShape("roundRect", { x, y: 1.85, w: 3.85, h: 1.85, fill: { color: CARD }, rectRadius: 0.08 });
-      circleIcon(s, t.icon, x + 0.3, 2.1, 0.55);
-      s.addText(t.tag, { x: x + 1.0, y: 2.2, w: 2.7, h: 0.35, fontSize: 12, bold: true, color: RED, fontFace: "Arial", margin: 0 });
-      s.addText(t.roofs, { x: x + 0.3, y: 2.6, w: 1.3, h: 0.75, fontSize: 40, bold: true, color: BLACK, fontFace: "Arial", margin: 0 });
-      s.addText("incremental roofs / yr", { x: x + 1.6, y: 2.95, w: 2.1, h: 0.3, fontSize: 12, color: MUTED, fontFace: "Arial", margin: 0 });
+      s.addShape("roundRect", { x, y: 1.9, w: 3.85, h: 1.85, fill: { color: CARD }, rectRadius: 0.08 });
+      circleIcon(s, t.icon, x + 0.3, 2.12, 0.5);
+      s.addText(t.big, { x: x + 1.0, y: 1.98, w: 2.75, h: 0.8, fontSize: 34, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+      s.addText(t.label, { x: x + 0.3, y: 2.85, w: 3.25, h: 0.8, fontSize: 11.5, color: INK, fontFace: "Arial", margin: 0 });
     });
 
-    // the math trail behind each scenario
-    const mh = { bold: true, color: WHITE, fill: { color: BLACK }, fontFace: "Arial", fontSize: 11.5, valign: "middle", align: "center" };
-    const mc = { fontFace: "Arial", fontSize: 12, color: INK, valign: "middle", align: "center" };
-    const mn = { fontFace: "Arial", fontSize: 12.5, bold: true, color: RED, valign: "middle", align: "center" };
-    const mrows = [
-      [{ text: "Roofs", options: mh }, { text: "Revenue (× $30,000)", options: mh }, { text: "Gross profit (35%)", options: mh }, { text: "Lead fee (2% of profit)", options: mh }, { text: "T^Rock half after fee", options: mh }, { text: "Less $24,000 sub = NET", options: mh }],
-      [{ text: "8", options: mc }, { text: "$240,000", options: mc }, { text: "$84,000", options: mc }, { text: "− $1,680", options: mc }, { text: "$41,160", options: mc }, { text: "+$17,160", options: mn }],
-      [{ text: "18", options: mc }, { text: "$540,000", options: mc }, { text: "$189,000", options: mc }, { text: "− $3,780", options: mc }, { text: "$92,610", options: mc }, { text: "+$68,610", options: mn }],
-      [{ text: "30", options: mc }, { text: "$900,000", options: mc }, { text: "$315,000", options: mc }, { text: "− $6,300", options: mc }, { text: "$154,350", options: mc }, { text: "+$130,350", options: mn }],
+    // the funnel behind the result
+    const fun = [
+      { big: "3,177", label: "homeowners called", sub: "2 dialers, verified-damage lists" },
+      { big: "105", label: "inspections booked", sub: "3.3% of calls" },
+      { big: "31", label: "contracts signed", sub: "29.5% of inspections" },
     ];
-    s.addTable(mrows, {
-      x: 0.6, y: 3.95, w: 12.1, colW: [1.1, 2.35, 2.2, 2.2, 2.15, 2.1],
-      border: { type: "solid", color: "DDDDDD", pt: 0.75 },
-      rowH: [0.5, 0.45, 0.45, 0.45], margin: 0.06,
+    fun.forEach((f, i) => {
+      const x = 0.6 + i * 4.15;
+      s.addShape("roundRect", { x, y: 4.0, w: 3.6, h: 1.45, fill: { color: i === 2 ? BLACK : CARD }, rectRadius: 0.08 });
+      s.addText(f.big, { x: x + 0.3, y: 4.12, w: 3.0, h: 0.6, fontSize: 28, bold: true, color: RED, fontFace: "Arial", margin: 0 });
+      s.addText(f.label, { x: x + 0.3, y: 4.72, w: 3.0, h: 0.32, fontSize: 12.5, bold: true, color: i === 2 ? WHITE : BLACK, fontFace: "Arial", margin: 0 });
+      s.addText(f.sub, { x: x + 0.3, y: 5.05, w: 3.0, h: 0.32, fontSize: 10.5, color: i === 2 ? "CFCFCF" : MUTED, fontFace: "Arial", margin: 0 });
+      if (i < 2) {
+        s.addText("→", { x: x + 3.62, y: 4.45, w: 0.5, h: 0.5, fontSize: 22, bold: true, color: RED, fontFace: "Arial", align: "center", margin: 0 });
+      }
+    });
+    s.addText("Their average ticket: ~$20,200. The same 31 roofs at T^Rock's $30,000 ticket ≈ $930,000 revenue — ~$159,000 net to T^Rock.", {
+      x: 0.6, y: 5.52, w: 12.1, h: 0.48, fontSize: 12, italic: true, color: INK, fontFace: "Arial", margin: 0
     });
 
     s.addShape("roundRect", { x: 0.6, y: 6.05, w: 12.1, h: 0.8, fill: { color: BLACK }, rectRadius: 0.06 });
     s.addText([
-      { text: "The maps exist either way. ", options: { bold: true, color: WHITE } },
-      { text: "The only question is whether T^Rock or a competitor is holding them when the next storm hits.", options: { color: "E6E6E6" } },
-    ], { x: 0.95, y: 6.18, w: 11.5, h: 0.55, fontSize: 15, fontFace: "Arial", margin: 0 });
-    footer(s, 9, "T^Rock half = (gross profit − lead fee) ÷ 2 (50/50 PM split). Lead fee shown at the 2% floor. Any shared-lead or ad spend this replaces is a direct offset on top.");
+      { text: "$7,100 in, $627,000 out — an 88× return, at $229 per signed roof. ", options: { bold: true, color: WHITE } },
+      { text: "That's the benchmark our 90-day scorecard is aiming at.", options: { color: "E6E6E6" } },
+    ], { x: 0.95, y: 6.15, w: 11.5, h: 0.62, fontSize: 13.5, fontFace: "Arial", margin: 0 });
+    footer(s, 9, "Operator-reported figures shared with us directly; company name withheld at their request. 128 selling days followed a 30-day ramp — roughly their first 4 months on the system.");
   }
 
   // ----------------------------------------------------- 9. PROOF SCORECARD
@@ -457,7 +460,7 @@ function footer(slide, n, note) {
 
     const items = [
       { icon: icons.searchDollar, h: "“Isn't the ‘limited offer’ a sales tactic?”", b: "Probably — and it doesn't matter. Billing is $2,000 monthly, locked forever: keep it and we pay $500/mo under sticker for life; cancel at day 90 and we're out $6,000 — T^Rock's net on about one job. Only dealbreaker: cancellation terms that aren't clean." },
-      { icon: icons.warn, h: "“Their case studies are marketing.”", b: "Correct. Titan Roofing & Restoration and others on their site are vendor-published, no audited numbers. That's exactly why the pilot has our own scorecard — we trust our data, not theirs." },
+      { icon: icons.warn, h: "“Their case studies are marketing.”", b: "The ones on their website, yes — vendor-published, no audits. Company A is different: an operator's own numbers shared with us directly. Still unaudited, which is why the proof period keeps our own scorecard." },
       { icon: icons.cross, h: "“Is the damage data real?”", b: "We verify it ourselves: weeks 1–2, every map-flagged roof a rep inspects gets logged confirmed/not confirmed. Below 70% accuracy, the tool dies on that metric alone." },
       { icon: icons.users, h: "“Will the reps actually use it?”", b: "Adoption is the real risk with any tool. So it gets a named owner (Dom), the whole team trains on it day 1, and usage shows up in the weekly scorecard. Reps not working the lists is visible in the numbers within two weeks." },
     ];
