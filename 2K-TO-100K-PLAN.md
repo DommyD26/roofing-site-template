@@ -1,242 +1,273 @@
-# $2K → $100K in 90 Days — Frisco Dial + Door Hanger Plan
+# $100K in 90 Days — Dom's Commission Plan
 
-**Engine:** 4 hrs/day Mojo dialing (3–7 PM) + 1,000 door hangers/week, your number on them
-**Window:** 13 weeks (the hanger program runs 20 weeks and keeps paying after)
+**Your economics:** $30k average ticket · 50% gross profit ($15k) · 50% commission = **$7,500/job**
+**Target:** $100,000 in your pocket = **14 jobs paid**
+**Engine:** 4.5 hrs/day Mojo dialing + 1,000 door hangers/week + Saturday closes
 **Capital:** $2,000
-**Target:** $100,000 gross profit collected
 
 ---
 
-## The budget — $2,000
+## Read this part first — it's worth more than the rest of the plan
 
-Rebuilt around what you actually asked for. Yard signs, Facebook/Nextdoor,
-LSA, and the domain are out (you have signs; LSA leads go to the T^Rock
-office line and get randomly assigned, so that spend buys someone else's
-pipeline).
+**Ask T^Rock exactly when commission pays out.** Three structures are common
+and they move your 90-day number by $40,000+:
 
-| Item | Cost | Notes |
-| --- | --- | --- |
-| Mojo Triple-Line Dialer + Lead Manager, 3 months | $447 | ~$149/mo. Triple-line is the whole point — single-line cuts your dials by ~60% for $50/mo less |
-| Skip-traced Frisco homeowner lists / Mojo data, 3 months | $150 | Neighborhood search or a purchased list; you need fresh numbers, not recycled ones |
-| Door hangers — 15,000, 4.25×11, 16pt gloss, full color 1-side | $950 | 15 weeks at 1,000/wk. Wholesale printer, not a retail print shop |
-| Frisco solicitor/handbill permit + background check | $75 | See compliance below — do this before week 1 |
-| Referral cards — 500 | $40 | Explained below |
-| Gas, reserve, hanger reorder deposit | $338 | |
-| **Total** | **$2,000** | |
+| Payout structure | What you collect in 90 days |
+| --- | --- |
+| 50% draw at contract signing, 50% at completion | **~$108k — goal cleared comfortably** |
+| 100% at job completion | ~$84k at 14 insp/wk — needs the higher volume below |
+| 100% only when the carrier pays in full | ~$65k — **the goal is at risk regardless of how hard you work** |
 
-Weeks 16–20 hangers (5,000 more, ~$350) come out of job proceeds, not the seed.
-
-**What referral cards are:** business-card-sized cards you hand out 5 at a
-time — at contract signing, not just at closeout. Front: your name, cell,
-"T^Rock Roofing." Back: *"I paid $250 for the referral that sent me here.
-Hand this to a neighbor — if it turns into a roof, the $250 is yours."*
-The bounty is paid out of the job, so the only cost is $40 of printing.
-Two of them landing over 13 weeks pays for the entire $2,000. You already
-have the highest-trust moment in the business (a homeowner who just signed);
-this is just not wasting it. Skip it if you'd rather — it's $40 either way.
-
----
-
-## Your week
-
-Reading your schedule back so you can correct me if I have it wrong:
-inspections run **M/T/Th/F mornings**, **Wednesday is the flex day**
-(morning *and* afternoon inspections), you dial **3–7 PM every day and
-don't stop early even if you book your appointment in the first 20 minutes**,
-and appointments get set for **the next morning**.
-
-| Time | Mon | Tue | Wed | Thu | Fri |
-| --- | --- | --- | --- | --- | --- |
-| 8:00–11:30 | Inspections | Inspections | Inspections | Inspections | Inspections |
-| 11:30–1:00 | Write-ups — inspection summary sent *same day*, CompanyCam uploaded, CRM updated | | | | |
-| 1:00–2:45 | **200 door hangers** | 200 | Inspections (overflow) | 200 | 200 |
-| 3:00–7:00 | **Mojo — 4 hrs, no early stop** | | | | |
-| 7:00–7:30 | Log every appointment in the CRM before you're out of the truck | | | | |
-
-Two scheduling notes:
-
-- **Wednesday needs 200 hangers too** — put them out before your 8 AM
-  inspection or right after the afternoon block. Otherwise you're at 800/wk,
-  not 1,000, and the hanger funnel is 20% smaller than the math below.
-- **Friday's dial session books Monday morning** unless you'll run Saturday
-  inspections. That's a 3-day gap between "yes" and "you're on my roof,"
-  and it's where no-shows come from. Confirm Friday-set appointments by text
-  Sunday evening, or take Saturday morning inspections — Saturday is also
-  the easiest day to get *both* spouses home, which is the single biggest
-  factor in signing on the spot.
-
-**On 200 hangers in 1.5 hrs:** that's one every 27 seconds. It's real on
-tight tract streets with sidewalks and no gates. On typical Frisco lots with
-long driveways and side gates it's more like 100–130/hr, so budget 1:45–2:00
-and pick your streets for density, not just for roof age. Older, denser
-Frisco neighborhoods beat new construction on both counts anyway.
+Same effort, same jobs, wildly different answer. If it's the third one, ask
+for a draw at contract before you start — that request is free and it's the
+highest-ROI 10 minutes in this entire plan. Everything below is built to
+clear $100k **under the worst of the three**, so if you get a draw, you
+overshoot.
 
 ---
 
 ## The math
 
-| Input | Value |
+At your 10% close rate (I'm reading that as **10% of inspections you run turn
+into signed contracts** — tell me if you meant 10% of appointments *set*,
+including no-shows, and I'll re-cut it):
+
+| Inspections/wk | Signed in 13 wks | Commission signed |
+| --- | --- | --- |
+| 12 | 15.6 | $117k |
+| 14 | 18.2 | $137k |
+| **17** | **22.1** | **$166k** |
+
+Signing $100k+ is easy at any of these. **Collecting it inside 90 days is
+the whole problem**, because an insurance job takes ~7–9 weeks from signature
+to paid-in-full: deductible at signing → ACV check → 3–5 weeks to build →
+2–4 weeks for depreciation release.
+
+That means **only jobs signed in roughly weeks 1–6 fully collect inside your
+window.** A contract signed in week 11 is real money, but it's Q1 money.
+
+So the plan targets **17 inspections/week**, front-loaded:
+
+- 2.2 signed/week × weeks 1–6 = **13.2 jobs fully collected by week 13 ≈ $99k**
+- Plus partial collections and any draw structure on the weeks 7–13 signings
+- Plus ~8 more signed jobs paying out in the two weeks *after* the window
+
+**Weeks 1–6 are worth double weeks 8–13 for this specific goal.** Front-load
+everything. A slow start cannot be made up in November.
+
+**The single biggest lever is not volume — it's your 10%.** Going 10% → 15%
+takes you from $166k signed to $250k signed on the same hours. 10% is low for
+roofing; a trained rep on a *qualified* inspection runs 30–50%. Yours is
+likely low because cold-call leads aren't pre-qualified. Fix it on the phone,
+not on the roof — see the qualifying section below.
+
+---
+
+## The new schedule
+
+The reason your old day couldn't hit this: **door hangers were eating prime
+inspection hours.** Hangers can go out at any daylight hour. Inspections need
+9–5. Dialing has to be 3–8 PM. So hangers move to first thing, and the middle
+of the day converts entirely to inspections.
+
+### Monday, Tuesday, Thursday, Friday
+
+| Time | Block |
 | --- | --- |
-| Triple-line dials, 4 hrs/day | ~400–480/day → **~2,200/week** |
-| Live contacts at ~5% | ~110/week (≈22/day) |
-| Appointments set | **1/day week 1**, rising to 1.5/day by week 6 as your script tightens |
-| Door hanger response at 0.3–1% of 1,000/wk | 3–10 calls/wk → **2–3 inspections/wk**, lagging 1–3 weeks |
-| Inspection → signed contract | ~25% (cold leads are unqualified — about 40% have real damage/need, about 60% of those close) |
-| Avg insurance replacement | $14,000 @ ~40% GP = **$5,600 GP** |
-| Blended GP/job (75% replacements, 25% repairs) | **~$4,400** |
+| 7:15–8:45 | **200 door hangers** — cool, quiet, and people leaving for work see you working |
+| 9:00–10:15 | **Inspection 1** |
+| 10:30–11:45 | **Inspection 2** |
+| 11:45–12:45 | Lunch + **inspection summaries sent same day** (non-negotiable — speed is why you win) |
+| 1:00–2:15 | **Inspection 3** |
+| 2:15–3:00 | Drive / buffer / carrier + supplement calls |
+| 3:00–7:30 | **Mojo — 4.5 hrs, no early stop** |
+| 7:30–8:00 | CRM entry + text-confirm tomorrow's appointments |
 
-Inspections by week: 5, 5, 7, 7, 7, 9, 9, 10, 10, 10, 10, 10, 10 = **~109 in 13 weeks**
-→ ~27 signed → **~$380k signed, ~$118k GP signed.**
+### Wednesday — production day
 
-**Collected inside 90 days is the harder number.** Jobs signed weeks 1–8
-(~15 of them) collect in-window ≈ **$65k GP**. Add first checks/ACV on
-weeks 9–11 signings ≈ **$17k**. That lands you at **~$82k** — short.
+| Time | Block |
+| --- | --- |
+| 7:15–8:45 | 200 door hangers |
+| 9:00–11:45 | **2 inspections** |
+| 12:45–3:00 | **Adjuster meetings · supplements · production checks · jobsite walks** |
+| 3:00–7:30 | Mojo — 4.5 hrs |
 
-**Four levers close the last $18k**, in order of size:
+By week 3 you'll have jobs in production and adjusters to meet. If you don't
+reserve time for it, it eats your dial block and the pipeline dies. This is
+the block that keeps the plan alive at week 7.
 
-1. **Supplements — $15–35k.** Itemized ice & water, drip edge, steep/high
-   charges, code items, O&P where it's legit. $1,000–2,500 GP per insurance
-   job across ~15 jobs. This lever alone closes the gap. It's also the
-   cheapest money in the whole plan: it's paperwork on jobs you already sold.
-2. **Appointments/day 1.0 → 1.5.** Free, it's just reps on the phone. Worth
-   ~6 extra signed jobs over the window.
-3. **Collect at signing, not at completion.** Deductible/first check when the
-   contract is signed. This doesn't create money, it moves it inside the
-   90-day window — which is the entire question.
-4. **Saturday inspections.** +3–4 inspections/week and the best close rate
-   of any day.
+### Saturday — the close day
 
-**Honest verdict:** $100k *signed* is very likely on this activity level.
-$100k *collected in 90 days* is reachable but tight, and it hinges on
-supplement discipline and chasing depreciation checks weekly, not on more
-leads. If you only do one thing from this document beyond the dialing, make
-it the supplements.
+| Time | Block |
+| --- | --- |
+| 9:00–1:00 | **3 inspections** |
+
+Book Saturday deliberately for the appointments where **both spouses will be
+home**. That one factor is the biggest swing in your close rate. Saturday
+inspections close at roughly double a weekday-morning inspection with one
+spouse at work. Saturday also catches Friday's dial session, which otherwise
+sits dead until Monday.
+
+**Total: 17 inspections/week.** That's a 12.5-hour weekday. It's brutal, and
+that's the honest cost of 50x in 90 days. Take Sunday completely off — the
+plan dies at week 6 from burnout far more often than from bad leads.
+
+---
+
+## Two changes to your dialing
+
+**1. Extend to 7:30 PM.** 6:30–7:30 is the highest-contact hour of the entire
+day for homeowners. Your old 3–7 window gave away the best 30 minutes. That's
+the extra half hour, and it's the cheapest appointments you'll book.
+
+**2. Qualify hard, and hang up fast on the rest.** You need 4–5 appointments a
+day, but more importantly you need them to be *closeable*. Before you book:
+
+- **Roof age 10+** — under 8 and you're donating a morning
+- **Owner-occupied** — renters can't sign anything
+- **No replacement or claim in the last 5 years**
+- **Both decision-makers can be there** — if only one, push to Saturday
+- **They know it's an insurance claim process**, not a free roof
+
+An unqualified inspection costs you 2.5 hours including drive. At 17/week,
+five wasted inspections is a whole day gone. **Fewer, better inspections is
+how 10% becomes 15%** — and 15% is $250k signed instead of $166k.
+
+---
+
+## Where 23 appointments/week come from
+
+You need ~23 set to run 17 (25% no-show).
+
+| Source | Per week | Notes |
+| --- | --- | --- |
+| Mojo dialing | 14–15 | ~2,500 dials, ~125 contacts, ~11% book rate |
+| Door hangers | 3–4 | Inbound, highest close rate of any source — lags 2–3 weeks |
+| Referrals from signed jobs | 2–3 | Zero cost, starts week 4, compounds |
+| Past customers / T^Rock rotation | 1–2 | |
+
+**Weeks 1–3 you'll be short**, because hangers and referrals haven't kicked in
+yet. Those weeks are pure dialing — which is exactly when front-loading
+matters most. Expect 12–13 inspections weeks 1–3, then 17–20 from week 4 on.
+
+Cut no-shows to protect the number: text immediately at booking with your
+name, time, and address, and again the night before. A confirmed appointment
+shows at ~85%; an unconfirmed one at ~60%.
+
+---
+
+## The budget — $2,000
+
+| Item | Cost | Notes |
+| --- | --- | --- |
+| Mojo Triple-Line Dialer + Lead Manager, 3 months | $447 | Triple-line only — single-line cuts your dials ~60% to save $50/mo |
+| Skip-traced Frisco homeowner lists / data, 3 months | $150 | Filter for **10+ year roofs and owner-occupied** — the list is where qualifying starts |
+| Door hangers — 15,000, 4.25×11, 16pt, full color | $950 | 15 weeks at 1,000/wk, wholesale printer |
+| Frisco solicitor/handbill permit + background check | $75 | Before week 1 |
+| Referral cards — 500 | $40 | See below |
+| Gas, reserve, hanger reorder deposit | $338 | |
+| **Total** | **$2,000** | |
+
+Weeks 16–20 hangers (~$350) come out of proceeds.
+
+**Referral cards** — business-card-sized, handed out 5 at a time **at contract
+signing**, not at closeout. Back reads: *"I paid $250 for the referral that
+sent me here. Hand this to a neighbor — if it turns into a roof, the $250 is
+yours."* At $7,500 commission a job, one referral returns 30x the entire print
+run. The bounty comes out of the job, so your only cost is $40. Skip it if you
+want, but it's the cheapest line in the budget by a mile.
 
 ---
 
 ## Door hanger copy
 
-Big, readable from arm's length, your cell as the biggest thing on the card.
-
 > **FRISCO — YOUR NEIGHBORS' ROOFS ARE BEING REPLACED BY INSURANCE**
 >
 > Storms this year did more damage than most homeowners can see from the
-> ground. If your roof is 8+ years old, there's a real chance your insurance
+> ground. If your roof is 10+ years old, there's a real chance your insurance
 > owes you a new one.
 >
 > **FREE 15-MINUTE INSPECTION — PHOTO REPORT EITHER WAY**
-> No damage? I'll tell you straight and you'll have documented photos on
-> file for later. No cost, no obligation, no pressure.
+> No damage? I'll tell you straight and you'll have documented photos on file
+> for later. No cost, no obligation, no pressure.
 >
 > **Dom — T^Rock Roofing**
 > **(your cell)** · Call or text
 > *Licensed · Insured · Local · [QR to your CompanyCam photo reports]*
 
-Print your call-back number in a size someone can read from a moving car.
-Hangers work on **repetition** — the same street twice, three weeks apart,
-beats two streets once. Rotate a 5-neighborhood cycle and hit each one
-every 3 weeks.
+Same street twice, three weeks apart, beats two streets once. Run a
+5-neighborhood rotation and hit each every 3 weeks.
 
 ---
 
 ## Mojo script
 
-**Open (own the fact that it's a cold call — it disarms):**
-"Hi, is this [name]? [Name], this is Dom with T^Rock Roofing — I'll be
-honest with you, this is a cold call, do you have thirty seconds?"
-*(Pause. Let them answer. The honesty is why they don't hang up.)*
+**Open — own that it's a cold call, it disarms:**
+"Hi, is this [name]? [Name], this is Dom with T^Rock Roofing — I'll be honest,
+this is a cold call. Do you have thirty seconds?" *(Pause. Let them answer.)*
 
 **Reason:**
-"I'm out in [their neighborhood] this week doing free roof inspections.
-We've had a rough couple of storm seasons in Collin County, and most of the
-damage that gets a roof approved isn't visible from the ground — it's soft
-hits in the mat. How old is the roof on the house?"
+"I'm out in [neighborhood] this week doing free roof inspections. We've had a
+rough couple of storm seasons in Collin County, and most of the damage that
+gets a roof approved isn't visible from the ground — it's soft hits in the
+mat. **How old is the roof on the house?**"
 
-**Qualify:** roof age (8+ is the target), owner-occupied, prior claim filed?
+**Qualify before you book** — roof age 10+, owner-occupied, no claim in 5
+years, and: *"Is there anyone else who'd be part of the decision? I'd rather
+catch you both at once so nobody has to hear it secondhand."*
 
-**The ask — assume it and give two times, never "are you interested":**
+**Ask — assume it, give two times, never "are you interested":**
 "Here's what I'd do. I'm in your area tomorrow morning — I'll get up there,
-photograph everything, and give you a straight answer. If there's damage,
-I'll show you exactly what I found and walk you through how the claim works.
-If there isn't, I'll tell you that and you'll have the photos on file.
-Either way it's free and it takes fifteen minutes. Does **8:30 or 10:00**
-work better?"
+photograph everything, and give you a straight answer. If there's damage I'll
+show you exactly what I found and walk you through how the claim works. If
+there isn't, I'll tell you that and you'll have the photos on file. Either way
+it's free and it's fifteen minutes. Does **9:00 or 10:30** work better?"
+
+*(If only one spouse can make a weekday: "Tell you what — I keep Saturday
+mornings open so I can catch both of you. 9:00 or 10:30 Saturday?")*
 
 **Objections:**
-- *"My roof's fine."* → "That's usually what it looks like from the ground —
-  hail damage is a soft bruise in the mat that shows up as a leak two years
-  later. Fifteen minutes, free, and if it's fine I'll be the one telling you
-  it's fine. 8:30 or 10:00?"
-- *"I'm not interested."* → "Fair enough. Can I ask — is it that you've
-  already had it looked at, or just that you don't want a salesman on your
-  roof?" *(Handle whichever it actually is.)*
-- *"Send me something."* → "Happy to text you my info right now. While I've
-  got you — the inspection's the part that actually tells you anything.
-  Tomorrow at 8:30?"
-- *"I'll call my own guy."* → "Smart. When he goes up, have him photograph
-  the soft metals and the ridge — that's where the claim gets approved or
-  denied. If he doesn't do a photo report, my offer stands."
-
-**Confirm every appointment twice:** text immediately with your name +
-time + address, and again the night before.
+- *"My roof's fine."* → "That's usually what it looks like from the ground — hail damage is a soft bruise in the mat that shows up as a leak two years later. Fifteen minutes, free, and if it's fine I'll be the one telling you it's fine. 9:00 or 10:30?"
+- *"Not interested."* → "Fair enough. Can I ask — have you already had it looked at, or do you just not want a salesman on your roof?" *(Handle the real one.)*
+- *"Send me something."* → "Happy to text my info right now. While I've got you — the inspection's the part that actually tells you anything. Tomorrow at 9:00?"
+- *"I'll use my own guy."* → "Smart. When he goes up, have him photograph the soft metals and the ridge — that's where a claim gets approved or denied. If he doesn't do a photo report, my offer stands."
 
 ---
 
-## Before your first dial — compliance (do not skip this)
+## Before your first dial — compliance
 
-Cold calling is the highest-legal-risk part of this plan, and it's cheap to
-do right and expensive to do wrong. TCPA damages are $500–1,500 **per call**.
+TCPA damages run $500–1,500 **per call**. Cheap to do right, ruinous to skip.
 
-1. **Scrub every list against the National DNC Registry.** Mojo has DNC
-   scrubbing built in — turn it on and confirm it's on. Registry access is
-   free for your first five area codes, which covers 214/469/972/945/430.
-2. **Scrub against the Texas No-Call list** as well — it's separate from the
-   federal one and administered by the state.
-3. **Keep your own internal do-not-call list.** Anyone who says "don't call
-   me again" goes on it permanently, same day, in Mojo.
-4. **Calling hours:** your 3–7 PM window is compliant. Keep it there.
-5. **Texas telephone-solicitor registration (Bus. & Com. Code Ch. 302).**
-   Texas requires registration + a bond for telephone solicitors, with
-   several exemptions that may cover an established local contractor calling
-   for its own services. **Verify this with a Texas attorney or the Secretary
-   of State before week 1** — I'm not able to tell you which exemption
-   applies to your setup. If registration is required, budget ~$200 fee plus
-   a bond premium, out of proceeds.
-6. **Frisco door-to-door / handbill rules.** Frisco requires a solicitor's
-   permit for door-to-door sales; distributing hangers may fall under
-   handbill rules. Get the permit ($75 is in the budget) and check HOA
-   restrictions on the neighborhoods in your rotation — a single HOA
-   complaint can cost you a whole subdivision.
-7. **Never offer to eat or discount a deductible.** It's insurance fraud in
-   Texas and one instance ends the business, not just the 90 days.
+1. **Scrub every list against the National DNC Registry.** Mojo has scrubbing built in — confirm it's on. Access is free for your first five area codes (covers 214/469/972/945/430).
+2. **Scrub the Texas No-Call list too** — separate from the federal registry.
+3. **Keep an internal DNC list.** "Don't call me again" goes in Mojo same day, permanently.
+4. **Calling hours:** 3:00–7:30 PM is compliant. Keep it there.
+5. **Texas telephone-solicitor registration (Bus. & Com. Code Ch. 302)** — Texas requires registration plus a bond for telephone solicitors, with exemptions that may cover an established contractor calling for its own services. **Verify with a Texas attorney or the Secretary of State before week 1.** I can't tell you which exemption fits T^Rock's setup. If required, budget ~$200 plus a bond premium out of proceeds.
+6. **Frisco permit** for door-to-door/handbill distribution, plus check HOA rules per neighborhood — one complaint can cost you a whole subdivision.
+7. **Never offer to eat or discount a deductible.** Insurance fraud in Texas. One instance ends everything.
 
 ---
 
-## Weekly scorecard — fill in every Sunday
+## Weekly scorecard — every Sunday
 
-| Wk | Dials | Contacts | Appts set | Appts ran | No-shows | Signed # | Signed $ | Collected $ | GP collected |
+| Wk | Dials | Contacts | Appts set | Ran | No-show % | Signed | Contract $ | **Commission earned** | **Commission paid** |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | | | | | | | | | |
-| 2 | | | | | | | | | |
 
-**Diagnostic rules — the plan corrects itself off this table:**
+Track **earned** and **paid** in separate columns. Earned tells you if the
+plan is working. Paid is the goal. They diverge by 7–9 weeks, and confusing
+them is how people think they're winning in week 10 and come up short.
 
-- Contacts < 80/wk → **list problem.** Bad numbers, not a bad script. Buy fresher data.
-- Contacts fine but appts < 5/wk → **script problem.** Record your calls (Mojo does this) and listen to 10 of them Sunday night. The failure is almost always that you asked "are you interested?" instead of offering two times.
-- Appts set but < 70% ran → **confirmation problem.** Text at booking and the night before. Fix is free.
-- Ran but < 25% signed → **inspection problem.** You're either not finding damage (wrong roof age — tighten qualifying on the phone) or not closing in the room (get both decision-makers there; Saturday).
-- Signed but collections lag > 5 weeks → **not a lead problem.** It's check-chasing and production scheduling. More dialing will not fix it and will make it worse.
-- Hanger calls < 3/wk after week 4 → **offer or placement problem.** Change neighborhoods before you change the copy.
+**Diagnostics:**
 
-## What kills this plan
+- Contacts < 100/wk → **list problem.** Buy fresher data, filtered to 10+ yr roofs.
+- Appts < 14/wk from dialing → **script problem.** Mojo records your calls; listen to 10 Sunday night. It's almost always that you asked "are you interested?" instead of offering two times.
+- No-shows > 25% → **confirmation problem.** Text at booking and the night before. Free fix.
+- Ran but close rate stuck at 10% → **qualifying problem, not a closing problem.** Check how many inspections had a roof under 10 years or only one spouse home. That's your answer.
+- Commission *earned* on pace but *paid* lagging → **production and check-chasing.** Block 30 min every Friday for depreciation checks, supplement status, and unpaid balances. More dialing will not fix this and will make it worse.
 
-Not the math — every conversion rate above is ordinary. The two real risks:
+## What kills this
 
-1. **You stop dialing when the pipeline gets busy.** Weeks 6–9 you'll have
-   inspections, adjuster meetings, production, and supplements all landing
-   at once, and the 3–7 PM block is the first thing that gets sacrificed.
-   Every hour you don't dial in week 7 is a job you don't collect in week 12.
-   The block is non-negotiable — that's the whole plan.
-2. **Collections drift.** You can sign $380k and collect $60k if nobody
-   chases carriers. Block 30 minutes every Friday for nothing but
-   depreciation checks, supplement status, and unpaid balances.
+1. **You stop dialing when the pipeline gets busy.** Weeks 6–9 bring inspections, adjusters, production, and supplements all at once, and 3:00–7:30 is the first thing sacrificed. Every hour you don't dial in week 7 is $7,500 you don't collect in Q1. The block is the plan.
+2. **A slow start.** Weeks 1–6 are worth double the back half because of the collection lag. There is no catching up in November.
+3. **Burnout.** 12.5-hour days, six days a week, for 13 weeks. Sunday is off. Completely off.
