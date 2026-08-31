@@ -1,65 +1,123 @@
-# $100K in 90 Days — Dom's Commission Plan
+# $100K Commission Plan — Dom / T^Rock
 
-**Your economics:** $30k average ticket · 50% gross profit ($15k) · 50% commission = **$7,500/job**
-**Target:** $100,000 in your pocket = **14 jobs paid**
+**Your economics:** $30k avg ticket · 50% GP ($15k) · 50% commission = **$7,500/job**
+**Payout:** 100% at completion — final check clears → +10 days → closeout on the PM portal by Sunday midnight → paid the following Thursday. No draws, no exceptions.
 **Engine:** 4.5 hrs/day Mojo dialing + 1,000 door hangers/week + Saturday closes
 **Capital:** $2,000
 
 ---
 
-## Read this part first — it's worth more than the rest of the plan
+## Read this first — the payout terms, not the workload, are the constraint
 
-**Ask T^Rock exactly when commission pays out.** Three structures are common
-and they move your 90-day number by $40,000+:
+I modeled your exact payout rule against the job cycle. Here is what it does:
 
-| Payout structure | What you collect in 90 days |
+**Signature → money in your account is ~11 weeks on a standard insurance job.**
+Build 3–4 weeks, final invoice, 2–4 weeks for the carrier to release
+depreciation, ~1 week for the check to clear, then **+10 days**, then the
+Sunday cutoff, then Thursday.
+
+Your window is 13 weeks. So on standard jobs, **only what you sign in weeks
+1–2 pays before day 90.** That is ~2.5 jobs, about $19k.
+
+Even if *every single job* you sold ran the fastest possible path, the
+ceiling is:
+
+| Share of jobs on the fast path | Paid by day 90 |
 | --- | --- |
-| 50% draw at contract signing, 50% at completion | **~$108k — goal cleared comfortably** |
-| 100% at job completion | ~$84k at 14 insp/wk — needs the higher volume below |
-| 100% only when the carrier pays in full | ~$65k — **the goal is at risk regardless of how hard you work** |
+| 40% | $43,000 |
+| 60% | $55,000 |
+| 80% | $67,000 |
+| **100% (physically maximum)** | **$79,500** |
 
-Same effort, same jobs, wildly different answer. If it's the third one, ask
-for a draw at contract before you start — that request is free and it's the
-highest-ROI 10 minutes in this entire plan. Everything below is built to
-clear $100k **under the worst of the three**, so if you get a draw, you
-overshoot.
+**$100,000 paid within 90 days is not reachable under this payout structure.**
+Not with more dials, more hours, or a better close rate — the money is
+already earned and sitting in the carrier/portal pipeline on day 90. This is
+a calendar wall, not an effort wall.
+
+**Here is what the same effort actually produces:**
+
+| Milestone | When |
+| --- | --- |
+| ~$55k **paid**, ~$165k **earned and in the pipe** | Day 90 |
+| **$100k paid** | **Week 16–17 (~day 115)** |
+| $150k paid | Week 20 (~day 140) |
+
+So: **$100k in four months, not three.** Same plan, same work, no shortcuts
+available. If you need $100k specifically by day 90, the only inputs that
+move are a draw (you've said no) or a different comp structure — not
+anything you can out-work.
+
+Everything below is built to **maximize what clears by day 90 and get you to
+$100k as fast as the calendar physically allows.**
 
 ---
 
-## The math
+## The two levers that actually matter now
 
-At your 10% close rate (I'm reading that as **10% of inspections you run turn
-into signed contracts** — tell me if you meant 10% of appointments *set*,
-including no-shows, and I'll re-cut it):
+Because signing volume is no longer the bottleneck, the plan shifts. Your job
+is now to **compress the 11 weeks**, not just fill the top of the funnel.
 
-| Inspections/wk | Signed in 13 wks | Commission signed |
+### Lever 1 — hunt already-approved claims (worth ~5 weeks per job)
+
+A homeowner whose claim is **already approved and who hasn't picked a
+contractor yet** skips the entire adjuster/approval phase:
+
+| | Standard job | Already-approved claim |
 | --- | --- | --- |
-| 12 | 15.6 | $117k |
-| 14 | 18.2 | $137k |
-| **17** | **22.1** | **$166k** |
+| Signature → paid | ~11 weeks | **~6 weeks** |
+| Signed through week... still pays by day 90 | Week 2 | **Week 7** |
 
-Signing $100k+ is easy at any of these. **Collecting it inside 90 days is
-the whole problem**, because an insurance job takes ~7–9 weeks from signature
-to paid-in-full: deductible at signing → ACV check → 3–5 weeks to build →
-2–4 weeks for depreciation release.
+That one targeting change is the difference between ~2.5 jobs paid and ~10.6
+jobs paid inside the window. **It is the single highest-value thing in this
+document.**
 
-That means **only jobs signed in roughly weeks 1–6 fully collect inside your
-window.** A contract signed in week 11 is real money, but it's Q1 money.
+How to find them, in priority order:
 
-So the plan targets **17 inspections/week**, front-loaded:
+- **Ask it on every single call, early:** *"Have you already had an adjuster
+  out, or filed a claim on this?"* An approved-but-unstarted claim jumps
+  straight to the front of your calendar — inspect it same day if you can.
+- **Denied / underpaid claims** — homeowners who got a lowball settlement and
+  gave up. They're motivated, the file already exists, and a supplement
+  reopens it. Great cold-call segment.
+- **Storm-date lists from 12–24 months ago.** Approved claims that never got
+  built are extremely common — people take the ACV check and stall. Those
+  homeowners have money sitting in an account and a deadline they've usually
+  forgotten about.
+- **Retail / cash jobs.** No carrier at all — signature to paid can be 4–5
+  weeks. Smaller tickets, but they clear fastest and they smooth your cash.
 
-- 2.2 signed/week × weeks 1–6 = **13.2 jobs fully collected by week 13 ≈ $99k**
-- Plus partial collections and any draw structure on the weeks 7–13 signings
-- Plus ~8 more signed jobs paying out in the two weeks *after* the window
+Put a **FAST PATH** flag on these jobs in the CRM and give them your first
+available inspection slot, every time. A week-6 fast-path job pays; a week-6
+standard job does not.
 
-**Weeks 1–6 are worth double weeks 8–13 for this specific goal.** Front-load
-everything. A slow start cannot be made up in November.
+### Lever 2 — kill the dead time inside the cycle
 
-**The single biggest lever is not volume — it's your 10%.** Going 10% → 15%
-takes you from $166k signed to $250k signed on the same hours. 10% is low for
-roofing; a trained rep on a *qualified* inspection runs 30–50%. Yours is
-likely low because cold-call leads aren't pre-qualified. Fix it on the phone,
-not on the roof — see the qualifying section below.
+Every week you shave off is a week of commission pulled into the window.
+
+- **Mortgage company endorsement is the #1 hidden delay** — 2–6 weeks. When a
+  depreciation check is made out to the homeowner *and* their mortgage
+  company, it has to be endorsed by the lender before anybody sees it. Find
+  out at contract signing whether the loan requires it, and have the
+  homeowner start that packet **the day the check is issued**, not the day it
+  arrives. This alone can save a month.
+- **Push production scheduling personally.** Don't wait on the queue for your
+  own jobs. Every week off the build is a week earlier you get paid.
+- **Final invoice and closeout docs go out the day of the final walkthrough**, not
+  "that week."
+- **Never let a check clear on a Friday, Saturday, or Sunday.** Your own rule
+  costs a full extra week if it does:
+
+| Check clears | You get paid | Days |
+| --- | --- | --- |
+| **Mon / Tue / Wed / Thu** | Thursday | **17** |
+| Fri / Sat / Sun | Thursday | **24** |
+
+Deposit so clearing lands Mon–Thu. Across 14 jobs that's about two months of
+cumulative delay you simply don't take.
+
+- **Submit the closeout the hour the check clears.** Missing Sunday midnight
+  by sixty minutes costs seven days. Put a recurring Sunday 8 PM alarm in
+  your phone labeled "PORTAL CLOSEOUTS" and never miss it.
 
 ---
 
@@ -93,8 +151,14 @@ of the day converts entirely to inspections.
 | 3:00–7:30 | Mojo — 4.5 hrs |
 
 By week 3 you'll have jobs in production and adjusters to meet. If you don't
-reserve time for it, it eats your dial block and the pipeline dies. This is
-the block that keeps the plan alive at week 7.
+reserve time for it, it eats your dial block and the pipeline dies.
+
+**Under a pay-on-completion structure this block is not overhead — it is
+where your commission gets pulled forward.** Wednesday afternoon is when you
+push schedulers on your own builds, chase depreciation releases, check on
+mortgage endorsements, and get final invoices out. An hour here is worth more
+than an hour of dialing from week 5 onward, because the pipeline is already
+full and the money is stuck in the middle of it, not the top.
 
 ### Saturday — the close day
 
@@ -121,8 +185,12 @@ day for homeowners. Your old 3–7 window gave away the best 30 minutes. That's
 the extra half hour, and it's the cheapest appointments you'll book.
 
 **2. Qualify hard, and hang up fast on the rest.** You need 4–5 appointments a
-day, but more importantly you need them to be *closeable*. Before you book:
+day, but more importantly you need them to be *closeable* **and fast-paying**.
+Before you book:
 
+- **"Have you already filed a claim or had an adjuster out?"** — ask this in
+  the first thirty seconds. An approved-but-unbuilt claim is worth five weeks
+  of calendar to you and goes to the top of the schedule, same day if possible
 - **Roof age 10+** — under 8 and you're donating a morning
 - **Owner-occupied** — renters can't sign anything
 - **No replacement or claim in the last 5 years**
@@ -149,6 +217,12 @@ You need ~23 set to run 17 (25% no-show).
 **Weeks 1–3 you'll be short**, because hangers and referrals haven't kicked in
 yet. Those weeks are pure dialing — which is exactly when front-loading
 matters most. Expect 12–13 inspections weeks 1–3, then 17–20 from week 4 on.
+
+**Weight your weeks 1–7 lists toward fast-path leads.** Ask your data vendor
+for storm-date lists from 12–24 months back rather than fresh ones — those
+neighborhoods are full of approved claims that were never built. After week 7,
+a standard job can't pay inside the window anyway, so the list mix matters far
+less and you can go back to general prospecting for Q1 pipeline.
 
 Cut no-shows to protect the number: text immediately at booking with your
 name, time, and address, and again the night before. A confirmed appointment
@@ -250,24 +324,61 @@ TCPA damages run $500–1,500 **per call**. Cheap to do right, ruinous to skip.
 
 ## Weekly scorecard — every Sunday
 
-| Wk | Dials | Contacts | Appts set | Ran | No-show % | Signed | Contract $ | **Commission earned** | **Commission paid** |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | | | | | | | | | |
+| Wk | Dials | Contacts | Appts set | Ran | Signed | **Fast-path signed** | Commission **earned** | Commission **paid** |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | | | | | | | | |
 
-Track **earned** and **paid** in separate columns. Earned tells you if the
-plan is working. Paid is the goal. They diverge by 7–9 weeks, and confusing
-them is how people think they're winning in week 10 and come up short.
+Track **earned** and **paid** as separate columns and never confuse them.
+Under your comp structure they diverge by 6–11 weeks. Earned tells you whether
+the plan is working; paid is the goal; and in week 9 you will feel broke while
+sitting on $130k of earned commission. That feeling is what makes people quit
+a plan that's actually working. The scorecard is there so you can see it in
+numbers instead of feeling it.
+
+**Also track, per job in the CRM:** date signed → date built → date invoiced →
+date check received → **date check cleared** → date closeout submitted → date
+paid. After five jobs you'll know exactly which step is your slowest, and that
+step is where your next $7,500 is hiding.
 
 **Diagnostics:**
 
-- Contacts < 100/wk → **list problem.** Buy fresher data, filtered to 10+ yr roofs.
-- Appts < 14/wk from dialing → **script problem.** Mojo records your calls; listen to 10 Sunday night. It's almost always that you asked "are you interested?" instead of offering two times.
+- Contacts < 100/wk → **list problem.** Fresher data, filtered to 10+ yr roofs.
+- Appts < 14/wk from dialing → **script problem.** Mojo records your calls; listen to 10 on Sunday. It's almost always asking "are you interested?" instead of offering two times.
 - No-shows > 25% → **confirmation problem.** Text at booking and the night before. Free fix.
-- Ran but close rate stuck at 10% → **qualifying problem, not a closing problem.** Check how many inspections had a roof under 10 years or only one spouse home. That's your answer.
-- Commission *earned* on pace but *paid* lagging → **production and check-chasing.** Block 30 min every Friday for depreciation checks, supplement status, and unpaid balances. More dialing will not fix this and will make it worse.
+- Close rate stuck at 10% → **qualifying problem, not closing.** Count how many inspections had a roof under 10 years or only one spouse home. There's your answer.
+- **Fast-path signed < 50% of signings in weeks 1–7** → you're not asking the claim question early enough. This is the metric that decides your day-90 number.
+- Earned on pace but paid lagging → **cycle problem.** Pull up the per-job date log and find the slow step. It is usually the mortgage endorsement or a check that cleared on a Friday.
 
 ## What kills this
 
-1. **You stop dialing when the pipeline gets busy.** Weeks 6–9 bring inspections, adjusters, production, and supplements all at once, and 3:00–7:30 is the first thing sacrificed. Every hour you don't dial in week 7 is $7,500 you don't collect in Q1. The block is the plan.
-2. **A slow start.** Weeks 1–6 are worth double the back half because of the collection lag. There is no catching up in November.
-3. **Burnout.** 12.5-hour days, six days a week, for 13 weeks. Sunday is off. Completely off.
+1. **Quitting in week 9 because the bank account doesn't match the work.** This
+   is the real risk now, and it's psychological, not operational. Weeks 1–5 you
+   get paid almost nothing while working 12-hour days. The money from that work
+   lands in weeks 11–17. Put the earned column somewhere you see it daily.
+   Budget your personal expenses for a **thin first 8 weeks** — that's the
+   single most important practical consequence of no-draws.
+2. **You stop dialing when the pipeline gets busy.** Weeks 6–9 bring
+   inspections, adjusters, production, and closeouts at once, and 3:00–7:30 is
+   the first thing sacrificed. Every hour you don't dial in week 7 is $7,500 you
+   don't collect in Q1.
+3. **Letting the cycle slip.** Under pay-on-completion, a two-week production
+   delay isn't an inconvenience — it's a two-week pay cut, and near the boundary
+   it's a whole job pushed out of the window.
+4. **Missing Sunday midnight on the portal.** Sixty minutes costs seven days.
+   Recurring alarm, every Sunday, 8 PM.
+5. **Burnout.** 12.5-hour days, six days, for 13 weeks. Sunday off. Completely.
+
+---
+
+## Bottom line
+
+Work this plan exactly and you will **sign ~$660k in contracts and earn
+~$165k in commission inside 90 days.** About **$55k of it will actually be in
+your account on day 90**, and you'll cross **$100k paid around day 115** and
+$150k by day 140.
+
+The gap between earned and paid is entirely your comp structure. If at any
+point T^Rock will discuss a draw at contract — even 25% — it moves roughly
+$40k into the 90-day window for zero additional work. Worth asking once,
+in writing, before week 1. You've said no exceptions, so the plan above
+assumes none.
