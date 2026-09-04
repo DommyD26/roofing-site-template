@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roofing Construction &amp; Estimating — Certification E-Course</title>
+  <meta name="description" content="A 15-chapter certification course companion to Roofing Construction & Estimating by Daniel Atcheson — detailed lessons, graded tests with fresh numbers every attempt, skill rankings, badges and a certification exam.">
+  <meta name="theme-color" content="#0f2444">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-bar">
+      <button id="menu-toggle" aria-label="Toggle course menu" aria-expanded="false">☰</button>
+      <a class="logo" href="#/home">ROOFING <span>Construction &amp; Estimating</span> · E-Course</a>
+      <a class="book-link" id="header-book-link" href="#" target="_blank" rel="noopener">📖 Open the book (PDF)</a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar" aria-label="Course navigation"></aside>
+    <main id="app" aria-live="polite"></main>
+  </div>
+
+  <div id="toasts" aria-live="polite"></div>
+
+  <div id="more-overlay" class="more-overlay" hidden></div>
+  <div id="more-sheet" class="more-sheet" role="dialog" aria-label="More menu" hidden></div>
+  <nav id="tabbar" class="tabbar" aria-label="Main menu"></nav>
+
+  <footer class="site-footer">
+    <div class="footer-bar">
+      <p>&copy; <span id="year"></span> — Companion certification e-course to <em>Roofing Construction &amp; Estimating, Revised</em> by Daniel Atcheson
+        (<a href="https://craftsman-book.com/" target="_blank" rel="noopener">Craftsman Book Company</a>).
+        Lessons are original summaries; refer to the book for complete chapters. Progress saves on this device and backs up automatically once you enter your name — your Unique ID in My Stats restores it anywhere.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Captured early so the install banner can offer one-tap install on Chrome.
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      window.__deferredInstall = e;
+    });
+  </script>
+  <script src="assets/course-data.js"></script>
+  <script src="assets/course-bank2.js"></script>
+  <script src="assets/course-extras.js"></script>
+  <script src="assets/course-explain.js"></script>
+  <script src="assets/course.js"></script>
+  <script>
+    (function () {
+      var link = document.getElementById("header-book-link");
+      if (window.COURSE) link.href = window.COURSE.bookUrl;
+      var btn = document.getElementById("menu-toggle");
+      var side = document.getElementById("sidebar");
+      btn.addEventListener("click", function () {
+        var open = side.classList.toggle("open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      side.addEventListener("click", function (e) {
+        if (e.target.closest("a")) {
+          side.classList.remove("open");
+          btn.setAttribute("aria-expanded", "false");
+        }
+      });
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("sw.js").catch(function () { /* offline mode unavailable; app still works */ });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

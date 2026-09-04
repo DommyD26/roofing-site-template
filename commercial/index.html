@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Commercial Roofing Exam · T-Rock Training</title>
+  <meta name="description" content="Commercial roofing practice exam — 73 study questions with full model answers, self-graded practice tests and weak-spot drilling.">
+  <meta name="theme-color" content="#0f2444">
+  <link rel="icon" href="../assets/icons/icon-192.png">
+  <style>
+    /* Standalone module — mirrors the course's visual identity but shares
+       no files with it. All styles are local to this page. */
+    :root {
+      --navy: #16325c; --navy-deep: #0f2444; --ember: #b93d15; --ember-hot: #9a3211;
+      --gold: #e3c08d; --page: #f5f6f8; --surface: #fff; --ink: #1b2534; --muted: #5b6472;
+      --line: #e5e8ee; --line-strong: #d4d9e2; --green: #2e7d4f; --green-text: #1d5c38;
+      --green-bg: #e8f4ec; --red: #b23a3a; --red-text: #8f2b2b; --red-bg: #fbecec;
+      --blue-bg: #e7f0fb; --blue-text: #1c4374; --radius: 14px;
+      --shadow: 0 1px 2px rgba(15,36,68,.05), 0 4px 16px rgba(15,36,68,.06);
+      --shadow-lift: 0 4px 8px rgba(15,36,68,.08), 0 12px 32px rgba(15,36,68,.12);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--page); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    :focus-visible { outline: 3px solid var(--navy); outline-offset: 2px; border-radius: 4px; }
+    .top { background: rgba(15,36,68,.95); color: #fff; position: sticky; top: 0; z-index: 20; }
+    .top-bar { max-width: 900px; margin: 0 auto; padding: .7rem 1.25rem; display: flex; align-items: center; gap: .9rem; }
+    .top-bar strong { font-size: 1rem; letter-spacing: .02em; }
+    .top-bar strong span { color: var(--gold); font-weight: 600; }
+    .top-bar a.back { margin-left: auto; color: #fff; text-decoration: none; font-size: .82rem; font-weight: 600; border: 1px solid rgba(255,255,255,.25); padding: .35rem .85rem; border-radius: 999px; white-space: nowrap; }
+    .top-bar a.back:hover { background: rgba(255,255,255,.12); }
+    main { max-width: 900px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+    .kicker { text-transform: uppercase; letter-spacing: .14em; font-size: .7rem; font-weight: 800; color: var(--ember); margin: 0 0 .5rem; }
+    h1 { margin: 0 0 .6rem; font-size: clamp(1.5rem, 3.4vw, 2.1rem); font-weight: 800; line-height: 1.15; letter-spacing: -.015em; }
+    .lede { color: var(--muted); max-width: 62ch; margin: 0 0 1.2rem; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.25rem 1.35rem; margin: 1rem 0; }
+    .mode-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .8rem; margin: 1.2rem 0; }
+    a.mode { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.1rem 1.2rem; text-decoration: none; color: var(--ink); transition: transform .12s, box-shadow .12s; }
+    a.mode:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+    a.mode h3 { margin: 0 0 .25rem; font-size: 1.02rem; }
+    a.mode p { margin: 0; font-size: .84rem; color: var(--muted); }
+    .btn { display: inline-block; padding: .6rem 1.3rem; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--navy); background: var(--surface); text-decoration: none; font-weight: 700; font-size: .9rem; font-family: var(--font); cursor: pointer; }
+    .btn:hover { background: #f0f2f6; }
+    .btn.primary { background: var(--ember); border-color: var(--ember); color: #fff; }
+    .btn.primary:hover { background: var(--ember-hot); }
+    .btn.good { background: var(--green); border-color: var(--green); color: #fff; }
+    .btn.bad { background: var(--red); border-color: var(--red); color: #fff; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+    .qhead { display: flex; justify-content: space-between; align-items: center; gap: .8rem; flex-wrap: wrap; margin-bottom: .5rem; }
+    .qhead h2 { margin: 0; font-size: 1.05rem; }
+    .track { height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; margin: .4rem 0; }
+    .track-fill { height: 100%; background: linear-gradient(90deg, var(--ember), var(--navy)); border-radius: 999px; transition: width .3s; }
+    .autosave { font-size: .76rem; color: var(--muted); margin: .2rem 0 1rem; }
+    .qtext { font-size: 1.08rem; font-weight: 700; margin: .8rem 0; white-space: pre-wrap; }
+    textarea.scratch { width: 100%; min-height: 110px; border: 1px solid var(--line-strong); border-radius: 10px; padding: .7rem .8rem; font: inherit; font-size: .92rem; resize: vertical; }
+    .answer { background: var(--blue-bg); border: 1px solid var(--line); border-radius: 10px; padding: .9rem 1rem; margin-top: 1rem; }
+    .answer h3 { margin: 0 0 .5rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .07em; color: var(--blue-text); }
+    .answer p { margin: 0 0 .55rem; font-size: .93rem; white-space: pre-wrap; }
+    .answer p:last-child { margin-bottom: 0; }
+    .grade-row { display: flex; gap: .7rem; margin-top: 1rem; flex-wrap: wrap; }
+    .nav-row { display: flex; justify-content: space-between; gap: .7rem; margin-top: 1.4rem; }
+    label.opt { display: flex; gap: .55rem; align-items: flex-start; border: 1px solid var(--line); border-radius: 10px; padding: .6rem .75rem; margin: .4rem 0; cursor: pointer; }
+    label.opt:hover { background: var(--page); }
+    label.opt.is-answer { background: var(--green-bg); border-color: var(--green); }
+    .result { font-weight: 700; padding: .7rem .9rem; border-radius: 10px; margin: .8rem 0; }
+    .result.pass { background: var(--green-bg); color: var(--green-text); }
+    .result.fail { background: var(--red-bg); color: var(--red-text); }
+    .rev { border: 1px solid var(--line); border-radius: 10px; padding: .8rem 1rem; margin: .7rem 0; }
+    .rev.wrong { border-left: 4px solid var(--red); }
+    .rev.right { border-left: 4px solid var(--green); }
+    .rev .qtext { font-size: .98rem; margin: 0 0 .4rem; }
+    .chip { display: inline-block; padding: .1rem .6rem; border-radius: 999px; font-size: .72rem; font-weight: 700; }
+    .chip.red { background: var(--red-bg); color: var(--red-text); }
+    .chip.green { background: var(--green-bg); color: var(--green-text); }
+    .chip.blue { background: var(--blue-bg); color: var(--blue-text); }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th, td { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid var(--line); }
+    th { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+    .muted { color: var(--muted); }
+    .backlink { cursor: pointer; color: var(--navy); font-weight: 600; }
+    .table-scroll { overflow-x: auto; }
+    @media (max-width: 640px) { main { padding: 1rem .9rem 3rem; } .card { padding: 1rem .95rem; } }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-bar">
+      <strong>COMMERCIAL <span>Roofing Exam</span></strong>
+      <a class="back" href="../">← Back to course</a>
+    </div>
+  </header>
+  <main id="app"><p class="muted">Loading…</p></main>
+  <script src="exam-data.js"></script>
+  <script src="exam.js"></script>
+</body>
+</html>
