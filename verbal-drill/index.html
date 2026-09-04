@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commercial Roofing — Verbal Exam Drill</title>
+<meta name="description" content="Oral exam drill for commercial roofing: scenario questions, spoken model answers, and a trap tier. Know when to use a system, how to sell it, and when it will not suffice.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ Commercial Roofing — Verbal Exam Drill ============
+   Palette from the roof itself: TPO-white paper, EPDM ink, membrane
+   greys, one shot of survey-marking orange, and marking-blue reserved
+   for spoken answers only. Type: Barlow + Barlow Condensed. */
+:root {
+  --paper: #f1f1ee;      /* TPO white, aged one season */
+  --ink: #17191c;        /* EPDM */
+  --mem1: #e4e5e1;       /* membrane grey panel */
+  --mem2: #c9cbc5;       /* seam line */
+  --mem3: #8b8e88;       /* weathered grey */
+  --mark: #f4541d;       /* survey marking paint */
+  --talk: #1f5f9e;       /* marking-blue: spoken answers ONLY */
+  --talk-bg: #e8f0f8;
+  --good: #2f7a44;
+  --good-bg: #e6f1e9;
+  --bad: #b03a2e;
+  --bad-bg: #f7e9e7;
+  --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --cond: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+:focus-visible { outline: 3px solid var(--talk); outline-offset: 2px; }
+button { font-family: var(--body); }
+
+header.bar { background: var(--ink); color: #fff; padding: .8rem 1rem .7rem; }
+.bar-inner { max-width: 680px; margin: 0 auto; }
+.bar h1 { margin: 0; font-family: var(--cond); font-weight: 700; font-size: 1.35rem; letter-spacing: .04em; text-transform: uppercase; line-height: 1.1; }
+.bar h1 em { font-style: normal; color: var(--mark); }
+.bar p.sub { margin: .15rem 0 0; font-size: .78rem; color: #b9bcb6; }
+nav.tabs { display: flex; gap: 0; max-width: 680px; margin: .7rem auto 0; }
+nav.tabs button { flex: 1; background: none; border: none; border-bottom: 3px solid #3a3d41; color: #b9bcb6; font-family: var(--cond); font-weight: 600; font-size: 1rem; letter-spacing: .05em; text-transform: uppercase; padding: .45rem 0 .5rem; cursor: pointer; }
+nav.tabs button.on { color: #fff; border-bottom-color: var(--mark); }
+
+main { max-width: 680px; margin: 0 auto; padding: 1.1rem 1rem 4rem; }
+.muted { color: #565a56; }
+
+/* ---- tier picker: the one loud place ---- */
+.standard { border-left: 4px solid var(--mark); padding: .35rem .9rem; margin: .4rem 0 1.2rem; font-size: .93rem; }
+.standard strong { font-family: var(--cond); text-transform: uppercase; letter-spacing: .05em; font-size: .95rem; }
+.tier-row { display: flex; align-items: stretch; gap: .9rem; width: 100%; text-align: left; background: var(--mem1); border: 1px solid var(--mem2); border-radius: 4px; padding: 0; margin: 0 0 .7rem; cursor: pointer; overflow: hidden; }
+.tier-row:active { background: var(--mem2); }
+.tier-num { flex: 0 0 64px; display: flex; align-items: center; justify-content: center; font-family: var(--cond); font-weight: 700; font-size: 2.6rem; color: #fff; background: var(--ink); }
+.tier-row.t4 .tier-num { background: var(--mark); }
+.tier-body { padding: .6rem .2rem .6rem 0; flex: 1; min-width: 0; }
+.tier-body h2 { margin: 0; font-family: var(--cond); font-weight: 700; font-size: 1.25rem; letter-spacing: .03em; text-transform: uppercase; }
+.tier-body p { margin: .1rem 0 0; font-size: .84rem; color: #565a56; }
+.tier-score { font-size: .78rem; font-weight: 600; color: var(--ink); margin-top: .25rem; }
+.tier-score b { color: var(--mark); }
+
+/* ---- question view ---- */
+.qmeta { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; font-family: var(--cond); text-transform: uppercase; letter-spacing: .05em; font-size: .95rem; margin-bottom: .35rem; }
+.qmeta .cat { color: var(--mark); font-weight: 700; }
+.qtext { font-size: 1.12rem; font-weight: 600; margin: .3rem 0 1rem; white-space: pre-wrap; }
+.opt { display: block; width: 100%; text-align: left; background: #fff; border: 1.5px solid var(--mem2); border-radius: 4px; padding: .7rem .85rem; margin: 0 0 .55rem; font-size: .95rem; line-height: 1.45; cursor: pointer; }
+.opt:not(:disabled):hover { border-color: var(--mem3); }
+.opt:disabled { cursor: default; color: var(--ink); opacity: 1; }
+.opt.right { border-color: var(--good); background: var(--good-bg); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+.opt .tick { font-weight: 700; margin-right: .35rem; }
+.verdict { font-family: var(--cond); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: 1.05rem; margin: .8rem 0 .4rem; }
+.verdict.ok { color: var(--good); }
+.verdict.no { color: var(--bad); }
+.why { background: var(--mem1); border: 1px solid var(--mem2); border-radius: 4px; padding: .75rem .9rem; font-size: .92rem; margin: 0 0 .8rem; }
+.why b.lab { font-family: var(--cond); text-transform: uppercase; letter-spacing: .06em; font-size: .84rem; color: #565a56; display: block; margin-bottom: .25rem; }
+.say { background: var(--talk-bg); border: 1.5px solid var(--talk); border-radius: 4px; padding: .8rem .95rem; font-size: .98rem; margin: 0 0 1rem; position: relative; }
+.say b.lab { font-family: var(--cond); text-transform: uppercase; letter-spacing: .06em; font-size: .84rem; color: var(--talk); display: block; margin-bottom: .3rem; }
+.say p { margin: 0; font-style: italic; }
+.reveal { animation: rise .22s ease-out; }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .reveal { animation: none; } }
+
+.ctl { display: flex; gap: .6rem; margin-top: .4rem; }
+.btn { border: 1.5px solid var(--ink); background: var(--ink); color: #fff; border-radius: 999px; padding: .6rem 1.4rem; font-weight: 700; font-size: .95rem; cursor: pointer; }
+.btn.quiet { background: none; color: var(--ink); }
+.btn.quiet:hover { background: var(--mem1); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+.sum { text-align: center; padding: 1.4rem 0; }
+.sum .big { font-family: var(--cond); font-weight: 700; font-size: 3.4rem; line-height: 1; color: var(--mark); }
+.sum h2 { font-family: var(--cond); text-transform: uppercase; letter-spacing: .04em; margin: .2rem 0 .4rem; }
+.sum p { margin: .3rem 0 1rem; }
+
+/* ---- field reference ---- */
+.ref h2 { font-family: var(--cond); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; font-size: 1.2rem; border-bottom: 2px solid var(--ink); padding-bottom: .2rem; margin: 1.6rem 0 .6rem; }
+.ref h2:first-child { margin-top: .2rem; }
+.ref p, .ref li { font-size: .93rem; }
+.ref ol li, .ref ul li { margin-bottom: .35rem; }
+.ref .steps li { margin-bottom: .55rem; }
+.ref .steps b { font-family: var(--cond); text-transform: uppercase; letter-spacing: .04em; }
+.table-scroll { overflow-x: auto; }
+.ref table { border-collapse: collapse; width: 100%; font-size: .87rem; margin: .4rem 0; }
+.ref th, .ref td { border: 1px solid var(--mem2); padding: .45rem .55rem; text-align: left; vertical-align: top; }
+.ref th { background: var(--mem1); font-family: var(--cond); text-transform: uppercase; letter-spacing: .04em; font-size: .8rem; }
+.note { font-size: .82rem; color: #565a56; border-left: 3px solid var(--mem2); padding-left: .7rem; }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-inner">
+    <h1>Commercial Roofing — <em>Verbal Exam Drill</em></h1>
+    <p class="sub">Know when to use a system. Know how to sell it over the others. Know when it will not suffice.</p>
+  </div>
+  <nav class="tabs">
+    <button id="tab-drill" class="on" type="button">Drill</button>
+    <button id="tab-ref" type="button">Field Reference</button>
+  </nav>
+</header>
+<main id="app"></main>
+<script>
+"use strict";
+const QUESTIONS = [];
+/* Tier 0 — Easy: identification and fundamentals */
+QUESTIONS.push(
+{ t:0, c:"Systems", q:"Which of these membranes is a thermoset — meaning once it cures, its seams can never be heat-welded?", o:["TPO","EPDM","PVC","KEE"], a:1,
+  w:"EPDM is vulcanized rubber — a thermoset. Its chemistry is fixed at manufacture, so seams are made with tape or adhesive, never a welder. TPO, PVC and KEE are thermoplastics that soften with heat, which is why their seams are hot-air welded into monolithic joints.",
+  s:"EPDM is the thermoset. It's cured rubber, so you can't weld it — every seam is tape or glue. The thermoplastics like TPO and PVC weld into one piece, and that seam difference is half the argument between them." },
+{ t:0, c:"Systems", q:"A membrane whose field seams are joined with hot-air welding equipment is:", o:["EPDM","Built-up roofing","TPO or PVC","Modified bitumen"], a:2,
+  w:"Hot-air welding is the signature of thermoplastics — TPO and PVC. BUR is bedded in bitumen, mod bit is torched, mopped or self-adhered, and EPDM seams are taped or glued.",
+  s:"That's a thermoplastic, so TPO or PVC. The robot welder fuses the sheets into one piece of plastic, and a good weld is actually stronger than the sheet around it." },
+{ t:0, c:"Systems", q:"A restaurant with grease exhaust discharging onto the roof should get which membrane?", o:["TPO","EPDM","PVC or KEE","Smooth BUR"], a:2,
+  w:"Animal fats and grease chemically attack EPDM, TPO and asphalt. PVC and KEE are the grease-resistant chemistries, which is why manufacturers spec them around kitchen exhaust. This is straight from manufacturer chemical-resistance data.",
+  s:"Around grease it's PVC, or KEE if the exposure is bad. Grease eats TPO, rubber and asphalt — the manufacturers' own compatibility charts say so. I'd never put TPO under a kitchen fan." },
+{ t:0, c:"Systems", q:"A built-up roof (BUR) is:", o:["A single reinforced sheet fastened in rows","Multiple plies of felt bedded in bitumen, surfaced with gravel or a cap sheet","Foam sprayed in place and coated","Interlocking metal panels on clips"], a:1,
+  w:"BUR is the classic multi-ply assembly — alternating moppings of hot bitumen and reinforcing felts, finished with aggregate or a cap sheet. Redundancy is its virtue: water has to get through several plies, not one.",
+  s:"A built-up roof is layers — felt, hot asphalt, felt, hot asphalt, three or four plies deep, with gravel or a cap sheet on top. Its whole sales pitch is redundancy. One bad spot in one ply doesn't leak because there are more plies under it." },
+{ t:0, c:"Systems", q:"The two modified bitumen chemistries, and the classic application method for each:", o:["APP — torch applied; SBS — mopped, cold-applied or self-adhered","APP — self-adhered only; SBS — torch only","Both are always hot-mopped","APP — ballasted; SBS — mechanically attached"], a:0,
+  w:"APP is plastic-modified asphalt and is classically torch-applied. SBS is rubber-modified and goes down in hot asphalt, cold adhesive or self-adhered — the flame-free options. Knowing which is which matters the moment hot work is off the table.",
+  s:"APP is the plastic-modified one you torch. SBS is rubber-modified and gives you the flame-free options — mop it, cold-apply it, or peel-and-stick. So when a building can't tolerate a torch, SBS is how mod bit stays in the conversation." },
+{ t:0, c:"Attachment", q:"The three basic ways a single-ply membrane is attached:", o:["Welded, riveted, clipped","Fully adhered, mechanically attached, ballasted","Nailed, stapled, taped","Torched, mopped, sprayed"], a:1,
+  w:"Fully adhered is glued to the substrate, mechanically attached uses rows of fasteners and plates, ballasted is loose-laid and held down by stone or paver weight. Deck type, wind design and budget decide among them.",
+  s:"Glue it down, screw it down, or weigh it down. Fully adhered, mechanically attached, or ballasted. The deck and the wind design usually make that choice for me before price does." },
+{ t:0, c:"Attachment", q:"What holds a ballasted single-ply roof on the building?", o:["Adhesive under every sheet","Fastener rows in the laps","The weight of river stone or concrete pavers","Suction from the deck"], a:2,
+  w:"A ballasted membrane is loose-laid with sealed seams and held down purely by ballast weight — typically 10 to 25 pounds per square foot of stone or pavers. That weight is also its main limitation: the structure has to carry it.",
+  s:"Rock. The membrane is loose-laid and about a thousand to two thousand pounds per square of stone or pavers holds it down. Fast and cheap to install — but the building has to be designed to carry all that weight." },
+{ t:0, c:"Decks", q:"The most common structural deck under low-slope commercial roofs is:", o:["Poured gypsum","Steel","Cementitious wood fiber","Plank lumber"], a:1,
+  w:"Corrugated steel decking dominates modern commercial construction. It takes screw fasteners well, which is why mechanically attached systems are so common over it.",
+  s:"Steel deck, by a mile. It's light, it spans, and screws hold great in it — which is exactly why mechanically attached single-ply is the default system over steel." },
+{ t:0, c:"Decks", q:"Why does the deck type matter before you pick an attachment method?", o:["It only affects the color options","Each deck holds fasteners differently — some barely hold them at all","Decks are all equivalent if the insulation is thick","It only matters for warranty paperwork"], a:1,
+  w:"Steel and wood take screws well. Structural concrete takes drilled fasteners or adhesive. Gypsum and cementitious wood fiber hold standard screws poorly and need specialty fasteners or adhered systems. Attachment that ignores the deck blows off.",
+  s:"Because the deck is what everything ultimately hangs onto. Screws love steel and wood, concrete wants drilled anchors or glue, and gypsum barely holds a fastener at all. I pick the deck's attachment first, then the membrane." },
+{ t:0, c:"Coatings", q:"The one common coating chemistry that survives ponding water is:", o:["Acrylic","Silicone","Un-reinforced asphalt emulsion","Standard alkyd paint"], a:1,
+  w:"Silicone is moisture-cured and doesn't re-emulsify in standing water. Acrylics are water-based and soften and wash out under ponds — manufacturers exclude ponded areas from acrylic warranties.",
+  s:"Silicone. It cures with moisture and doesn't care about standing water. Acrylic is basically high-grade latex — leave it under a pond and it softens and washes away, and the manufacturer's own data sheet tells you not to do it." },
+{ t:0, c:"Coatings", q:"What separates a maintenance coating from a warrantable liquid-applied membrane?", o:["The color","Full reinforcement — polyester fabric embedded across the field","A thicker single pass","Applying two different brands"], a:1,
+  w:"Embedded polyester reinforcement turns a coating into a reinforced liquid membrane with real tensile strength and crack-bridging. That construction difference — not chemistry — is generally what manufacturers require before offering their longer system warranties.",
+  s:"Fabric. When we embed polyester reinforcement across the whole field, it stops being paint and becomes a built-in-place membrane, and that's when the manufacturer will talk about a real system warranty instead of a material warranty." },
+{ t:0, c:"Moisture", q:"A core cut on an existing roof tells you:", o:["Only the membrane color and thickness","The full assembly — every layer, the insulation condition, and whether it's wet","Nothing a photo can't show","Only the deck type"], a:1,
+  w:"A core is the ground truth: number of roof layers, membrane type, insulation type and thickness, moisture, and the deck. Scans find suspect areas; cores confirm what's actually there.",
+  s:"Everything. A core is the biopsy — I see every layer that's up there, what the insulation is, whether it's wet, and what deck I'm landing on. I don't trust a roof I haven't cored." },
+{ t:0, c:"Code", q:"Minimum design slope the building code requires for new membrane roofs (except coal tar):", o:["1/8 in 12","1/4 in 12","1/2 in 12","Dead level is permitted"], a:1,
+  w:"IBC Chapter 15 sets a design slope of not less than 1/4 in 12 for membrane roof systems, with coal tar BUR allowed at 1/8 in 12. It's a design requirement for new construction — reroofing has a positive-drainage path instead.",
+  s:"Quarter inch per foot. That's the code design slope for new membrane roofs — coal tar is the one exception at an eighth. Flat is never actually flat if it's built right." },
+{ t:0, c:"Code", q:"How many total roof coverings does code allow on a building before everything must come off?", o:["One","Two","Three","No limit if the structure holds"], a:1,
+  w:"IBC prohibits a recover where two or more applications of any roof covering already exist. One recover over one original roof is the ceiling — the third roof means tear-off.",
+  s:"Two. The code lets me put one roof over one roof, and that's it. If a building already has two up there, the next move is a tear-off — no matter how good the top one looks." },
+{ t:0, c:"Wind", q:"Where does wind uplift hit a low-slope roof hardest?", o:["Dead center of the field","Corners first, then perimeter, then field","Evenly everywhere","Only at penetrations"], a:1,
+  w:"Wind accelerating over edges creates the strongest suction at corners, then the perimeter zones. That's why attachment schedules add fasteners or narrower sheets in perimeter and corner zones.",
+  s:"The corners. Wind whips around the edges and the suction at a corner can run several times the field load. That's why the fastening tightens up in the perimeter and corner zones — the middle of the roof is the easy part." },
+{ t:0, c:"Details", q:"Base flashing versus counterflashing — which is which?", o:["Base flashing is the metal cap; counterflashing is the membrane","Base flashing is the membrane turned up the wall; counterflashing is the metal that covers its top edge","They're two names for the same piece","Counterflashing goes under the insulation"], a:1,
+  w:"Base flashing is the roofing membrane carried up the vertical surface. Counterflashing is the separate metal — often let into a reglet — that shields the base flashing's terminated top edge from water entry.",
+  s:"The base flashing is the membrane itself running up the wall. The counterflashing is the metal above it that protects that top edge. The base flashing does the waterproofing, the counterflashing keeps water from sneaking in behind it." },
+{ t:0, c:"Drainage", q:"When does standing water on a roof officially become 'ponding'?", o:["Immediately after rain","When it remains 48 hours after rainfall under drying conditions","Only if it's over 2 inches deep","Only in summer"], a:1,
+  w:"The 48-hour definition is the one written into most manufacturers' warranty exclusions — water still standing 48 hours after rain, in conditions that allow drying, is ponding, and damage from it is typically excluded from coverage.",
+  s:"Forty-eight hours. If water's still sitting there two days after the rain stopped, that's ponding — and that's the exact language most manufacturer warranties use to exclude it. Ponding isn't just bad for the roof, it's a coverage hole." },
+{ t:0, c:"Warranty", q:"An NDL warranty means:", o:["No Damage Liability — cosmetic issues excluded","No Dollar Limit — the manufacturer covers leak repairs, labor and material, with no cap up to the roof's value","Non-Delegable License — contractor-only coverage","No Deck Liability — deck excluded"], a:1,
+  w:"NDL is the manufacturer's system warranty: leaks from material or workmanship get repaired at the manufacturer's cost with no per-repair dollar cap. It requires an approved applicator, an approved assembly, and typically a completion inspection.",
+  s:"No Dollar Limit. If the roof leaks from material or workmanship, the manufacturer fixes it — labor and material, no cap. But they only sign up for that on their approved assembly, installed by their approved contractor, with their inspection at the end." },
+{ t:0, c:"Sales", q:"First cost versus life-cycle cost — what's the difference?", o:["They're the same number","First cost is the install price; life-cycle cost spreads install, maintenance, repairs and service life into cost per year","Life-cycle cost ignores maintenance","First cost includes 30 years of repairs"], a:1,
+  w:"First cost is the check the owner writes today. Life-cycle cost divides everything — install, upkeep, repairs, replacement timing — across the years of service. The cheapest roof today is frequently the most expensive per year of service.",
+  s:"First cost is what you pay me today. Life-cycle cost is what the roof costs you per year until it's replaced. My job is to show an owner that the cheapest bid and the cheapest roof are usually two different roofs." },
+{ t:0, c:"Operations", q:"OSHA's general fall protection trigger height in construction work is:", o:["4 feet","6 feet","10 feet","15 feet"], a:1,
+  w:"OSHA construction standards require fall protection at 6 feet above a lower level — guardrails, personal fall arrest, or an allowed alternative. Low-slope roofing has specific options like warning lines with safety monitors, but 6 feet is the number that starts the conversation.",
+  s:"Six feet. Past six feet up we're in fall protection — rails, tie-off, or a compliant warning-line setup on low-slope. It's an OSHA requirement, not a preference, and it's the first thing I check on any job plan." }
+);
+/* Tier 1 — Medium: standard application, one governing condition */
+QUESTIONS.push(
+{ t:1, c:"Systems", q:"A strip-center restaurant is re-roofing. Two kitchen exhaust fans discharge onto the roof. The GC wants TPO because it matched the rest of the center. Your call:", o:["TPO everywhere — consistency matters","PVC or KEE, at least in the exhaust discharge areas","EPDM — rubber handles anything","Smooth mod bit with a grease mat"], a:1,
+  w:"Grease exposure disqualifies TPO by the manufacturers' own chemical-resistance data. PVC or KEE is the system that survives it. Matching the neighbors is not a technical criterion.",
+  s:"The kitchen fans decide this one, not the neighbors. Grease breaks down TPO and the manufacturer's compatibility chart says so, which means so does the warranty. I'd run PVC on that building, and I'd show the owner the chart so it's not my opinion against the GC's." },
+{ t:1, c:"Systems", q:"A 120,000 sq ft distribution warehouse, steel deck, tight budget, owner wants a warrantable new roof over the existing single failing BUR. Most likely fit:", o:["Ballasted EPDM","Mechanically attached TPO over a recover board","Hot BUR again — match in kind","Spray foam over the gravel"], a:1,
+  w:"Big open steel-deck box with first-cost pressure is the mechanically attached TPO sweet spot — fast, economical, screw-friendly deck, and recover is allowed if it's the second covering and the existing is dry and sound. Ballast weight and a structural check make EPDM ballast a harder sell, and SPF over loose gravel is a prep nightmare.",
+  s:"That building is why mechanically attached TPO exists. Steel deck holds screws, the recover board bridges the old BUR, and the price per square on a big open field is hard to beat. I'd confirm the old roof is dry and it's only one layer, then that's my number one." },
+{ t:1, c:"Attachment", q:"Owner wants no fastener penetrations through a structural concrete deck with conduit hung tight to the underside. Which attachment fits?", o:["Mechanically attached — it's cheapest","Fully adhered membrane over adhered or low-rise-foam insulation","Ballasted — after a structural review for the added weight","Either B or C could work — B if weight is a concern"], a:3,
+  w:"Both fully adhered and ballasted avoid deck penetrations. Adhered adds almost no weight; ballasted adds 10–25 psf and needs a structural check. With conduit tight to the deck, drilling is the thing to avoid — so the honest answer is the pair, picked by weight capacity.",
+  s:"If we can't penetrate the deck, I've got two moves — glue everything down, or loose-lay and ballast it. Ballast means a structural engineer confirms the extra weight first. On most occupied buildings I lean fully adhered because it adds almost nothing to the dead load." },
+{ t:1, c:"Attachment", q:"On a mechanically attached single-ply in a high-wind area, what's the characteristic in-service behavior an owner may notice?", o:["Nothing — it's rigid","Membrane flutter or billowing between fastener rows in gusts","Gravel scatter","Seam sparkle at night"], a:1,
+  w:"Mechanically attached sheets are held in rows, so wind cycles the membrane between them — flutter. It's normal within design limits but it works air and stresses the sheet, which is why adhered systems get specified where wind performance or appearance matters.",
+  s:"You'll see it breathe. A screwed-down roof is only held in rows, so gusts pump the sheet up and down between them. Within design that's fine, but if the owner can't live with a roof that moves, that's the day I sell fully adhered." },
+{ t:1, c:"Decks", q:"You find a poured gypsum deck on a 1960s building. Standard roofing screws:", o:["Work fine at normal spacing","Hold poorly — gypsum needs specialty fasteners or an adhered approach, verified by pull testing","Work if you double the count","Should be replaced with nails"], a:1,
+  w:"Gypsum is soft and friable — standard screws strip and lose pullout. The membrane manufacturer's approved specialty fasteners for gypsum, field pull tests to prove withdrawal values, or an adhered assembly are the legitimate paths.",
+  s:"Standard screws in gypsum are a roof waiting to leave. That deck barely holds a fastener, so I'd pull-test the manufacturer's gypsum fasteners on site and let the numbers decide, and if they don't hit the values we go adhered instead." },
+{ t:1, c:"Decks", q:"Why can't you mop hot bitumen or weld directly on a bare steel deck?", o:["Steel reacts chemically with asphalt","The assembly needs insulation or a cover board first — a thermal barrier and a substrate — plus flutes make no continuous surface","Code bans steel under BUR","You can — it's routine"], a:1,
+  w:"A fluted steel deck has no continuous surface to build on, and roofing directly to steel skips the layer that gives fasteners and membrane a proper substrate. Assemblies over steel start with insulation or a suitable board, per the manufacturer's approved constructions.",
+  s:"There's nothing up there to roof onto — a steel deck is corrugated air. We board it or insulate it first so there's a continuous surface, and every manufacturer's approved assembly over steel starts exactly that way." },
+{ t:1, c:"Coatings", q:"A 15-year-old chalked TPO roof, dry and sound, owner wants restoration. The critical prep step before any coating goes on:", o:["Power wash only — TPO takes anything","Clean, then apply the coating manufacturer's TPO-specific primer, with adhesion test patches","Torch the surface to open it up","Sand the entire field"], a:1,
+  w:"Aged TPO is a low-surface-energy membrane — generic primers and coatings peel off it in sheets. Manufacturers require their single-ply primer for TPO and PVC, and a field adhesion test proves the system before the whole roof rides on it.",
+  s:"TPO is a slick surface — most things won't stick to it. So it gets cleaned, then the manufacturer's own single-ply primer, and I put down test patches and try to peel them before I commit the roof. Skip the primer and the whole coating comes off like a sunburn." },
+{ t:1, c:"Coatings", q:"Owner wants a white acrylic over a smooth asphalt BUR. Done straight, what happens?", o:["Perfect white roof","Brown staining bleeds through the acrylic — asphalt needs a bleed-blocking primer first","The acrylic dissolves the BUR","Nothing — asphalt and acrylic are best friends"], a:1,
+  w:"Asphalt oils migrate up through water-based acrylics and stain them brown — manufacturers require a bleed-blocking primer over asphaltic substrates. Cosmetic at first, but it signals the wrong system build and kills reflectivity.",
+  s:"You'll get a tan roof by fall. Asphalt bleeds through acrylic, so the manufacturer requires a stain-blocking primer between them. It's one coat of prevention against repainting the whole thing." },
+{ t:1, c:"Moisture", q:"When is an infrared moisture survey flown or walked, and what are you looking for?", o:["Noon — brightest light","After sunset — wet insulation holds the day's heat and shows warm against dry areas","During rain — leaks glow","Winter mornings only"], a:1,
+  w:"IR moisture detection reads thermal mass. Wet insulation stores more of the day's heat and re-radiates it after sunset, showing as warm anomalies. The survey maps suspect zones; core cuts then confirm, because IR alone can be fooled.",
+  s:"We shoot it after sunset. Wet insulation soaks up the day's heat and glows warm on camera long after the dry roof cools off. Then I core the warm spots — the camera finds suspects, the core cut convicts." },
+{ t:1, c:"Moisture", q:"The survey confirms saturated insulation in one wing. The plan for that insulation is:", o:["One-way breather vents to dry it over time","Remove and replace it — wet insulation comes out","Extra coating to seal it in","Wait for summer"], a:1,
+  w:"Field research and manufacturer requirements agree: venting doesn't meaningfully dry saturated insulation — measured drying rates run years to decades. Manufacturers won't warrant over known wet material. Wet insulation is removed, full stop.",
+  s:"It comes out. Vents don't dry a wet roof — the measured drying times run into decades, and no manufacturer will warrant over insulation we know is wet. We cut out the wet areas, replace them dry, and then talk about the new roof." },
+{ t:1, c:"Code", q:"A full replacement strips the roof to the steel deck. What does the energy code do at that moment?", o:["Nothing — reroofs are exempt from insulation rules","Exposing the deck triggers bringing insulation up to the current energy code","Only new buildings have insulation minimums","It only applies if the owner wants LEED"], a:1,
+  w:"Under the IECC, a roof replacement that exposes the deck is the event that requires insulation meeting the current code — you can't reinstall the old thermal value. The specific R depends on the adopted IECC edition and climate zone, so confirm both with the local jurisdiction before pricing.",
+  s:"The moment that deck sees daylight, the current energy code owns the insulation spec. We have to bring it up to today's requirement, not put back what was there. And before I price it I confirm which code edition our city has adopted, because the number moves with the edition." },
+{ t:1, c:"Code", q:"An owner wants a recover over a roof your cores show is water-soaked. Code says:", o:["Allowed with extra fasteners","Prohibited — a recover can't go over a water-soaked or deteriorated roof","Allowed if the new membrane is thicker","Allowed with a vapor barrier"], a:1,
+  w:"IBC prohibits recovering where the existing roof is water-soaked or too deteriorated to serve as a base. Wet assembly means tear-off — the code and every manufacturer's recover requirements line up on this.",
+  s:"Code kills that one for us. A recover isn't permitted over a water-soaked roof — the wet material has to come out. I'd rather lose the argument now than own that building's mold problem later." },
+{ t:1, c:"Wind", q:"How does an attachment layout actually respond to the corner-perimeter-field wind zones?", o:["Same spacing everywhere, heavier screws","Tighter fastener spacing or narrower sheets in perimeter zones, tighter again in corners","Extra ballast in the field only","Adhesive only at corners"], a:1,
+  w:"Uplift design increases attachment density where suction is highest — half-sheets or added rows at perimeters, more again at corners. The zone dimensions and pressures come from the wind design the code requires for the building.",
+  s:"The roof gets tougher where the wind pulls harder. Standard rows in the field, then extra rows or half-width sheets around the perimeter, and the tightest pattern in the corners. The fastening plan should look like a map of the wind." },
+{ t:1, c:"Details", q:"The common minimum height for base flashing above the finished roof surface, per manufacturer details:", o:["2 inches","8 inches","24 inches","There is no minimum"], a:1,
+  w:"Manufacturer flashing details commonly require 8 inches minimum above the finished surface for warranty coverage — a spec requirement rather than a building-code number. Below that, snow, ponding splash and drifting debris get above the waterproofing line.",
+  s:"Eight inches, per the manufacturer's details — that's a warranty requirement more than a code line. Any lower and a hard rain or a snow load laps water over the top of your waterproofing. When a curb's too short, we raise the curb, we don't shrink the flashing." },
+{ t:1, c:"Details", q:"A pitch pan (pitch pocket) around a structural post is best described as:", o:["A permanent, maintenance-free detail","A last-resort detail that needs scheduled refilling — a curb, boot or manufactured seal is better when possible","Code-prohibited everywhere","Only used on metal roofs"], a:1,
+  w:"Pitch pans rely on pourable sealer that shrinks and cracks with age, so they're a standing maintenance item and a common leak source. Manufacturers treat them as the option when a proper curb, boot or engineered seal can't be built.",
+  s:"A pitch pan is a promise to come back. The filler shrinks and it will eventually leak, so I use one only when there's truly no way to curb or boot the penetration — and it goes on the maintenance list the day we pour it." },
+{ t:1, c:"Drainage", q:"After new RTUs were set, water ponds behind the curbs. The correction:", o:["More coating in the pond","Tapered insulation crickets behind the curbs to move water around them","Drill weep holes in the curbs","Ignore it — units always pond"], a:1,
+  w:"Curbs dam the flow path. Tapered crickets on the high side redirect water around the curb to the drains. Coating a pond treats the symptom and voids nothing but your patience.",
+  s:"We build crickets. A curb is a dam, so we taper insulation behind it and split the water around to the drains. Coating the puddle just gives you a shinier puddle." },
+{ t:1, c:"Drainage", q:"A parapet roof drains through interior drains only. Code's position on secondary drainage:", o:["Optional everywhere","Required — a secondary (overflow) path must exist where the perimeter construction would trap water if drains block","Only for roofs over 100 squares","Only in hurricane zones"], a:1,
+  w:"Where parapets or edges would impound water on drain blockage, code requires secondary drainage — overflow drains or scuppers set just above the primary system — sized to protect the structure. It's the safety valve against a clogged drain collapsing a roof.",
+  s:"Overflow is code, not a nicety. If the parapets would turn the roof into a bathtub when a drain clogs, there has to be a second way out — overflow drains or scuppers set a little higher than the primaries. One plastic bag on a strainer shouldn't be able to test your deck design." },
+{ t:1, c:"Warranty", q:"An HVAC tech screws a new condensate line straight through the membrane. The NDL warranty status of that area:", o:["Fully covered — the warranty follows the roof","That penetration and its damage are excluded — unauthorized alterations void coverage there until repaired per the manufacturer","The whole roof warranty is dead forever","HVAC damage counts as storm damage"], a:1,
+  w:"Manufacturer warranties exclude leaks from alterations or penetrations made without following their requirements. The fix is documented repair by an approved contractor, often with manufacturer notification. Owners need trades-on-the-roof rules in their leases and service contracts.",
+  s:"The manufacturer won't own that hole. Unauthorized penetrations are excluded, so that spot is on the owner until an approved contractor repairs it and we paper it with the manufacturer. This is why I tell owners that nobody touches the roof without a call to us first." },
+{ t:1, c:"Sales", q:"Owner is selling the building in about 3 years. The roof is tired but dry. Your recommendation posture:", o:["30-year premium system — always sell the best","Repair plus restoration sized to the hold period, framed as cost per year of remaining ownership","Full tear-off — it's cleaner","Whatever the budget allows without explanation"], a:1,
+  w:"Recommendation follows hold period. A 3-year owner rarely benefits from a 30-year assembly; a documented repair-and-restoration package protects the sale window at a fraction of the cost, and a transferable warranty adds sale value. Selling past the need erodes trust.",
+  s:"Three years changes my answer. I'd fix what's wrong, restore the field, and hand you a warranty that transfers to your buyer — you get a dry building through the sale for a fraction of replacement money. Selling you a thirty-year roof for a three-year hold would be great for me and wrong for you." },
+{ t:1, c:"Operations", q:"Re-roofing an occupied office with fume-sensitive tenants and rooftop air intakes. Which install families get priority consideration?", o:["Torch-applied APP everywhere","Hot asphalt BUR — tradition wins","Low-odor paths — mechanically attached or induction-welded single-ply, self-adhered mod bit — with intake management in the plan","Whatever's cheapest, tenants adapt"], a:1,
+  w:"Occupied, odor-sensitive buildings push toward low-VOC, flame-free, low-odor systems, plus scheduling and temporary intake filtering or shutdowns coordinated with building management. OSHA hot-work rules and the manufacturer's application options frame what's practical.",
+  s:"Occupied building, so my first filter is what the tenants will never smell. Screw-down or induction-welded single-ply and self-adhered products keep kettles and torches off the job, and we plan every day's work around where the air intakes are and when we can filter or shut them." },
+{ t:1, c:"Systems", q:"Two 60-mil TPO quotes: one is a bargain import, one a major manufacturer. Same thickness, so same roof?", o:["Yes — 60 mil is 60 mil","No — thickness over scrim, formulation and the weathering package differ, and the data sheets prove it","Only the color differs","The cheaper one is thicker in practice"], a:1,
+  w:"Sheet quality lives in thickness over the reinforcing scrim, polymer and stabilizer package, and weld window — all on the manufacturers' data sheets. Two 60-mil sheets can weather very differently. Spec by data sheet, not by nominal mil.",
+  s:"Same number, different sheet. What matters is how much TPO rides above the scrim and what's in the polymer, and that's on the data sheet, not the label. I'd put the two data sheets side by side and let the owner watch the bargain evaporate." }
+);
+/* Tier 2 — Hard: competing constraints and code triggers; two options look right */
+QUESTIONS.push(
+{ t:2, c:"Code", q:"Cores show two existing roof systems and the moisture survey maps 40% of the insulation wet. Owner wants the cheapest legal fix. Your answer:", o:["Recover with mechanically attached TPO — fast and cheap","Cut out the wet 40%, then recover","Full tear-off and replacement — both code triggers already fired","Silicone restoration over everything"], a:2,
+  w:"Two layers already prohibits a recover, and 40% wet is past any sensible cut-and-patch threshold — and a coating can't legally or practically entomb saturated insulation either, since restoration requires a dry, sound substrate. Both roads lead to tear-off.",
+  s:"There's no cheap door left on this one. Code won't let me stack a third roof, and with forty percent of the insulation wet there's no honest patch plan or coating that fixes soaked material. It all comes off, and I'd rather tell you that today than after you've spent money on a Band-Aid." },
+{ t:2, c:"Code", q:"Different building: two existing roof layers, but cores and scan show it dry and sound. Owner can't fund tear-off this year. What's the one system family code still allows on top?", o:["A third membrane if it's lightweight","A liquid-applied restoration coating — a protective coating isn't an additional roof covering under the recover rules","A ballasted EPDM — ballast isn't 'attached'","Nothing at all until tear-off"], a:1,
+  w:"The code's recover prohibition counts roof coverings; its exception permits a protective roof coating over existing eligible coverings without tear-off. On a dry two-layer building, a reinforced restoration system is the legitimate bridge — with manufacturer substrate approval and adhesion testing.",
+  s:"Coating is the one move left on that board. Code counts roof coverings and stops at two, but a protective coating isn't counted as another covering — so a restoration over a dry, sound roof keeps you legal and dry until tear-off money exists. Wet or spongy, though, and that door closes too." },
+{ t:2, c:"Wind", q:"A 30-story tower has a ballasted EPDM roof at end of life. The owner assumes ballast again since it was fine for 30 years. The wind-design problem:", o:["None — grandfathering covers it","The ballasted design standard the code references runs out at about 150 ft — above that it's engineered design, and realistically a conversion to an attached or adhered system","Just use bigger stone","Double the parapet height and reuse the stone"], a:1,
+  w:"The code-referenced ballasted wind standard (ANSI/SPRI RP-4) applies to buildings up to 150 ft; taller means a registered design professional working to ASCE 7 — and at 300+ feet, ballast retention rarely pencils. Getting stone off and materials up that tower drives cost too. The honest path is engineering plus likely conversion.",
+  s:"At thirty stories we're way past what the ballasted standard covers — it stops around a hundred fifty feet, and above that an engineer has to design the wind system from scratch. Nobody's engineering loose rock at three hundred feet, so the real conversation is converting to an adhered or fastened system and craning all that stone off." },
+{ t:2, c:"Code", q:"A building has one layer of clay tile on its sloped section. The owner wants shingles right over the tile to skip tear-off cost. Code says:", o:["Fine — it's only one layer","Prohibited — recover isn't permitted over slate, clay, cement or asbestos-cement tile regardless of layer count","Allowed with longer nails","Allowed if an engineer signs off"], a:1,
+  w:"The recover prohibitions include existing slate, clay, cement or asbestos-cement tile — those coverings can't serve as a recover base at all. Layer count is irrelevant to this trigger.",
+  s:"Tile is an automatic no on recovers — the code names slate, clay and cement tile specifically, one layer or not. The tile comes off first. And honestly you can't fasten through that stuff reliably anyway, so the code and physics agree here." },
+{ t:2, c:"Systems", q:"Design calls for PVC installed over an existing asphalt BUR as a recover. The one component that absolutely must be in the assembly:", o:["Extra adhesive","A separator sheet between PVC and any asphalt product","Thicker PVC","A row of vents"], a:1,
+  w:"PVC and asphalt are chemically incompatible — plasticizer migration degrades the PVC in contact with asphaltic materials. Every PVC manufacturer requires a separation layer over asphaltic substrates. Miss it and the sheet embrittles from below.",
+  s:"The separator sheet. PVC and asphalt poison each other on contact — the plasticizers migrate and the sheet goes brittle — so the manufacturer requires a separation layer over any asphalt substrate. It's a cheap sheet that saves a six-figure roof." },
+{ t:2, c:"Systems", q:"An aging exposed-fastener metal roof over purlins needs a watertight fix without removal. The strongest recover approach:", o:["Ballasted EPDM on top of the ribs","Flute fill or a recover board to create a plane, then mechanically attached single-ply into the purlins","Shingles screwed to the ribs","Thick coating alone over the rust and fastener heads as the long-term fix"], a:1,
+  w:"Metal retrofit recovers level the ribs with flute fill or board, then fasten the new membrane into structural purlins per the manufacturer's metal-retrofit details. Ballast weight and slope don't suit metal buildings. Coating rusted, moving, fastener-backed panels without addressing fasteners and seams underperforms — coating-based metal restorations exist, but they start with fastener and seam treatment.",
+  s:"We flatten the ribs first — foam flute fill or a recover board — then screw a single-ply through into the purlins with the manufacturer's retrofit details. Now the metal is a deck instead of a roof. Just painting a coating over loose fasteners and moving seams is the version that calls you back in two years." },
+{ t:2, c:"Operations", q:"Cores reveal the old roof is coal tar pitch. Before pricing removal, the estimate has to carry what reality?", o:["Nothing special — it's just old asphalt","Fume and skin-exposure controls for workers, wind and heat scheduling, protecting intakes, disposal handling — and no mixing asphalt products into the tear-off plan","Coal tar can't legally be removed","Burn-off in place"], a:1,
+  w:"Coal tar fumes and dust are severe irritants — worker protection duties fall under OSHA's general hazard obligations, and tear-off in heat volatilizes it onto skin and into intakes. It also re-flows and contaminates equipment, and it isn't compatible with asphalt products. Removal is slower, nastier and pricier than an asphalt tear-off, and the bid must say so.",
+  s:"Coal tar changes the whole tear-off math. It burns skin and eyes, so my crew needs full protection and cool-weather scheduling, the intakes get sealed, and disposal is its own line item. It's the one tear-off I never let a bid treat like ordinary asphalt." },
+{ t:2, c:"Moisture", q:"An owner wants SPF sprayed over an old BUR that your scan shows has scattered wet areas 'to seal the moisture in.' Your position:", o:["Foam over it — SPF seals everything","Remove the wet areas first — foam over trapped moisture blisters and loses adhesion, and the manufacturer requires a dry substrate","Foam thicker over the wet spots","Vent the foam later"], a:1,
+  w:"SPF manufacturers require clean, dry, sound substrates. Moisture under foam vaporizes in the sun and blisters or delaminates the foam. 'Sealing it in' is entombing a failure. The wet gets cut out and dried in before spraying.",
+  s:"Foam doesn't seal moisture in, it traps a problem under a blanket. Sun turns that trapped water to vapor and the foam blisters right off — and no foam manufacturer warrants over a wet deck. We cut out the wet spots first, then spray." },
+{ t:2, c:"Decks", q:"Mechanically attaching a single-ply over lightweight insulating concrete (LWIC). What governs whether that's even viable?", o:["The membrane color","Field pullout testing with LWIC-specific fasteners against the manufacturer's required withdrawal values","The age of the building","Screw length alone"], a:1,
+  w:"LWIC holds standard fasteners unpredictably. The path is the membrane manufacturer's LWIC-approved fasteners, proven by on-roof pull tests meeting their published values, or an alternative attachment (like adhered over a base sheet fastened per the LWIC system's requirements). Test data, not assumption, qualifies the deck.",
+  s:"That deck has to prove itself. We put the manufacturer's lightweight-concrete fasteners in and pull-test them on the actual roof, and if the numbers meet the spec we can fasten. No numbers, no screws — we switch to an attachment the deck can actually hold." },
+{ t:2, c:"Coatings", q:"Owner wants the ponding areas of a roof coated with acrylic 'since it's cheaper per bucket.' Correct move:", o:["Do it — buckets are buckets","Fix the drainage first if possible, and any coating in remaining ponding zones must be silicone — acrylic there fails and its warranty excludes it","Double-coat the acrylic in the ponds","Coat with acrylic and add fans"], a:1,
+  w:"Water-based acrylic softens and erodes under ponding, and acrylic warranties exclude ponded areas. Silicone tolerates ponds. But the professional answer corrects the pond with drainage or tapered work where feasible — a pond is a defect, not a color choice.",
+  s:"Cheap per bucket gets expensive in a pond. Acrylic softens under standing water and the manufacturer excludes ponding right on the data sheet. I'd rather fix why the water stands there, and whatever still ponds after that gets silicone or nothing." },
+{ t:2, c:"Wind", q:"Aggregate-ballasted roof on a 12-story coastal building with 10-inch parapets. Per the ballasted wind standard's logic, what's wrong with reusing loose stone at the corners and perimeter?", o:["Nothing if the stone is washed","Low parapets and edge zones limit aggregate systems — corners and perimeters typically need pavers, larger stone systems or a different attachment per the standard's system tables","Stone color affects uplift","Corners need less ballast than field"], a:1,
+  w:"The ballasted standard's system selection depends on height, exposure and parapet — aggregate applications are restricted with low parapets, and edge zones are where scour and blow-off start. Perimeter and corner treatment upgrades (pavers, larger units, or attached perimeter) are the standard's answer, verified against the current edition for the actual building.",
+  s:"The corners are where loose stone leaves first. With ten-inch parapets on a tall coastal building, the ballast tables push you out of loose aggregate at the edges — that's paver or attached territory. I'd run the actual height and exposure through the standard before promising anybody their rock can stay." },
+{ t:2, c:"Drainage", q:"Re-roofing a parapet building that has primary interior drains and no overflow provision at all. Your scope should:", o:["Match existing — it survived this long","Add code-required secondary drainage — overflow drains or scuppers set above the primary inlets — as part of the re-roof","Just add bigger primary drains","Rely on the doors as overflow"], a:1,
+  w:"Code requires secondary drainage where the perimeter would impound water; a re-roof is where that deficiency gets corrected. Overflow inlets sit slightly above the primary system so they only work when drains fail — cheap insurance against structural overload.",
+  s:"That roof is one clogged strainer away from a structural problem, so the re-roof is when we fix it. We cut overflow scuppers through the parapet a couple inches above the drain level — they do nothing all year until the day they save the building." },
+{ t:2, c:"Warranty", q:"Low bidder proposes the same manufacturer system for a 20-year NDL, but isn't an approved applicator for that manufacturer. The owner asks if the warranty survives. It:", o:["Survives — the system is what matters","Doesn't happen at all — NDL system warranties are only issued on installs by the manufacturer's approved contractor, typically with inspection","Survives at 10 years instead","Transfers from your certification"], a:1,
+  w:"Manufacturers issue NDL warranties only for approved applicators installing approved assemblies, usually with a completion inspection. An unapproved installer can buy the same material and the owner still gets no system warranty. The bid comparison is warranty-to-warranty, not sheet-to-sheet.",
+  s:"That warranty never gets born. The manufacturer only issues an NDL when their approved contractor installs it and their inspector signs off, so the low bid is quoting a roof with a paper warranty it can't deliver. Same membrane, completely different product." },
+{ t:2, c:"Systems", q:"Restaurant roof with grease exposure, chronic ponding areas, and a real budget gap. TPO is cheapest, silicone restoration is mid, PVC replacement is most. The technically defensible pick:", o:["TPO — solve budget first","Silicone restoration — handles ponding and splits the cost","PVC with the drainage corrected — grease disqualifies TPO, and restoration over a grease-loaded substrate is an adhesion gamble","EPDM — rubber is forgiving"], a:2,
+  w:"Grease kills TPO by manufacturer data. Grease-contaminated substrates also sabotage coating adhesion — restoration warranties require clean substrates, and around fryer exhaust that's a constant battle. PVC with tapered corrections addresses both failure modes; budget gets handled with phasing or financing, not chemistry.",
+  s:"The grease writes this spec. TPO's out by the manufacturer's own chart, and a coating over a fryer-exhaust roof is a peel test you run every day. It's PVC with the ponding fixed by tapered work, and if the budget's short we phase the roof — I'd rather split the job than install the wrong system twice." },
+{ t:2, c:"Moisture", q:"Survey shows 30% of insulation wet, scattered across the whole field rather than one zone. Cut-and-patch or tear-off?", o:["Patch — under half is under half","Tear-off — past the ~25% practice threshold and scattered, patching costs converge on replacement without the benefit","Coat it and monitor","Vent and re-scan next year"], a:1,
+  w:"The common field cutoff is around 25% wet — a practice number, not code. Scattered wet is worse than concentrated: mobilization and detail work per patch multiply, the remaining old field is still old, and the manufacturer is warranting a quilt. Past the threshold and dispersed, replacement wins the math.",
+  s:"Thirty percent wet and it's everywhere — that's a tear-off. The rule of thumb we work to is about a quarter of the roof, and scattered wet is the worst kind because I'm mobilizing a crew to chase fifty little patches through a roof that's still old between them. At that point replacement is the cheaper honest number." },
+{ t:2, c:"Details", q:"New TPO must tie into a remaining EPDM section mid-roof for a phased project. The tie-in reality:", o:["Weld TPO to EPDM with higher heat","They can't be welded — thermoplastic and thermoset join only through mechanical termination and compatible transition details, built as a maintained joint","Glue them with EPDM adhesive","Overlap 12 inches and ballast the seam"], a:1,
+  w:"TPO won't weld to cured EPDM. Manufacturer tie-in details use termination bars, cover strips and compatible sealants — a mechanical, maintainable joint, ideally located at a high point or curb line, with each manufacturer's warranty stopping at the joint.",
+  s:"Those two will never weld — one's plastic, one's cured rubber. So the tie-in is mechanical, a termination bar and counterflashing detail right out of the book, and I put that joint somewhere high where water doesn't linger. Both warranties end at that line, and the owner needs to know that up front." },
+{ t:2, c:"Operations", q:"Tear-off on a 1978 building. The old BUR flashings and mastics are suspect for what, before demolition proceeds?", o:["Lead paint only","Asbestos — pre-1990 roofing mastics, felts and flashings can contain it, and testing comes before disturbance","Radon","Mold only"], a:1,
+  w:"Asbestos appeared in many older roofing products — testing suspect materials before disturbance is the compliance path under OSHA's asbestos-in-construction rules and the applicable regulations, and it changes handling, notification and disposal. Finding out mid-tear-off is the expensive version.",
+  s:"That's an asbestos question before it's a roofing question. A 'seventy-eight roof gets sampled — the mastics and felts are the usual suspects — because if it's hot, the removal happens under completely different rules. I test before the first cut, not after somebody's already breathed the answer." },
+{ t:2, c:"Code", q:"Same building, two scopes priced: (A) recover over the single existing dry roof, (B) full replacement to the deck. Which one drags the insulation up to current energy code?", o:["Both equally","Neither — reroofing is always exempt","B — replacement exposing the deck triggers current code insulation; the recover generally keeps existing insulation in place","A — recovers trigger everything"], a:2,
+  w:"The energy code's trigger runs through exposing the roof deck: replacement to the deck means insulation to current requirements. A recover leaves the assembly in place and generally doesn't trigger the upgrade. That R-value delta is often the real price difference between the scopes — confirm the adopted IECC edition and zone locally.",
+  s:"The tear-off does. The moment we take it to the deck, current energy code sets the insulation, and that can be several inches of polyiso the recover scope doesn't carry. It's one of the honest reasons a recover quote looks so much better — and the owner should hear that reason out loud." },
+{ t:2, c:"Drainage", q:"An existing roof slopes about 1/8 in 12 and drains fully within a day of rain. During replacement design, the slope conversation is:", o:["Must rebuild to 1/4 in 12 no matter what","Reroofing is excepted from the design-slope rule where positive drainage exists — document the drainage, and consider tapered anyway where ponds persist","Illegal to reroof at all","Add slope only at the drains"], a:1,
+  w:"The code's 1/4 in 12 is a design requirement for new construction; reroofing carries an exception where positive drainage exists. The professional move is documenting drainage performance and using tapered insulation to kill any chronic ponds — because the warranty's ponding exclusion doesn't care about the code exception.",
+  s:"Code gives an existing roof grace if it actually drains, and this one does — so I document that and we're fine on slope. But wherever it ponds I'm proposing tapered anyway, because the code exception won't cover us when the warranty's ponding exclusion shows up." },
+{ t:2, c:"Operations", q:"Torch-applied APP is proposed over a wood-fiber-decked section with combustible framing below. The defensible plan is:", o:["Torch straight to the deck, carefully","A mechanically fastened base sheet first — no direct flame on combustibles — plus hot-work permits, extinguishers, and a fire watch after burners stop","Water down the deck first","Switch the whole building to torch anyway"], a:1,
+  w:"Manufacturers prohibit torching directly to combustible substrates — a fastened base sheet separates flame from fuel. Hot-work controls and a post-work fire watch are standard OSHA-driven site practice; smoldering discovered hours later is roofing's classic building fire. Self-adhered or cold-applied SBS deserves a look instead.",
+  s:"No flame ever touches that deck. We fasten a base sheet first so the torch only sees the base, we run a hot-work permit with extinguishers staged, and somebody stays on fire watch after the last burner shuts off. Honestly, on a combustible deck I'd price self-adhered right next to it and let the owner pick their risk." }
+);
+/* Tier 3 — Expert: cost, risk, warranty, sales strategy, running the job */
+QUESTIONS.push(
+{ t:3, c:"Sales", q:"You're $80k over a competing bid on a 400-square TPO replacement. The owner slides the other proposal across the desk. Your first move:", o:["Match the price to keep the job","Walk the two scopes line by line — membrane spec, insulation, fastening schedule, details, warranty type, dry-in plan — and price the differences, not the total","Trash the competitor's reputation","Add a free maintenance year and hope"], a:1,
+  w:"An $80k gap on 400 squares is a scope gap: thinner sheet, less insulation, field-only fastening, material-only warranty, excluded details. Comparing line by line converts a price argument into a content argument you can win — or reveals real fat to cut from your own number.",
+  s:"Let's put them side by side and find the eighty thousand, because it's hiding in the scope. Usually it's thinner sheet, less insulation, a material-only warranty and a bunch of details in the fine print as exclusions. If they're truly selling my exact roof for eighty less, I'll tell you to take it — but I haven't seen that day yet." },
+{ t:3, c:"Sales", q:"Owner plans to hold the building 15+ years. Choices: 20-year NDL TPO replacement at $9/sf or a 10-year restoration at $4/sf. The honest framing:", o:["Restoration — always sell the cheaper entry","Replacement — always sell the bigger system","Cost per year of dry roof: roughly $0.45/sf/yr vs $0.40/sf/yr, then the differences — restoration needs a sound roof now and can be renewed, replacement resets everything including insulation","Flip a coin, both work"], a:2,
+  w:"Long holds justify life-cycle math. The two options are closer per year than the sticker gap suggests; the decision then turns on roof condition (restoration requires a sound, dry substrate), energy code insulation on a tear-off, renewability of coatings, and disruption tolerance. Presenting per-year numbers builds the trust that closes the next three jobs.",
+  s:"On a fifteen-year hold I'd show you both as cost per year, and they're closer than they look — call it forty-five cents a foot a year for the new roof against about forty for the restoration. The real difference is what each buys you. The tear-off resets everything including insulation, the restoration keeps your money low now and can be recoated later, but only if the roof under it is truly sound today." },
+{ t:3, c:"Sales", q:"An owner asks whether the roof work can be written off this year instead of capitalized over decades. Your lane:", o:["Promise full first-year deduction — it closes deals","Explain the general shape — repairs and restorations are often expensed as maintenance while replacements are typically capitalized, and current law has accelerated options — then send them to their CPA for the ruling on their building","Refuse to discuss money","Tell them taxes never matter in roofing"], a:1,
+  w:"Tax treatment genuinely swings roofing decisions — maintenance versus capital classification, and expensing provisions that can apply to nonresidential roofs. But the contractor's role is framing the question, not issuing tax advice; the CPA owns the answer for that owner's facts.",
+  s:"That's a real factor and it might be the deciding one. Broad strokes, repair and restoration work often runs through the books as maintenance while a full replacement usually gets capitalized, and there are provisions that can accelerate a roof write-off. But I sell roofs, not tax law — get your CPA on the phone and I'll give them the numbers both ways." },
+{ t:3, c:"Operations", q:"Re-roofing an occupied hospital wing. The two constraints that dominate every day's plan:", o:["Crew lunch options and parking","Air intakes and odors, and never opening more roof than you can make watertight the same day","Paint colors and logos","Weekend overtime rates"], a:1,
+  w:"Healthcare occupancies make air quality non-negotiable — intake mapping, filtration or shutdown coordination, low-odor systems. And phased dry-in discipline is absolute: an overnight storm over an open hospital roof is a career-ending event. Everything else schedules around those two.",
+  s:"Two rules run that job. Nothing we do can reach an air intake, so we map every intake and coordinate shutdowns before a single cut. And we never open more roof than we can close bone-dry that same day, because an open roof over patient beds isn't a risk I price, it's a risk I refuse." },
+{ t:3, c:"Operations", q:"Mid-tear-off, you find deteriorated deck far beyond the bid allowance. The professional sequence:", o:["Quietly roof over the bad deck to stay on schedule","Stop in that area, make it safe and watertight, document with photos and measurements, price the added work, and get a signed change order before proceeding","Finish the job and argue at final billing","Text the owner a bigger invoice after"], a:1,
+  w:"Burying bad deck creates a latent defect you own forever. The change-order discipline — stop, document, price, sign, proceed — protects both sides, and a per-unit deck price in the original contract makes the conversation short. Surprises handled in daylight preserve the relationship.",
+  s:"We stop right there, get it safe and dried in, and I'm calling the owner with photos before the next square foot moves. Here's what we found, here's the unit price for deck replacement that's already in our contract, sign here and we keep rolling. What I will never do is roof over bad deck to protect a schedule." },
+{ t:3, c:"Operations", q:"'Dry-in discipline' on a phased tear-off means:", o:["Working only in dry months","Every area opened gets fully watertight — tied in, flashed or temporarily sealed — before the crew leaves, every single day","Keeping the crew hydrated","Drying materials before install"], a:1,
+  w:"The tear-off exposes the building; the daily watertight line is what keeps an occupied building's contents safe from the pop-up storm nobody forecast. It sizes each day's work area and is the habit that separates professional crews from claims-generating ones.",
+  s:"It means the building is waterproof every night, no exceptions. We only tear off what we can completely close today — tied in, flashed, sealed — because the storm that hurts you is the one the forecast missed. I size the day's work to the dry-in, never the other way around." },
+{ t:3, c:"Operations", q:"Your quality checkpoints on a single-ply install, beyond 'the foreman is good':", o:["Trust and a final walk","A start-up mockup, daily seam probing of cooled welds, test cuts or peel checks, fastener pattern spot-counts against the layout, and photo documentation by area","One inspection at the end","Whatever the manufacturer inspector catches"], a:1,
+  w:"Welds get probed after cooling, destructive test welds verify equipment settings each shift and when conditions change, fastening gets counted against the wind layout, and photos build the record. Manufacturer inspection is a backstop, not the QC plan.",
+  s:"We prove the roof as we build it. First morning, test welds to dial the machine. Every day, probe the cooled seams and pull a test cut. I spot-count fastener rows against the wind layout, and every area gets photographed before it's covered. The manufacturer's inspector should be walking a roof we already know is right." },
+{ t:3, c:"Warranty", q:"Where do manufacturer warranty inspectors focus their punch list, and what does that tell you about install priorities?", o:["The field seams only — details rarely matter","Flashings, terminations, penetrations and edges — details are where roofs fail, so detail craft decides the inspection and the roof's life","The parking lot staging","Insulation brand labels"], a:1,
+  w:"Field membrane rarely fails first; details do. Inspectors gate the warranty on flashing heights, termination bars, corner work and penetration seals. A crew's detail standard is the single best predictor of a roof outliving its warranty.",
+  s:"The inspector lives at the edges and the penetrations, because that's where roofs actually fail. The big flat field almost never leaks — the curb corner somebody rushed on a Friday does. So I staff details with my best hands, not my fastest ones." },
+{ t:3, c:"Sales", q:"On a typical owner-occupied commercial deal, who actually moves the buying decision, and what does each care about?", o:["The architect alone","Owner signs and cares about money and risk, the facility or property manager recommends and cares about disruption and being covered, consultants and CPAs shape the frame — sell to each in their language","Whoever answers the phone","OSHA"], a:1,
+  w:"The owner authorizes capital and weighs risk and hold period. The PM or facility manager filters everything and fears tenant disruption and blame. Engineers and consultants gate the spec on some jobs; the CPA shapes capital-versus-expense. Winning means answering each one's actual question, not repeating one pitch.",
+  s:"The owner writes the check, but the property manager decides who gets into the room, so I sell them different things. The manager hears how we protect tenants and make them look good, the owner hears cost per year and risk taken off their desk, and if a consultant wrote the spec I bid the spec. Same roof, three languages." },
+{ t:3, c:"Sales", q:"When do you tell an owner NOT to buy what they're asking to buy?", o:["Never — the customer is always right","When the request will fail — recover over wet insulation, coating a failing roof, the wrong chemistry for the exposure — decline it in writing and offer the path that works","Whenever a bigger ticket is available","Only if another contractor already refused"], a:1,
+  w:"Installing a known failure transfers their problem onto your license and reputation, and the warranty won't save either. Declining bad scope in writing, with reasons and an alternative, loses a transaction and wins a client — and it's the answer an examiner is really probing for.",
+  s:"The day they ask me to install a failure. If the survey says the insulation's wet, I'm not selling a coating over it at any price — I'll put in writing why it fails and what I'd do instead. I'd rather lose that job than own that roof's problems, and owners remember which contractor told them the truth." },
+{ t:3, c:"Sales", q:"Owner: 'Your price is too high.' The disciplined response pattern:", o:["Immediately drop 10%","Ask what they're comparing against, isolate whether it's budget or value, re-anchor on what the number buys — and if the number must move, scope moves with it","Agree and add hidden charges later","Walk out"], a:1,
+  w:"An unexplained discount teaches the buyer the first number was padding. Diagnosing the objection — comparison, budget ceiling, or missing value — lets you respond precisely, and any price move tied to a scope change keeps integrity and margin intact.",
+  s:"Too high compared to what — another bid, or the budget you've got. If it's a bid, let's line the scopes up and find the gap. If it's budget, I can move the price, but scope moves with it — maybe we phase the roof or adjust the warranty term. What I won't do is just knock ten percent off, because then the first number was a lie." },
+{ t:3, c:"Warranty", q:"The real reason to sell a maintenance plan with every new roof:", o:["Pure add-on revenue","Manufacturer warranties typically require documented maintenance, small findings stay small, and you become the standing roofer for every future call","It replaces the warranty","Owners expect free inspections anyway"], a:1,
+  w:"Warranty terms commonly condition coverage on maintenance and prompt leak notice — an unmaintained roof hands the manufacturer an out. Semi-annual inspections catch sealant and detail wear cheap, generate documentation, and keep the relationship (and referrals) alive between reroofs.",
+  s:"Because the warranty quietly requires it. Skip documented maintenance and the manufacturer has an exit the day there's a claim. Twice a year we're on the roof catching hundred-dollar problems before they're ten-thousand-dollar ones, the file stays clean for the warranty, and when anything happens on that building, we're the ones they call." },
+{ t:3, c:"Sales", q:"Presenting life-cycle numbers, the metric that lands best with a numbers-driven owner:", o:["Total squares installed","Cost per square foot per year of expected service, options side by side with maintenance included","The crew size","Warranty page count"], a:1,
+  w:"$/sf/year normalizes a $4 restoration lasting 10 years against a $9 replacement lasting 25 — suddenly they're comparable objects. Adding expected maintenance keeps it honest. CFOs think in annualized cost; giving them their own metric shortens the meeting.",
+  s:"I give them cost per square foot per year. Take the install price, add the expected maintenance, divide by the years it honestly buys — now a four-dollar restoration and a nine-dollar replacement are on the same chart. CFOs live in annualized numbers, so I walk in speaking their language." },
+{ t:3, c:"Operations", q:"Thunderstorms are possible Friday afternoon. Your tear-off crew wants to open the last big section Friday morning to finish Monday. Call:", o:["Open it — momentum matters","Don't open what Friday can't close — work details, staging or small areas instead, and hit the section Monday with a clean window","Open it and stage tarps","Open half and hope"], a:1,
+  w:"Tarps are not a roof. Weekend exposure over an occupied building against a known storm risk is exactly how interior claims happen; the schedule gain is hours, the downside is the whole job's margin and the client. Weather windows size the work, period.",
+  s:"We don't open it. A tarp against a Friday thunderstorm over somebody's inventory is a bet I never take — the most expensive water on any job is the water we let in ourselves. The crew works details Friday and we take that section Monday morning with a clean sky." },
+{ t:3, c:"Warranty", q:"Before bidding a spec'd NDL job, the smart pre-bid move with the manufacturer:", o:["Nothing — bid and sort it later","Confirm in writing that the exact assembly is approved and warrantable on this deck and slope — an assembly letter — before pricing it","Ask for free material","Have them bid it for you"], a:1,
+  w:"Not every combination of deck, insulation, attachment and membrane is warrantable, and finding out at submittal or inspection re-prices the job on your dime. The manufacturer's pre-bid assembly confirmation kills that risk and often surfaces a cheaper approved alternative.",
+  s:"I get the assembly blessed in writing before I price it. One call to the manufacturer's rep confirms this exact stack on this deck carries the twenty-year NDL, and that letter goes in my bid file. The worst day in roofing is learning at inspection that the roof you built isn't the roof they warrant." },
+{ t:3, c:"Systems", q:"The honest sales case for SPF, and its honest disqualifier:", o:["It's cheap and anyone can spray it","Case: seamless, self-flashing, highest R per inch, great over irregular decks. Disqualifier: unforgiving of weather and applicator skill, and it commits the owner to recoating cycles","It never needs maintenance","It's invisible to hail"], a:1,
+  w:"SPF's monolithic self-flashing nature and top-tier R per inch make it a legitimate premium answer, especially on irregular roofs. But it's applicator-sensitive, needs tight weather windows, must be protected from UV with maintained coatings, and hail scars it. It sells where the owner accepts a maintenance relationship.",
+  s:"Foam is a beautiful roof for the right owner — one seamless piece that flashes itself around every penetration, with the best insulation per inch in the business. The other half of that truth is it lives and dies on the applicator and the weather that week, and the coating on top is a maintenance commitment forever. I sell it with both halves attached." },
+{ t:3, c:"Systems", q:"Aging exposed-fastener metal roof, owner asking replace-or-restore. The restoration scope that's actually credible:", o:["One thick coat of anything white","Replace or re-gasket every fastener, treat every seam and penetration, then the coating system — the coating is the finish, the fastener-and-seam work is the roof","Just the rusty panels","Wax and buff"], a:1,
+  w:"Metal roofs leak at fasteners and seams, not mid-panel. Credible metal restoration is 80% mechanical prep — fastener replacement, seam treatment with reinforcement, rust conversion — then the field coating per the manufacturer's system. Coating-only bids are the ones that fail and take the concept's reputation with them.",
+  s:"On metal, the coating is the last twenty percent of the job. The roof leaks at ten thousand screws and every lap, so the real scope is new gasketed fasteners, seam treatment with fabric, rust handled — then the coating locks it all down. Anyone quoting you just the white paint is quoting the part that doesn't fix anything." },
+{ t:3, c:"Systems", q:"Where ballasted EPDM still wins the bid honestly, and the caveats that ride along:", o:["Everywhere — cheapest is cheapest","Big, low, open buildings with structure for the weight: lowest first cost and fast dry-in. Caveats: structural capacity, height and edge-zone wind limits, hail and leak-tracing pain, and code checks","High-rises needing speed","Small cut-up roofs with many curbs"], a:1,
+  w:"On a low warehouse with capacity, loose-laid ballast is genuinely the cheapest fast roof. The liabilities are real: dead load, the ballasted standard's height and parapet limits, miserable leak detection under stone, and moving rock for any future work. Sold with the caveats, it's legitimate; sold without them, it's a callback.",
+  s:"On a big low warehouse that can carry the rock, ballast is still the cheapest dry roof money buys, and it goes down fast. I just sell it with its bill attached — the structure has to verify, wind limits cap where it can go, and the day it leaks, finding that leak under a thousand tons of stone is its own line item." },
+{ t:3, c:"Warranty", q:"Owner: 'So this warranty guarantees me no leaks for 20 years, right?' Truthful answer:", o:["Yes — total protection, sign here","It defines who fixes covered leaks and pays for the repair — with exclusions like ponding, unauthorized work, storms and neglect. It's a repair obligation, not a force field, and the install quality is the real protection","No comment until closing","Warranties are unnecessary paperwork"], a:1,
+  w:"Overselling warranty scope detonates at the first excluded claim. NDL coverage is strong — manufacturer-funded repair of covered leaks — but the exclusions list is real. Setting it straight up front positions maintenance correctly and marks you as the contractor who doesn't spin.",
+  s:"It guarantees that covered leaks get fixed on the manufacturer's dime, and that's worth having — but there's an exclusions page, and ponding, storm damage and anybody else's screws through the roof live on it. The thing that actually keeps you dry for twenty years is the install and the maintenance file. The warranty is the backstop, not the roof." },
+{ t:3, c:"Operations", q:"A property manager calls in a panic — active leak over a tenant's server room, storm ongoing. Tonight's job and its boundaries:", o:["Full repair diagnosis in the storm","Stop the water defensibly — divert, contain, temporary-patch with materials compatible with a future permanent repair — document everything, return for real diagnosis in daylight","Promise a new roof by morning","Decline until sunny"], a:1,
+  w:"Emergency response is containment and compatible temporary measures, documented, with the permanent repair scoped properly afterward. Incompatible goop smeared at midnight becomes the obstacle to the real fix. Speed and honesty here is how PM relationships — and their portfolios — are won.",
+  s:"Tonight we stop the water and protect the room — divert it, contain it, temporary-patch with something that won't fight the permanent repair. I photograph everything, and tomorrow in daylight we find the actual source and quote the real fix. What I don't do at midnight in the rain is pretend I'm diagnosing anything." }
+);
+/* Tier 4 — Aaron: traps. Naming a system first is usually the failure. */
+QUESTIONS.push(
+{ t:4, c:"Trap", q:"Aaron, arms crossed: \"What's the cheapest roof?\"", o:["Mechanically attached TPO, final answer","Ballasted EPDM, always has been","Cheapest to install or cheapest to own? And on what building? Then commit — on a big open steel-deck box it's likely mech-attached TPO, and here's what would change that","Whatever's on sale this month"], a:2,
+  w:"The question is unanswerable as asked — 'cheapest' splits into first cost versus life-cycle, and building size, deck, access, code triggers and existing conditions move the answer. The passing response surfaces the variables, then still commits to the most likely case and names what flips it. Freezing up or naming one system blind both fail.",
+  s:"Cheapest to install or cheapest to own — those are different roofs. Give me a big open warehouse on steel deck and cheapest install is probably mechanically attached TPO, with ballasted EPDM in the fight if the structure takes the weight. But put grease on that roof or a second existing layer under it and my answer changes on the spot." },
+{ t:4, c:"Trap", q:"\"Which is better — silicone, or a reinforced polyester system?\"", o:["Silicone, hands down","Reinforced polyester, obviously","That's comparing a chemistry to a construction — polyester reinforcement goes IN a coating, including silicone. A reinforced silicone system is both at once","Neither works on roofs"], a:2,
+  w:"Category error. Silicone is a coating chemistry; reinforced polyester describes how a liquid system is built — fabric embedded in the liquid, whatever the chemistry. The trap tests whether you'll pick a side in a comparison that doesn't parse.",
+  s:"Those aren't competitors — one's a chemistry and one's a way of building the system. Polyester fabric gets embedded in a coating, and that coating can be silicone. So the real question is which chemistry for this exposure, and whether the substrate needs full reinforcement. Ask me that one and I'll pick." },
+{ t:4, c:"Trap", q:"\"Owner has $40,000. The roof needs a $150,000 tear-off — it's wet, it's two layers deep. What system do you install for his $40k?\"", o:["A thin recover — something is better than nothing","A coating — it's all the budget buys","None — no system succeeds on that roof for $40k. Spend it on targeted repairs, drainage fixes and dry-in of the worst areas, documented as a bridge to the real scope","Take the $40k as a deposit and start"], a:2,
+  w:"Every named system is genuinely wrong: recover is code-prohibited at two layers and over wet material, coating over saturated insulation fails and no manufacturer warrants it. The passing answer says 'nothing succeeds here' out loud, then puts the $40k to honest triage work with the replacement scoped for when funding exists.",
+  s:"For forty thousand I can't install him a roof that works — recover is illegal over two wet layers, and a coating over soaked insulation is just an expensive way to fail. What I can do is spend it surgically — fix the worst leaks, get drainage moving, dry in the critical areas — and hand him a documented plan to the real replacement. That's the only honest use of his money." },
+{ t:4, c:"Trap", q:"\"Thirty-story tower, ballasted EPDM, owner wants the cheapest replacement. Go.\"", o:["Re-ballast with the same stone — proven for 30 years","Cheapest is mech-attached TPO, same as any warehouse","Height is the problem — the ballasted standard stops around 150 feet, so this is engineered wind design and almost certainly a conversion. Before pricing anything I need the structure, deck and edge conditions","Coat the old EPDM and skip replacement talk"], a:2,
+  w:"The trap is 'cheapest' hiding the real governor: at 30 stories, the code-referenced ballasted standard no longer applies and loose ballast at that height is a wind-design non-starter — plus stone removal logistics dominate cost. The answer leads with the disqualifier, then scopes what's needed to price the conversion honestly.",
+  s:"At thirty stories the cheap conversation ends at the wind design. The ballasted standard runs out around a hundred fifty feet, so nothing loose-laid is defensible up there — this roof converts to an adhered or fastened system under an engineer's wind design, and craning thirty years of stone off is half the job. Cheapest starts after those facts, not before them." },
+{ t:4, c:"Trap", q:"\"Simple question. TPO or PVC?\"", o:["TPO — it owns the market","PVC — it's been around longer","For what exposure? General field work, TPO usually wins on cost. Grease, chemicals or fire-adjacent exposure, PVC. Tell me what's on the roof and I'll commit","They're identical products"], a:2,
+  w:"Naked either/or with the deciding variable withheld. The answer names the variable (exposure), gives the honest default each way, and asks the one question that resolves it — demonstrating you choose systems by condition, not allegiance.",
+  s:"Depends what the roof has to survive. Clean warehouse air, TPO wins on price and it welds great. Kitchen grease, chemical exhaust or an owner who wants the most weld-friendly sheet ten years from now, I'm at PVC. Tell me what's blowing out of the fans and I'll give you a one-word answer." },
+{ t:4, c:"Trap", q:"Aaron nods along with your answer, then asks: \"How do you know you're right?\"", o:["Twenty years of experience, that's how","Because that's what everyone does","I check it — code section, the manufacturer's published detail, a core cut or pull test where it's a field question. If I can't point to the source, I say it's judgment and I label it that way","My gut has never failed"], a:2,
+  w:"Behavioral probe: is your confidence sourced or performed? The passing answer names verification habits — code text, manufacturer literature, physical testing — and distinguishes cited fact from labeled judgment. 'Experience' alone is the trap answer; it's how confident wrong answers sound.",
+  s:"Because I can show you where it comes from. If it's a code claim I'll pull the section, if it's a system claim I'll pull the manufacturer's detail or data sheet, and if it's a field condition I core it or pull-test it instead of guessing. And when something's just my judgment, I'll say that word out loud so you know which kind of answer you're getting." },
+{ t:4, c:"Trap", q:"He asks you something you genuinely don't know. The room is quiet. You:", o:["Give the most confident guess available — never show weakness","Change the subject smoothly","Say you don't know, say precisely where you'd find it and how fast, and follow up with the sourced answer","Blame the question"], a:2,
+  w:"The test is whether you'll bluff. In this trade a confident wrong answer becomes a leak, a claim or an injury. 'I don't know, here's exactly how I find out, you'll have it by tomorrow' — delivered without flinching — is a senior answer, and following through is the actual pass.",
+  s:"I don't know that one cold, and I'm not going to guess at it in front of you. Here's what I'd do — check the manufacturer's spec and the code section tonight and have you a sourced answer by morning. The guys who bluff that question are the ones who cost somebody a building later." },
+{ t:4, c:"Trap", q:"\"What would make you walk away from a job?\" — and he's watching how fast you answer.", o:["Nothing — revenue is revenue","Only jobs that are too small","Being asked to build a known failure or hide one — roof over wet insulation, skip the permit, bury bad deck, cut fall protection. Price is negotiable, that isn't","Rainy season"], a:2,
+  w:"Integrity probe. The answer needs named, concrete lines — safety, legality, concealment of defects, installing systems known to fail — delivered without hedging. 'Nothing' fails on character; vague virtue fails on specificity.",
+  s:"The day the job requires me to lie or build a failure. If an owner wants me to roof over wet insulation, skip the permit, bury rotten deck, or run a crew without fall protection, I'm out — no price fixes those. I'll negotiate money all day, but not physics and not safety." },
+{ t:4, c:"Trap", q:"He builds it live: \"Warehouse, steel deck, one dry existing roof — your system?\" You say mech TPO. \"Now there's a fryer exhaust line on it.\" Then: \"Now the survey shows ponding by the drains.\" Then: \"Turns out there are already two roofs up there.\" What's the passing behavior?", o:["Defend mech TPO to the end — changing answers looks weak","Restart from scratch, flustered, at every addition","Update out loud each time: grease moves it to PVC, ponding adds tapered work, and the second layer converts the whole thing to a tear-off — with the trigger named at each step","Stop answering after the second change"], a:2,
+  w:"The stack test: will you keep defending a dead answer? Each variable is a specific trigger — chemistry, drainage, code layer limit — and the passing pattern is updating immediately, naming why, and landing on tear-off with PVC and tapered insulation. Loyalty to your first answer is the trap.",
+  s:"Every fact you added just changed my roof, and I'll say so each time. The fryer line moves me off TPO to PVC. The ponding adds tapered insulation to the scope. And the second existing roof ends the recover completely — now it's a tear-off, then tapered, then PVC. New information beats my old answer every single time." },
+{ t:4, c:"Trap", q:"\"Fine — then what's the BEST membrane?\"", o:["PVC — pound for pound the champion","Whatever the biggest manufacturer makes","There isn't a best one, and anyone with a best one is selling it. There's a right one per building — exposure, deck, code, budget, hold period. Give me a building and I'll name it","60-mil anything"], a:2,
+  w:"Same trap as 'cheapest,' dressed up. Membranes are tools matched to conditions; a contractor with one answer for every building is running a product line, not a practice. Commit to the matching process, then demonstrate it instantly when given conditions.",
+  s:"There's no best membrane, there's a right membrane for a building — and a guy who names one without asking questions is selling you his inventory. Hand me the building. Restaurant row, I'll say PVC. Big dry box, probably TPO. Hail alley on a budget, maybe a heavy EPDM. The skill isn't the pick, it's the match." },
+{ t:4, c:"Trap", q:"\"A coating fixes leaks, right? Roof leaks, we coat it, done?\"", o:["Right — that's the whole point of coatings","Only silicone fixes leaks","Backwards — coatings preserve roofs that already don't leak. Leaks get found and repaired first, wet material comes out, and then a coating extends what's left. Coating an active leak seals a failure in","Two coats fixes anything"], a:2,
+  w:"Restoration systems require sound, dry substrates — repairs come first and the coating is life-extension, not leak repair. Wet insulation under a fresh coating keeps rotting on the owner's dime with a warranty that excludes it. This confusion is common enough that examiners test for it specifically.",
+  s:"That's backwards, and it's the most expensive backwards in roofing. A coating preserves a roof that's already sound — so we find the leaks, repair them, cut out anything wet, and then the coating buys the roof another decade. Coat an active leak and you've just paid good money to hide it while it grows." },
+{ t:4, c:"Trap", q:"He hands you a work order for a building you've never seen: \"Can you overlay this roof? Yes or no.\"", o:["Yes — overlays almost always work","No — overlays are always trouble","Not yet answerable — I need the layer count, moisture findings, the covering type and the deck. If it's one dry layer and not tile, likely yes and I'll say so. Two layers, wet, or tile, no","Whatever the last contractor said"], a:2,
+  w:"Yes-or-no is the trap frame; the recover decision is gated by code prohibitions (layers, moisture, covering type) and field condition. The passing answer names the exact gates, states the likely-yes case, and refuses to certify a roof sight-unseen — while still sounding decisive, not evasive.",
+  s:"I can tell you exactly what makes it a yes, but not from a work order. One existing layer, cores dry, and it's not tile — then yes, we overlay it and I'll stand behind that. Two layers, wet insulation, or tile up there and the code itself says no. Get me forty-five minutes on that roof with a core cutter and you'll have your one-word answer." },
+{ t:4, c:"Trap", q:"\"Another contractor told my client that with coatings, nobody ever needs a tear-off again. React.\"", o:["He's right — coatings ended tear-offs","Say nothing — never discuss competitors","Coatings are great tools with hard disqualifiers — wet insulation, failed adhesion, deteriorated substrates. A roof that's structurally done still comes off. I'd show the client the disqualifier list, not an argument","Report him to somebody"], a:2,
+  w:"Tests whether you'll counter overselling with facts instead of rivalry. Restoration legitimately defers tear-offs on sound roofs — but manufacturers' own substrate requirements define where it can't go. Teaching the client the disqualifiers positions you as the honest expert without naming-calling.",
+  s:"Coatings are a real tool and I sell them — on the right roof. But every coating manufacturer publishes the same disqualifiers, and wet insulation is the big one. You can't paint over soaked material and call it saved. So never say never a tear-off — say not yet, as long as the roof under it stays sound and dry, and prove that with a survey." },
+{ t:4, c:"Trap", q:"\"This system's cheapest per square foot today. Why wouldn't the owner just buy it every time?\"", o:["He should — today's price is the only real number","Because cheap systems are all scams","Because the owner buys years of dry building, not squares of material — hold period, maintenance, warranty and replacement timing decide the real cost. Cheapest today is often priciest per year","Because expensive feels better"], a:2,
+  w:"First-cost tunnel vision is the tested error. The answer reframes to cost per year of service over the owner's hold period — where a cheap short-lived system frequently loses — while conceding the case where first cost legitimately rules: short holds and bridge strategies.",
+  s:"Because he's not buying squares, he's buying dry years. Stretch each option across what it really costs per year — install, upkeep, when it needs replacing — and the cheap roof is often the expensive one. Now if he's selling the building in two years, fine, today's price might honestly be the whole story. That's why I ask the hold question first." },
+{ t:4, c:"Trap", q:"\"The roof has an old acrylic coating on it. Just shoot silicone over that, right? And if the silicone chalks out someday, we'll acrylic over it. Same thing both directions?\"", o:["Exactly — coatings stack freely both ways","Never coat over any coating, ever","Not symmetric. Silicone over sound, tested acrylic can work with the manufacturer's prep and adhesion patches. But nothing bonds to cured silicone — going onto silicone later means silicone again, or removal","Alternate them yearly for balance"], a:2,
+  w:"Direction matters. Over existing acrylic: verify adhesion of what's there, prep and prime per the silicone manufacturer, and prove it with test patches. But cured silicone's release surface rejects other chemistries — a silicone roof is a silicone commitment. The trap is agreeing to the symmetry.",
+  s:"One direction works, one doesn't. Silicone can go over that old acrylic if it's still stuck tight — we test patches and follow the manufacturer's prep. But the day you silicone a roof, you've married it, because nothing else will ever bond to cured silicone. Recoats from then on are silicone or a tear-off of the coating. I make sure the owner hears that before the first drum opens." },
+{ t:4, c:"Trap", q:"\"Two 60-mil sheets, two prices. Sixty mil is sixty mil — buy the cheap one, right?\"", o:["Right — thickness is the spec","Wrong — always buy the expensive one","The mil number isn't the sheet. Thickness over scrim, polymer and stabilizer package, weld window — that's what ages. The data sheets and the warranty terms are the comparison, not the label","Buy both and mix them"], a:2,
+  w:"Nominal thickness hides the quality variables: mil-over-scrim, formulation, weathering package, and what warranty the manufacturer will actually stand behind. 'Always buy expensive' is equally lazy — the passing answer is compare the published data, then decide.",
+  s:"Sixty mil tells me almost nothing by itself. What matters is how much membrane rides above the scrim and what's in the polymer, because that's the part that has to survive twenty summers. Put the two data sheets and the two warranty offers side by side — sometimes the cheap sheet holds up fine, and sometimes you just found out why it's cheap." },
+{ t:4, c:"Trap", q:"\"Just tell me the R-value we need on this replacement. One number.\"", o:["R-20 — memorize it","R-30 to be safe","The number comes from whichever energy code edition this city has adopted, for our climate zone, for above-deck insulation — and it moves when they adopt a new edition. I confirm with the jurisdiction before pricing, because tearing to the deck triggers full current code","Whatever fits the budget"], a:2,
+  w:"Reciting a memorized R fails the moment the jurisdiction's adopted edition differs. The durable answer is the mechanism — replacement exposing the deck triggers current-code insulation, the value is a lookup against the adopted IECC edition and climate zone, verified with the AHJ. Process over trivia.",
+  s:"I won't give you a number from memory, because the right one lives in whichever energy code this city has adopted, and cities around here are on different editions. What I know cold is the trigger — the day we expose that deck, current code owns the insulation spec. So I make one call to the building department, and then my number is bulletproof instead of close." },
+{ t:4, c:"Trap", q:"On the roof, he stomps a dry-looking area: \"Looks fine. Sign off that it's dry.\"", o:["Sign it — it looks and feels fine","Refuse to ever certify anything","Looks tells me nothing about the insulation — wet roofs walk fine on sunny days. I'll sign after a moisture scan and cores say dry, and that paper protects both of us","Sign it but keep a copy"], a:2,
+  w:"Surface appearance doesn't reveal saturated insulation — that's what IR or capacitance scanning plus confirming cores exist for. The trap is certifying from a stomp. The pass is the polite refusal wired to the method that produces a signature you'd defend.",
+  s:"It walks fine, and so do plenty of soaked roofs on a sunny day. The water we care about is down in the insulation where a boot can't feel it. Scan it after sunset, core the warm spots, and if they come up dry I'll sign it with a clean conscience — that's me protecting your name and mine on the same sheet of paper." },
+{ t:4, c:"Trap", q:"\"Schedule's tight. Skip the manufacturer's final inspection and mail the warranty in later — nobody will care, right?\"", o:["Right — inspections are ceremony","Right, if photos are good","The inspection is typically what activates the NDL — skip it and the owner may hold a roof with no system warranty. If schedule's tight, we schedule the inspector now, not skip them","Only new crews need inspections"], a:2,
+  w:"System warranties are generally issued after the manufacturer's completion inspection and punch list. Skipping it risks exactly the coverage the owner paid a premium for. The pass is refusing the shortcut and solving the actual constraint — the calendar — by managing the inspector's schedule like any other trade.",
+  s:"That inspection is the birth certificate of the warranty — skip it and the owner paid NDL money for a roof with no NDL. If the schedule's the problem, I get the inspector booked today and build his date into the plan like every other trade. I've never met an owner who'd trade their warranty for one week of calendar." },
+{ t:4, c:"Trap", q:"\"Owner wants a hail-proof roof. Sell him one.\"", o:["Easy — sell impact-rated TPO as hail-proof","Tell him hail-proof doesn't exist and stop there","No such thing as hail-proof, and I won't sell the word. There are impact-rated assemblies — heavier membranes, cover boards, protected membranes — that survive most events, and insurance handles the rest. He gets 'hail-resistant, and here's exactly what that means'","Recommend moving the building"], a:2,
+  w:"Selling 'hail-proof' writes a check the roof can't cash and litigation collects. The pass is refusing the word while still solving the need: impact-rated assemblies, cover boards over the insulation, thicker or fleece-backed membranes, and honest framing of what ratings mean alongside insurance strategy.",
+  s:"I can't sell hail-proof because the sky doesn't sign contracts. What I can build is seriously hail-resistant — a heavier membrane over a hard cover board instead of bare foam, tested impact ratings, details that take a beating. He gets the honest word and the toughest assembly his money buys, and his insurance covers the storm nobody builds for." }
+);
+/* ---------------- storage: window.storage -> localStorage -> memory ---------------- */
+const SKEY = "crvd-scores";
+let MEM = null;
+async function loadScores() {
+  try {
+    if (window.storage && typeof window.storage.get === "function") {
+      const v = await window.storage.get(SKEY);
+      const parsed = typeof v === "string" ? JSON.parse(v) : v;
+      if (parsed && typeof parsed === "object") return parsed;
+    }
+  } catch (e) {}
+  try {
+    const v = JSON.parse(localStorage.getItem(SKEY));
+    if (v && typeof v === "object") return v;
+  } catch (e) {}
+  return MEM || {};
+}
+function saveScores(s) {
+  MEM = s;
+  try { if (window.storage && typeof window.storage.set === "function") { window.storage.set(SKEY, JSON.stringify(s)); } } catch (e) {}
+  try { localStorage.setItem(SKEY, JSON.stringify(s)); } catch (e) {}
+}
+
+/* ---------------- helpers ---------------- */
+const app = document.getElementById("app");
+function el(tag, cls, html) { const n = document.createElement(tag); if (cls) n.className = cls; if (html !== undefined) n.innerHTML = html; return n; }
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+const TIERS = [
+  { name: "Easy", desc: "Identification and fundamentals. Answerable without thinking." },
+  { name: "Medium", desc: "Standard application. One governing condition, one right answer." },
+  { name: "Hard", desc: "Competing constraints and code triggers. Two options look right." },
+  { name: "Expert", desc: "Cost, risk, warranty, sales strategy, running the job." },
+  { name: "Aaron", desc: "Traps. Every named system is wrong until you ask a question." }
+];
+
+let SCORES = {};
+let run = null; // {tier, order, i, right}
+
+/* ---------------- views ---------------- */
+function viewTiers() {
+  app.innerHTML = "";
+  app.appendChild(el("div", "standard", "<strong>The grading standard</strong><br>Answer out loud. Name the variables, commit anyway, give the one-sentence reason, then say what would change your mind."));
+  TIERS.forEach((t, i) => {
+    const qs = QUESTIONS.filter(q => q.t === i).length;
+    const s = SCORES["t" + i];
+    const row = el("button", "tier-row t" + i);
+    row.type = "button";
+    row.innerHTML = '<span class="tier-num">' + i + "</span>" +
+      '<span class="tier-body"><h2>' + esc(t.name) + "</h2><p>" + esc(t.desc) + "</p>" +
+      '<p class="tier-score">' + (s && s.runs ? "Best <b>" + s.best + "/" + qs + "</b> · last " + s.last + "/" + qs + " · " + s.runs + " run" + (s.runs > 1 ? "s" : "") : qs + " questions · not attempted") + "</p></span>";
+    row.onclick = () => startTier(i);
+    app.appendChild(row);
+  });
+  window.scrollTo(0, 0);
+}
+
+function startTier(tier) {
+  const idx = QUESTIONS.map((q, i) => q.t === tier ? i : -1).filter(i => i >= 0);
+  run = { tier, order: shuffle(idx), i: 0, right: 0 };
+  viewQuestion();
+}
+
+function viewQuestion() {
+  const q = QUESTIONS[run.order[run.i]];
+  app.innerHTML = "";
+  app.appendChild(el("div", "qmeta",
+    '<span class="cat">' + esc(q.c) + "</span><span>" + esc(TIERS[run.tier].name) + " · " + (run.i + 1) + " / " + run.order.length + "</span>"));
+  app.appendChild(el("p", "qtext", esc(q.q)));
+
+  const optWrap = el("div", "");
+  app.appendChild(optWrap);
+  const after = el("div", "");
+  app.appendChild(after);
+
+  // options render in shuffled order so answer position carries no signal
+  const order = shuffle([0, 1, 2, 3]);
+  const correctPos = order.indexOf(q.a);
+  const btns = order.map((srcIdx, pos) => {
+    const b = el("button", "opt", esc(q.o[srcIdx]));
+    b.type = "button";
+    b.onclick = () => answer(pos);
+    optWrap.appendChild(b);
+    return b;
+  });
+
+  function answer(pos) {
+    const ok = pos === correctPos;
+    if (ok) run.right++;
+    btns.forEach((b, i) => {
+      b.disabled = true;
+      if (i === correctPos) { b.classList.add("right"); b.innerHTML = '<span class="tick">✓</span>' + esc(q.o[order[i]]); }
+      else if (i === pos) { b.classList.add("wrong"); b.innerHTML = '<span class="tick">✕</span>' + esc(q.o[order[i]]); }
+    });
+    const rev = el("div", "reveal");
+    rev.appendChild(el("p", "verdict " + (ok ? "ok" : "no"), ok ? "Right" : "Not this time"));
+    rev.appendChild(el("div", "why", '<b class="lab">Why</b>' + esc(q.w)));
+    rev.appendChild(el("div", "say", '<b class="lab">🗣 Say it like this</b><p>&ldquo;' + esc(q.s) + '&rdquo;</p>'));
+    const ctl = el("div", "ctl");
+    const next = el("button", "btn", run.i + 1 < run.order.length ? "Next →" : "Finish");
+    next.type = "button";
+    next.onclick = () => { run.i++; run.i < run.order.length ? viewQuestion() : viewSummary(); };
+    const quit = el("button", "btn quiet", "Exit tier");
+    quit.type = "button";
+    quit.onclick = viewTiers;
+    ctl.appendChild(next); ctl.appendChild(quit);
+    rev.appendChild(ctl);
+    after.appendChild(rev);
+    next.focus({ preventScroll: true });
+  }
+  window.scrollTo(0, 0);
+}
+
+function viewSummary() {
+  const total = run.order.length;
+  const key = "t" + run.tier;
+  const s = SCORES[key] || { best: 0, last: 0, runs: 0 };
+  s.last = run.right;
+  s.best = Math.max(s.best, run.right);
+  s.runs++;
+  SCORES[key] = s;
+  saveScores(SCORES);
+
+  app.innerHTML = "";
+  const sum = el("div", "sum");
+  sum.appendChild(el("div", "big", run.right + "/" + total));
+  sum.appendChild(el("h2", "", esc(TIERS[run.tier].name) + " tier complete"));
+  const pct = run.right / total;
+  sum.appendChild(el("p", "muted",
+    pct === 1 ? "Clean run. Say them out loud next time and it counts double." :
+    pct >= 0.8 ? "Exam-ready territory. Re-run your misses until the spoken answers come out on their own." :
+    pct >= 0.5 ? "The bones are there. Read every &ldquo;Say it like this&rdquo; out loud — the wording is the skill." :
+    "Rough one. Slow down, read the Why blocks, and take the tier again tomorrow."));
+  const ctl = el("div", "ctl"); ctl.style.justifyContent = "center";
+  const again = el("button", "btn quiet", "↻ Repeat tier");
+  again.type = "button"; again.onclick = () => startTier(run.tier);
+  ctl.appendChild(again);
+  if (run.tier < 4) {
+    const adv = el("button", "btn", "Advance to " + TIERS[run.tier + 1].name + " →");
+    adv.type = "button"; adv.onclick = () => startTier(run.tier + 1);
+    ctl.appendChild(adv);
+  }
+  const home = el("button", "btn quiet", "All tiers");
+  home.type = "button"; home.onclick = viewTiers;
+  ctl.appendChild(home);
+  sum.appendChild(ctl);
+  app.appendChild(sum);
+  window.scrollTo(0, 0);
+}
+
+/* ---------------- field reference ---------------- */
+function viewRef() {
+  app.innerHTML =
+  '<div class="ref">' +
+
+  "<h2>How to structure a spoken answer</h2>" +
+  '<ol class="steps">' +
+  "<li><b>Name the variables.</b> Say out loud what the answer depends on — deck, exposure, layers, moisture, hold period. This is the step that separates you from a salesman.</li>" +
+  "<li><b>Commit anyway.</b> Pick the most likely case and give a real answer. Naming variables without committing reads as dodging.</li>" +
+  "<li><b>One-sentence reason.</b> The single governing fact — the code trigger, the chemistry, the warranty term.</li>" +
+  "<li><b>Say what would change your mind.</b> One condition that flips your answer. This is what mastery sounds like.</li>" +
+  "</ol>" +
+
+  "<h2>Intake checklist — ask before recommending anything</h2>" +
+  "<ul>" +
+  "<li>What deck is it, and what shape is it in?</li>" +
+  "<li>How many roof coverings are up there already?</li>" +
+  "<li>What do the cores and the moisture scan say?</li>" +
+  "<li>What discharges onto the roof — grease, chemicals, exhaust?</li>" +
+  "<li>Where does water go, and where does it stand?</li>" +
+  "<li>How tall is the building and what are the edge and parapet conditions?</li>" +
+  "<li>Is the building occupied during the work? Where are the air intakes?</li>" +
+  "<li>How long does the owner plan to hold the building?</li>" +
+  "<li>What warranty does the owner actually want?</li>" +
+  "<li>Which code editions has this jurisdiction adopted?</li>" +
+  "</ul>" +
+
+  "<h2>Deck → attachment</h2>" +
+  '<div class="table-scroll"><table>' +
+  "<tr><th>Deck</th><th>What holds</th><th>Watch for</th></tr>" +
+  "<tr><td>Steel</td><td>Screws — mechanically attached shines; adhered over board fine</td><td>Gauge and corrosion; fastener back-out over time</td></tr>" +
+  "<tr><td>Structural concrete</td><td>Drilled anchors or fully adhered; ballast if structure allows</td><td>Moisture in new pours; drilling near embedded items</td></tr>" +
+  "<tr><td>Lightweight insulating concrete</td><td>LWIC-specific fasteners proven by pull tests, or base-sheet systems</td><td>Standard screws strip; verify withdrawal values on the roof</td></tr>" +
+  "<tr><td>Gypsum</td><td>Specialty fasteners with field pull tests, or adhered</td><td>Friable, weak pullout, often wet — treat with suspicion</td></tr>" +
+  "<tr><td>Cementitious wood fiber</td><td>Specialty fasteners, verified; adhered approaches</td><td>Fastener spin-out; moisture damage; span sag</td></tr>" +
+  "<tr><td>Wood / plank</td><td>Screws and nails hold well; most systems work</td><td>Rot at eaves and penetrations; combustible — no direct torch</td></tr>" +
+  "</table></div>" +
+
+  "<h2>Code triggers to know cold</h2>" +
+  "<ul>" +
+  "<li><b>Recover prohibited</b> when the existing roof is water-soaked or deteriorated, when two or more coverings exist, or when the covering is slate, clay, cement or asbestos-cement tile.</li>" +
+  "<li><b>A protective roof coating</b> over an eligible existing covering is permitted without tear-off and is not counted as an additional covering — restoration survives on a two-roof building when a recover cannot.</li>" +
+  "<li><b>Design slope</b> for new membrane roofs is 1/4 in 12 (coal tar 1/8 in 12). Reroofing is excepted where positive drainage exists.</li>" +
+  "<li><b>Secondary (overflow) drainage</b> is required where parapets or edges would impound water if primary drains block.</li>" +
+  "<li><b>Ballasted wind design</b> runs through the code-referenced standard (ANSI/SPRI RP-4) — applies up to 150 ft, with parapet and edge-zone limits; taller means engineered design.</li>" +
+  "<li><b>Edge metal securement</b> runs through the code-referenced ANSI/SPRI ES-1 testing.</li>" +
+  "<li><b>Energy code:</b> replacement exposing the deck triggers insulation to current code. The value depends on the adopted IECC edition and climate zone — confirm with the jurisdiction before pricing. Recovers generally don't trigger it.</li>" +
+  "</ul>" +
+
+  "<h2>When each system wins</h2>" +
+  '<div class="table-scroll"><table>' +
+  "<tr><th>System</th><th>Wins when</th><th>Disqualified by</th></tr>" +
+  "<tr><td>TPO (mech.)</td><td>Big open roofs, steel deck, first-cost pressure, reflectivity</td><td>Grease/chemical exposure; owners who hate flutter</td></tr>" +
+  "<tr><td>PVC / KEE</td><td>Restaurants, grease, chemical exhaust, long weldability</td><td>Direct asphalt contact without a separator</td></tr>" +
+  "<tr><td>EPDM</td><td>Hail-prone areas (thick sheets), simple big roofs, ballast jobs</td><td>Grease and oils; taped seams as the weak point</td></tr>" +
+  "<tr><td>Mod bit (SBS/APP)</td><td>Redundancy, high foot traffic, small cut-up roofs, repair-friendly</td><td>Odor/flame limits on occupied buildings (pick the right application)</td></tr>" +
+  "<tr><td>BUR</td><td>Redundancy and proven mass; institutional owners who spec it</td><td>Kettle logistics, odor, weight, fewer crews that do it well</td></tr>" +
+  "<tr><td>Metal</td><td>Slope visible from grade, longevity, snow country</td><td>Low slope, complex penetrations, first cost</td></tr>" +
+  "<tr><td>SPF</td><td>Irregular decks, max R per inch, seamless self-flashing</td><td>Applicator/weather sensitivity; permanent coating commitment</td></tr>" +
+  "<tr><td>Coating restoration</td><td>Sound dry roof, budget bridge, two-layer buildings, short holds</td><td>Wet insulation, failed adhesion, deteriorated substrate</td></tr>" +
+  "</table></div>" +
+
+  "<h2>Coating disqualifiers — walk away when</h2>" +
+  "<ul>" +
+  "<li>The insulation is wet — wet material comes out; venting doesn't dry it.</li>" +
+  "<li>Adhesion test patches fail after proper prep and primer.</li>" +
+  "<li>The membrane or substrate is past sound — a coating is not a structural repair.</li>" +
+  "<li>Ponding areas with anything but silicone chemistry.</li>" +
+  "<li>Single-ply without the manufacturer's membrane-specific primer (low-energy surfaces).</li>" +
+  "<li>Asphalt substrates under acrylic without a bleed-blocking primer.</li>" +
+  "<li>Grease-saturated surfaces that can't be cleaned to the manufacturer's standard.</li>" +
+  "<li>Going over cured silicone with anything except silicone.</li>" +
+  "</ul>" +
+
+  "<h2>Warranty types</h2>" +
+  "<ul>" +
+  "<li><b>Material-only</b> — manufacturer covers defective material, no labor, often prorated. The cheapest paper.</li>" +
+  "<li><b>System / NDL</b> — manufacturer covers leaks from material and workmanship, labor included, no dollar cap. Requires approved applicator, approved assembly, completion inspection, documented maintenance.</li>" +
+  "<li><b>Contractor workmanship</b> — your own promise on installation, typically 2–10 years. It's only as good as your company.</li>" +
+  "<li><b>Common exclusions</b> — ponding (48-hour language), unauthorized penetrations and trades damage, storms beyond rated limits, neglected maintenance, chemical exposure outside the chemistry.</li>" +
+  "</ul>" +
+
+  "<h2>Who moves a commercial buying decision</h2>" +
+  "<ol>" +
+  "<li><b>Owner</b> — signs the check. Speaks money, risk, hold period.</li>" +
+  "<li><b>Property / facility manager</b> — gatekeeper and recommender. Speaks disruption, tenants, and not getting blamed.</li>" +
+  "<li><b>Consultant / engineer / architect</b> — gates the spec where present. Speaks documents.</li>" +
+  "<li><b>CPA</b> — shapes capital-versus-expense and timing. Speaks tax years.</li>" +
+  "<li><b>Building maintenance staff</b> — sees everything first and can champion or bury you. Speak to them with respect.</li>" +
+  "</ol>" +
+
+  '<p class="note">Sources discipline: code claims come from the adopted building and energy codes (including the wind and edge standards the code references), product claims from the manufacturer\'s published data sheets, details and warranty terms, and safety claims from OSHA. Anything that\'s field practice rather than a requirement — like the ~25% wet-area tear-off threshold — gets labeled as practice when you say it out loud.</p>' +
+  "</div>";
+  window.scrollTo(0, 0);
+}
+
+/* ---------------- tabs & boot ---------------- */
+const tabDrill = document.getElementById("tab-drill");
+const tabRef = document.getElementById("tab-ref");
+function setTab(which) {
+  tabDrill.classList.toggle("on", which === "drill");
+  tabRef.classList.toggle("on", which === "ref");
+  if (which === "drill") viewTiers(); else viewRef();
+}
+tabDrill.onclick = () => setTab("drill");
+tabRef.onclick = () => setTab("ref");
+
+loadScores().then(s => { SCORES = s || {}; viewTiers(); }).catch(() => { SCORES = {}; viewTiers(); });
+
+</script>
+</body>
+</html>
